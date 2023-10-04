@@ -4,6 +4,7 @@ class PasswordViewController: UIViewController {
     
   // 추가한 email 프로퍼티
   var email: String?
+  var password: String?
     
   private let passwordTextField = UITextField()
   private let passwordTextFielddividerLine = UIView()
@@ -76,6 +77,8 @@ class PasswordViewController: UIViewController {
     passwordTextField.isSecureTextEntry = true
     passwordTextField.translatesAutoresizingMaskIntoConstraints = false
     view.addSubview(passwordTextField)
+    // 키보드 생성
+    passwordTextField.becomeFirstResponder()
 
       
     // 비밀번호 확인 입력창
@@ -89,12 +92,17 @@ class PasswordViewController: UIViewController {
     confirmPasswordTextField.isSecureTextEntry = true
     confirmPasswordTextField.translatesAutoresizingMaskIntoConstraints = false
     view.addSubview(confirmPasswordTextField)
+      confirmPasswordTextField.becomeFirstResponder()
     
       
     // graydivide for confirmation password
     confirmPasswordTextFielddividerLine.backgroundColor = .gray
     confirmPasswordTextFielddividerLine.translatesAutoresizingMaskIntoConstraints = false
     view.addSubview(confirmPasswordTextFielddividerLine)
+      
+    // 키보드 내리기를 위한 탭 제스처 추가
+    let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap))
+    view.addGestureRecognizer(tapGesture)
 
       // '확인' 버튼
     let confirmButton = UIButton(type: .system)
@@ -182,6 +190,13 @@ class PasswordViewController: UIViewController {
       return NSPredicate(format: "SELF MATCHES %@", passwordRegex).evaluate(with: password)
       // Change the color of the emailTextFielddividerLine based on the validation result
   }
+    
+    // 키보드 내리기 위한 탭 제스처 핸들러
+    @objc func handleTap() {
+        // 키보드를 내립니다.
+        view.endEditing(true)
+    }
+
 
   @objc func nextButtonTapped() {
       guard let password = passwordTextField.text, !password.isEmpty else {
@@ -244,8 +259,12 @@ class PasswordViewController: UIViewController {
 
       // 다음 뷰 컨트롤러로 이메일과 비밀번호 전달
       let nicknameVC = NicknameViewController()
+//      print("passVC전 - email:\(email)")
+//      print("passVC전 - email:\(nicknameVC.email)")
       nicknameVC.email = email
       nicknameVC.password = password
+//      print("passVC - email:\(email)")
+//      print("passVC - email:\(nicknameVC.email)")
       navigationController?.pushViewController(nicknameVC, animated: true)
       
   }

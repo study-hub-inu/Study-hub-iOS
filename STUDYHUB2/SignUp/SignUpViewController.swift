@@ -1,6 +1,7 @@
 import UIKit
 
-class SignUpViewController: UIViewController {
+class SignUpViewController: UIViewController, UITextFieldDelegate {
+
     private let emailTextField = UITextField()
     private let emailTextFielddividerLine = UIView()
 
@@ -61,7 +62,14 @@ class SignUpViewController: UIViewController {
         emailTextField.borderStyle = .roundedRect
         emailTextField.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(emailTextField)
-
+        // 키보드 생성
+        emailTextField.becomeFirstResponder()
+        
+        
+        // 키보드 내리기를 위한 탭 제스처 추가
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap))
+        view.addGestureRecognizer(tapGesture)
+        
         // '인증' 버튼
         validButton.setTitle("인증", for: .normal)
         validButton.setTitleColor(.white, for: .normal)
@@ -177,66 +185,104 @@ class SignUpViewController: UIViewController {
         verificationCodeTextField.isHidden = true
         verificationCodedividerLine.isHidden = true
     }
+    
+    // 키보드 내리기 위한 탭 제스처 핸들러
+    @objc func handleTap() {
+        // 키보드를 내립니다.
+        view.endEditing(true)
+    }
 
     @objc func validButtonTapped() {
         if let email = emailTextField.text {
-            let isValidEmail = email.hasSuffix("@inu.ac.kr")
-
-            // Check if the entered email follows the '@inu.ac.kr' format
-            emailTextFielddividerLine.backgroundColor = isValidEmail ? .green : .red
-
-            if !isValidEmail {
-                // Show an alert if email format is invalid
-                let alertController = UIAlertController(title: "경고", message: "잘못된 주소입니다. 다시 입력해주세요", preferredStyle: .alert)
-                let okAction = UIAlertAction(title: "확인", style: .default, handler: nil)
-                alertController.addAction(okAction)
-                present(alertController, animated: true, completion: nil)
+            // Create a URL for email duplication check
+            guard let duplicationURL = URL(string: "https://study-hub.site:443/api/email/duplication") else {
+                return
             }
-            else {
-                // Create a URL
-                guard let url = URL(string: "https://study-hub.site:443/api/email") else {
+
+            // Prepare JSON data for duplication check
+            let duplicationJSONData: [String: Any] = ["email": email]
+            guard let duplicationData = try? JSONSerialization.data(withJSONObject: duplicationJSONData) else {
+                return
+            }
+
+            // Configure the duplication check request
+            var duplicationRequest = URLRequest(url: duplicationURL)
+            duplicationRequest.httpMethod = "POST"
+            duplicationRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            duplicationRequest.httpBody = duplicationData
+
+            // Create a URLSessionDataTask for duplication check
+            let duplicationTask = URLSession.shared.dataTask(with: duplicationRequest) { [weak self] data, response, error in
+                if let error = error {
+                    print("Error: \(error)")
                     return
                 }
 
-                // Prepare JSON data
-                let jsonData: [String: Any] = ["email": email]
-                guard let jsonData = try? JSONSerialization.data(withJSONObject: jsonData) else {
-                    return
-                }
+                // Handle the duplication check response
+                if let httpResponse = response as? HTTPURLResponse {
+                    if httpResponse.statusCode == 200 {
+                        // Duplication check passed, now send email to the main endpoint
 
-                // Configure the request
-                var request = URLRequest(url: url)
-                request.httpMethod = "POST"
-                request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-                request.httpBody = jsonData
+                        // Create a URL for sending the email
+                        guard let emailURL = URL(string: "https://study-hub.site:443/api/email") else {
+                            return
+                        }
 
-                // Create a URLSessionDataTask
-                let task = URLSession.shared.dataTask(with: request) { data, response, error in
-                    if let error = error {
-                        print("Error: \(error)")
-                        return
-                    }
+                        // Prepare JSON data for sending email
+                        let emailJSONData: [String: Any] = ["email": email]
+                        guard let emailData = try? JSONSerialization.data(withJSONObject: emailJSONData) else {
+                            return
+                        }
 
-                    // Handle the response if needed
-                    if let data = data {
-                        if let responseJSON = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
-                            print("Response JSON: \(responseJSON)")
+                        // Configure the email sending request
+                        var emailRequest = URLRequest(url: emailURL)
+                        emailRequest.httpMethod = "POST"
+                        emailRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+                        emailRequest.httpBody = emailData
+
+                        // Create a URLSessionDataTask for sending email
+                        let emailTask = URLSession.shared.dataTask(with: emailRequest) { emailData, emailResponse, emailError in
+                            if let emailError = emailError {
+                                print("Email Sending Error: \(emailError)")
+                                return
+                            }
+
+                            // Handle the email sending response if needed
+                            if let emailData = emailData {
+                                if let emailResponseJSON = try? JSONSerialization.jsonObject(with: emailData, options: []) as? [String: Any] {
+                                    print("Email Sending Response JSON: \(emailResponseJSON)")
+                                }
+                            }
+                        }
+
+                        // Start the email sending data task
+                        emailTask.resume()
+
+                        // Show verification UI when validButton is tapped
+                        DispatchQueue.main.async {
+                            self?.codesendLabel.isHidden = false
+                            self?.verificationLabel.isHidden = false
+                            self?.verificationCodeTextField.isHidden = false
+                            self?.verificationCodedividerLine.isHidden = false
+                        }
+                    } else {
+                        // Duplication check failed, show an alert
+                        DispatchQueue.main.async {
+                            let alert = UIAlertController(title: "경고",
+                                                          message: "중복된 이메일입니다. 다시 입력해주세요.",
+                                                          preferredStyle: .alert)
+                            alert.addAction(UIAlertAction(title: "확인", style: .default, handler: nil))
+                            self?.present(alert, animated: true, completion: nil)
                         }
                     }
                 }
-
-                // Start the data task
-                task.resume()
-
-                // Show verification UI when validButton is tapped
-                codesendLabel.isHidden = false
-                verificationLabel.isHidden = false
-                verificationCodeTextField.isHidden = false
-                verificationCodedividerLine.isHidden = false
-
             }
+
+            // Start the duplication check data task
+            duplicationTask.resume()
         }
     }
+
 
     // Action for emailTextField editingChanged event
     @objc func emailTextFieldDidChange() {
@@ -310,8 +356,12 @@ class SignUpViewController: UIViewController {
                             // Change the color of verificationCodedividerLine to green
                             self.verificationCodedividerLine.backgroundColor = .green
 
-                            let passwordViewController = PasswordViewController()
-                            self.navigationController?.pushViewController(passwordViewController, animated: true)
+                            // 다음 뷰 컨트롤러로 이메일 전달
+                            let passwordVC = PasswordViewController()
+                            passwordVC.email = email
+//                            print("signVC - email:\(email)")
+//                            print("signVC - email:\(passwordVC.email)")
+                            self.navigationController?.pushViewController(passwordVC, animated: true)
                         } else {
                             // Change the color of verificationCodedividerLine to red
                             self.verificationCodedividerLine.backgroundColor = .red
@@ -327,15 +377,11 @@ class SignUpViewController: UIViewController {
             }
         }
 
-        // 다음 뷰 컨트롤러로 이메일 전달
-         let passwordVC = PasswordViewController()
-         passwordVC.email = email
-
         // Start the verification data task
         verificationTask.resume()
     }
 }
-
+//
 //import UIKit
 //
 //class SignUpViewController: UIViewController {
@@ -571,12 +617,14 @@ class SignUpViewController: UIViewController {
 //        }
 //
 //        // 다음 뷰 컨트롤러로 이메일 전달
-//         let passwordVC = PasswordViewController()
-//         passwordVC.email = email
+//        let passwordVC = PasswordViewController()
+//        passwordVC.email = email
+//        print("signVC - email:\(email)")
+//        print("signVC - email:\(passwordVC.email)")
 //
-//        let passwordViewController = PasswordViewController()
-//
-//              // Use the navigation controller to push the PasswordViewController onto the navigation stack
-//              navigationController?.pushViewController(passwordViewController, animated: true)
-//          }
+//        // Use the navigation controller to push the PasswordViewController onto the navigation stack
+//        navigationController?.pushViewController(passwordVC, animated: true)
+//    }
 //}
+//
+//

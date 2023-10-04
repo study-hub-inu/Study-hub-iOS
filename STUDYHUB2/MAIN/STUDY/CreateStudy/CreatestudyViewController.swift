@@ -2,6 +2,56 @@ import UIKit
 
 class CreateStudyViewController: UIViewController {
     
+    // 선택한 학과를 저장할 프로퍼티
+    var selectedDepartment: String? {
+        didSet {
+            // selectedDepartment가 설정되면 버튼을 생성
+            if let department = selectedDepartment {
+                addDepartmentButton(department)
+            }
+        }
+    }
+    
+    // 선택한 학과에 대한 버튼을 생성하고 departmentButtonStackView에 추가하는 함수
+    func addDepartmentButton(_ department: String) {
+        // Department 버튼과 삭제 버튼을 수평으로 나열하는 스택 뷰 생성
+        let buttonStackView = UIStackView()
+        buttonStackView.axis = .horizontal
+        buttonStackView.spacing = 0
+        buttonStackView.translatesAutoresizingMaskIntoConstraints = false
+        // 버튼 스택 뷰를 departmentButtonStackView에 추가
+        departmentButtonStackView.addArrangedSubview(buttonStackView)
+        
+        // Department 버튼 생성
+        let departmentButton = UIButton(type: .system)
+        departmentButton.backgroundColor = UIColor(hexCode: "F3F5F6")
+        departmentButton.setTitleColor(UIColor(hexCode: "68737D"), for: .normal)
+        departmentButton.setTitle(department, for: .normal)
+        departmentButton.layer.cornerRadius = 20
+        departmentButton.titleLabel?.font = UIFont.systemFont(ofSize: 16)
+        departmentButton.contentHorizontalAlignment = .center // 텍스트 정렬
+        
+        // 삭제 버튼 생성
+        let deleteButton = UIButton(type: .system)
+        deleteButton.setImage(UIImage(systemName: "xmark.circle.fill"), for: .normal)
+        deleteButton.tintColor = .lightGray
+//        deleteButton.addTarget(self, action: #selector(deleteButtonTapped), for: .touchUpInside)
+        
+        // 문자열 길이에 따라 버튼 가로 길이 동적 조절
+        let buttonWidth = department.width(withConstrainedHeight: 30, font: departmentButton.titleLabel!.font)
+        departmentButton.widthAnchor.constraint(equalToConstant: buttonWidth + 50).isActive = true
+        
+        buttonStackView.addArrangedSubview(departmentButton)
+        buttonStackView.addArrangedSubview(deleteButton)
+            
+        
+    }
+
+    
+    let departmentButton = UIButton(type: .system)
+    private let categoryStackView = UIStackView()
+    private let departmentButtonStackView = UIStackView()
+    
     private let allGenderButton = UIButton(type: .system)
     private let maleOnlyButton = UIButton(type: .system)
     private let femaleOnlyButton = UIButton(type: .system)
@@ -16,6 +66,24 @@ class CreateStudyViewController: UIViewController {
     private let fineButtonsStackView = UIStackView()
     private let finefixStackView = UIStackView()
     
+    private let  periodStackView = UIStackView()
+    private let startDateButton = UIButton()
+    
+    private let  periodStackView2 = UIStackView()
+    private let endDateButton = UIButton()
+    
+    private var selectedDepartments: [String] = [] // 선택된 학과를 저장할 배열
+
+    
+    // Add these properties to your UIViewController
+    let startDatePicker = UIDatePicker()
+    let startDateTextField = UITextField()
+    var selectedStartDate: Date?
+    
+    // Add these properties to your UIViewController
+    let endDatePicker = UIDatePicker()
+    let endDateTextField = UITextField()
+    var selectedEndDate: Date?
     
 
     override func viewDidLoad() {
@@ -43,21 +111,16 @@ class CreateStudyViewController: UIViewController {
         createStudyLabel.font = UIFont.boldSystemFont(ofSize: 18)
         createStudyLabel.translatesAutoresizingMaskIntoConstraints = false
         
-        // "임시저장" label
-        let saveLabel = UILabel()
-        saveLabel.text = "임시저장"
-        saveLabel.textColor = UIColor(hexCode: "#FF5530")
-        saveLabel.translatesAutoresizingMaskIntoConstraints = false
-        
-        // Spacer view to push saveLabel to the right
-        let spacerView = UIView()
-        spacerView.translatesAutoresizingMaskIntoConstraints = false
+
+//        // Spacer view to push saveLabel to the right
+//        let spacerView = UIView()
+//        spacerView.translatesAutoresizingMaskIntoConstraints = false
         
         // Add the views to the header stack view
         headerStackView.addArrangedSubview(backButton)
         headerStackView.addArrangedSubview(createStudyLabel)
-        headerStackView.addArrangedSubview(spacerView)
-        headerStackView.addArrangedSubview(saveLabel)
+//        headerStackView.addArrangedSubview(spacerView)
+      
         
         // Add the header stack view to the view
         view.addSubview(headerStackView)
@@ -97,6 +160,10 @@ class CreateStudyViewController: UIViewController {
         chatLinkTextField.font = UIFont.systemFont(ofSize: 14)
         chatLinkTextField.borderStyle = .roundedRect  // Add rounded border
         chatLinkTextField.translatesAutoresizingMaskIntoConstraints = false
+        
+        // 키보드 내리기를 위한 탭 제스처 추가
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap))
+        view.addGestureRecognizer(tapGesture)
     
         let chatLinkDividerLine = UIView()
         chatLinkDividerLine.backgroundColor = UIColor(hexCode: "#F3F5F6")
@@ -167,70 +234,11 @@ class CreateStudyViewController: UIViewController {
         headerContentStackView.addArrangedSubview(studyinfoStackViewDividerLine)
         
         //////////////////////// category
-        let categoryStackView = UIStackView()
         categoryStackView.axis = .vertical
         categoryStackView.spacing = 16
         categoryStackView.translatesAutoresizingMaskIntoConstraints = false
         // Add the buttons stack view to the header content stack view
         headerContentStackView.addArrangedSubview(categoryStackView)
-        
-//        let categoryTitleStackView = UIStackView()
-//        categoryTitleStackView.axis = .horizontal
-//        categoryTitleStackView.spacing = 16
-//        categoryTitleStackView.translatesAutoresizingMaskIntoConstraints = false
-//        // Add the buttons stack view to the header content stack view
-//        categoryStackView.addArrangedSubview(categoryTitleStackView)
-//
-//        // Create a label for "스터디 제목"
-//        let categoryLabel = UILabel()
-//        categoryLabel.text = "카테고리 선택"
-//        categoryLabel.textColor = .black
-//        categoryLabel.font = UIFont.systemFont(ofSize: 18, weight: .bold)
-//        categoryLabel.translatesAutoresizingMaskIntoConstraints = false
-//
-//        // Create a button with ">" image
-//        let categoryButton = UIButton(type: .system)
-//        categoryButton.setImage(UIImage(systemName: "chevron.right"), for: .normal)
-//        categoryButton.tintColor = .black
-//        categoryButton.translatesAutoresizingMaskIntoConstraints = false
-//
-//        categoryTitleStackView.addArrangedSubview(categoryLabel)
-//        categoryTitleStackView.addArrangedSubview(categoryButton)
-//
-//
-//        // Create a label for description
-//        let description2Label = UILabel()
-//        description2Label.text = "혹시 찾는 카테고리가 없으시다면, 새롭게 추가해주세요!"
-//        description2Label.textColor = UIColor(hexCode: "#49545C")
-//        description2Label.font = UIFont.systemFont(ofSize: 14)
-//        description2Label.translatesAutoresizingMaskIntoConstraints = false
-//
-//        // Create a text field for chat link input
-//        let categoryTextField = UITextField()
-//        categoryTextField.placeholder = "새 카테고리 이름을 알려주세요"
-//        categoryTextField.textColor = .gray
-//        categoryTextField.font = UIFont.systemFont(ofSize: 14)
-//        categoryTextField.borderStyle = .roundedRect  // Add rounded border
-//        categoryTextField.translatesAutoresizingMaskIntoConstraints = false
-//
-//        // Create the "추가" button
-//        let addButton = UIButton(type: .system)
-//        addButton.setTitle("추가", for: .normal)
-//        addButton.setTitleColor(UIColor(hexCode: "#A1AAB0"), for: .normal)
-//        addButton.backgroundColor = UIColor(hexCode: "#E9EBED")
-//        addButton.layer.cornerRadius = 2
-//        addButton.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: .bold)
-//        addButton.addTarget(self, action: #selector(addButtonTapped), for: .touchUpInside)
-//        addButton.translatesAutoresizingMaskIntoConstraints = false
-//
-//        categoryTextField.addSubview(addButton)
-//
-//        // Create a label for description
-//        let description3Label = UILabel()
-//        description3Label.text = "18자리 이하, 특수문자 포함 불가"
-//        description3Label.textColor = UIColor(hexCode: "#A1AAB0")
-//        description3Label.font = UIFont.systemFont(ofSize: 12)
-//        description3Label.translatesAutoresizingMaskIntoConstraints = false
         
         let associatedepartStackView = UIStackView()
         associatedepartStackView.axis = .horizontal
@@ -252,23 +260,26 @@ class CreateStudyViewController: UIViewController {
         associatedepartButton.tintColor = .black
         associatedepartButton.addTarget(self, action: #selector(departmentArrowButtonTapped), for: .touchUpInside)
         associatedepartButton.translatesAutoresizingMaskIntoConstraints = false
-
+        
         associatedepartStackView.addArrangedSubview(associatedepartLabel)
         associatedepartStackView.addArrangedSubview(associatedepartButton)
         
-    
+
+        departmentButtonStackView.axis = .vertical
+        departmentButtonStackView.spacing = 16
+        departmentButtonStackView.translatesAutoresizingMaskIntoConstraints = false
+        // Add the buttons stack view to the header content stack view
+        categoryStackView.addArrangedSubview(departmentButtonStackView)
+
+        
         let categoryStackViewDividerLine = UIView()
         categoryStackViewDividerLine.backgroundColor = UIColor(hexCode: "#F3F5F6")
         categoryStackViewDividerLine.translatesAutoresizingMaskIntoConstraints = false
         categoryStackViewDividerLine.heightAnchor.constraint(equalToConstant: 10).isActive = true // Adjust the thickness here
 
-        
-        // Add UI elements to the headerContentStackView
-//        categoryStackView.addArrangedSubview(categoryTitleStackView)
-//        categoryStackView.addArrangedSubview(description2Label)
-//        categoryStackView.addArrangedSubview(categoryTextField)
-//        categoryStackView.addArrangedSubview(description3Label)
-        categoryStackView.addArrangedSubview(associatedepartStackView)
+  
+
+//        categoryStackView.addArrangedSubview(departmentButton)
         headerContentStackView.addArrangedSubview(categoryStackViewDividerLine)
         
         //////////////////////// studymember
@@ -535,453 +546,547 @@ class CreateStudyViewController: UIViewController {
         headerContentStackView.addArrangedSubview(studymethodStackViewDividerLine)
         
         //////////////////////// period
-        let periodStackView = UIStackView()
-        periodStackView.axis = .vertical
-        periodStackView.spacing = 16
-        periodStackView.translatesAutoresizingMaskIntoConstraints = false
-        // Add the buttons stack view to the header content stack view
-        headerContentStackView.addArrangedSubview(periodStackView)
-        
-        // Create a label for "기간"
-        let periodLabel = UILabel()
-        periodLabel.text = "기간"
-        periodLabel.textColor = .black
-        periodLabel.font = UIFont.systemFont(ofSize: 18, weight: .bold)
-        periodLabel.translatesAutoresizingMaskIntoConstraints = false
-        
-        let grayDividerLine3 = UIView()
-        grayDividerLine3.backgroundColor = UIColor(hexCode: "#F3F5F6")
-        grayDividerLine3.translatesAutoresizingMaskIntoConstraints = false
-        grayDividerLine3.heightAnchor.constraint(equalToConstant: 2).isActive = true // Adjust the thickness here
+         periodStackView.axis = .vertical
+         periodStackView.spacing = 16
+         periodStackView.translatesAutoresizingMaskIntoConstraints = false
+         // Add the buttons stack view to the header content stack view
+         headerContentStackView.addArrangedSubview(periodStackView)
+         
+         // Create a label for "기간"
+         let periodLabel = UILabel()
+         periodLabel.text = "기간"
+         periodLabel.textColor = .black
+         periodLabel.font = UIFont.systemFont(ofSize: 18, weight: .bold)
+         periodLabel.translatesAutoresizingMaskIntoConstraints = false
+         
+         let grayDividerLine3 = UIView()
+         grayDividerLine3.backgroundColor = UIColor(hexCode: "#F3F5F6")
+         grayDividerLine3.translatesAutoresizingMaskIntoConstraints = false
+         grayDividerLine3.heightAnchor.constraint(equalToConstant: 2).isActive = true // Adjust the thickness here
 
-        // Create a label for "시작하는 날"
-        let startLabel = UILabel()
-        startLabel.text = "시작하는 날"
-        startLabel.textColor = .black
-        startLabel.font = UIFont.systemFont(ofSize: 18, weight: .bold)
-        startLabel.translatesAutoresizingMaskIntoConstraints = false
-        
-        // Create a button for "시작일 선택하기"
-        let startDateButton = UIButton()
-        startDateButton.setTitle("선택하기", for: .normal)
-        startDateButton.setTitleColor(UIColor(hexCode: "#A1AAB0"), for: .normal)
-        startDateButton.titleLabel?.font = UIFont.systemFont(ofSize: 16)
-        startDateButton.backgroundColor = .white
-        startDateButton.layer.borderWidth = 1
-        startDateButton.layer.borderColor = UIColor(hexCode: "#D8DCDE").cgColor
-        startDateButton.layer.cornerRadius = 2
-        startDateButton.translatesAutoresizingMaskIntoConstraints = false
-//        startDateButton.addTarget(self, action: #selector(startDateButtonTapped), for: .touchUpInside)
-        
+         // Create a label for "시작하는 날"
+         let startLabel = UILabel()
+         startLabel.text = "시작하는 날"
+         startLabel.textColor = .black
+         startLabel.font = UIFont.systemFont(ofSize: 18, weight: .bold)
+         startLabel.translatesAutoresizingMaskIntoConstraints = false
+         
+         // Create a button for "시작일 선택하기"
+         startDateButton.setTitle("선택하기", for: .normal)
+         startDateButton.setTitleColor(UIColor(hexCode: "#A1AAB0"), for: .normal)
+         startDateButton.titleLabel?.font = UIFont.systemFont(ofSize: 16)
+         startDateButton.backgroundColor = .white
+         startDateButton.layer.borderWidth = 1
+         startDateButton.layer.borderColor = UIColor(hexCode: "#D8DCDE").cgColor
+         startDateButton.layer.cornerRadius = 2
+         startDateButton.translatesAutoresizingMaskIntoConstraints = false
+         startDateButton.addTarget(self, action: #selector(startDateButtonTapped), for: .touchUpInside)
+         
+      
+         
+         // Create a label for "성별"
+         let endLabel = UILabel()
+         endLabel.text = "종료하는 날"
+         endLabel.textColor = .black
+         endLabel.font = UIFont.systemFont(ofSize: 18, weight: .bold)
+         endLabel.translatesAutoresizingMaskIntoConstraints = false
+         
+         // Create a button for "종료일 선택하기"
+         endDateButton.setTitle("선택하기", for: .normal)
+         endDateButton.setTitleColor(UIColor(hexCode: "#A1AAB0"), for: .normal)
+         endDateButton.titleLabel?.font = UIFont.systemFont(ofSize: 16)
+         endDateButton.backgroundColor = .white
+         endDateButton.layer.borderWidth = 1
+         endDateButton.layer.borderColor = UIColor(hexCode: "#D8DCDE").cgColor
+         endDateButton.layer.cornerRadius = 2
+         endDateButton.translatesAutoresizingMaskIntoConstraints = false
+         endDateButton.addTarget(self, action: #selector(endDateButtonTapped), for: .touchUpInside)
+         
+         // Create a button for "완료하기"
+         let completeButton = UIButton()
+         completeButton.setTitle("완료하기", for: .normal)
+         completeButton.setTitleColor(.white, for: .normal)
+         completeButton.backgroundColor = UIColor(hexCode: "#FF5530")
+         completeButton.layer.cornerRadius = 5
+         completeButton.translatesAutoresizingMaskIntoConstraints = false
+         
      
-        
-        
-        // Create a label for "성별"
-        let endLabel = UILabel()
-        endLabel.text = "종료하는 날"
-        endLabel.textColor = .black
-        endLabel.font = UIFont.systemFont(ofSize: 18, weight: .bold)
-        endLabel.translatesAutoresizingMaskIntoConstraints = false
-        
-        // Create a button for "종료일 선택하기"
-        let endDateButton = UIButton()
-        endDateButton.setTitle("선택하기", for: .normal)
-        endDateButton.setTitleColor(UIColor(hexCode: "#A1AAB0"), for: .normal)
-        endDateButton.titleLabel?.font = UIFont.systemFont(ofSize: 16)
-        endDateButton.backgroundColor = .white
-        endDateButton.layer.borderWidth = 1
-        endDateButton.layer.borderColor = UIColor(hexCode: "#D8DCDE").cgColor
-        endDateButton.layer.cornerRadius = 2
-        endDateButton.translatesAutoresizingMaskIntoConstraints = false
-//        endDateButton.addTarget(self, action: #selector(endDateButtonTapped), for: .touchUpInside)
-        
-        // Create a button for "완료하기"
-        let completeButton = UIButton()
-        completeButton.setTitle("완료하기", for: .normal)
-        completeButton.setTitleColor(.white, for: .normal)
-        completeButton.backgroundColor = UIColor(hexCode: "#FF5530")
-        completeButton.layer.cornerRadius = 5
-        completeButton.translatesAutoresizingMaskIntoConstraints = false
-        
-    
-        // Add UI elements to the headerContentStackView
-        periodStackView.addArrangedSubview(periodLabel)
-        periodStackView.addArrangedSubview(grayDividerLine3)
-        periodStackView.addArrangedSubview(startLabel)
-        periodStackView.addArrangedSubview(startDateButton)
-        periodStackView.addArrangedSubview(endLabel)
-        periodStackView.addArrangedSubview(endDateButton)
-        // Add the completeButton to the periodStackView
-        periodStackView.addArrangedSubview(completeButton)
-        
-        // Constraints for the "완료하기" button
-        completeButton.leadingAnchor.constraint(equalTo: periodStackView.leadingAnchor, constant: 16).isActive = true
-        completeButton.trailingAnchor.constraint(equalTo: periodStackView.trailingAnchor, constant: -16).isActive = true
-        completeButton.heightAnchor.constraint(equalToConstant: 57).isActive = true
+         // Add UI elements to the headerContentStackView
+         periodStackView.addArrangedSubview(periodLabel)
+         periodStackView.addArrangedSubview(grayDividerLine3)
+         periodStackView.addArrangedSubview(startLabel)
+         periodStackView.addArrangedSubview(startDateButton)
+         periodStackView.addArrangedSubview(endLabel)
+         periodStackView.addArrangedSubview(endDateButton)
+         // Add the completeButton to the periodStackView
+         periodStackView.addArrangedSubview(completeButton)
+         
+         // Constraints for the "완료하기" button
+         completeButton.leadingAnchor.constraint(equalTo: periodStackView.leadingAnchor, constant: 16).isActive = true
+         completeButton.trailingAnchor.constraint(equalTo: periodStackView.trailingAnchor, constant: -16).isActive = true
+         completeButton.heightAnchor.constraint(equalToConstant: 57).isActive = true
 
-    
-        
-        // Create a scroll view to make the content scrollable
-        let scrollView = UIScrollView()
-        scrollView.translatesAutoresizingMaskIntoConstraints = false
-        scrollView.addSubview(headerContentStackView)
-        view.addSubview(scrollView)
-        
-        // Set up constraints
-        NSLayoutConstraint.activate([
-            // Header stack view constraints
-            headerStackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            headerStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: -60),
-            headerStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-                    
-            // "스터디 만들기" label constraints
-            createStudyLabel.centerXAnchor.constraint(equalTo: headerStackView.centerXAnchor, constant: 16),
-                      
-            // Spacer view constraints
-            spacerView.widthAnchor.constraint(equalTo: headerStackView.widthAnchor, multiplier: 0.15),
+         
+         // Create a scroll view to make the content scrollable
+         let scrollView = UIScrollView()
+         scrollView.translatesAutoresizingMaskIntoConstraints = false
+         scrollView.addSubview(headerContentStackView)
+         view.addSubview(scrollView)
+         
+         // Set up constraints
+         NSLayoutConstraint.activate([
+             // Header stack view constraints
+             headerStackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+             headerStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: -60),
+             headerStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
                      
-
-            // "임시저장" label constraints
-            saveLabel.trailingAnchor.constraint(equalTo: headerStackView.trailingAnchor),
+             // "스터디 만들기" label constraints
+             createStudyLabel.centerXAnchor.constraint(equalTo: headerStackView.centerXAnchor, constant: 100),
                        
+ //            // Spacer view constraints
+ //            spacerView.widthAnchor.constraint(equalTo: headerStackView.widthAnchor, multiplier: 0.15),
+                      
+
+ //            // "임시저장" label constraints
+ //            saveLabel.trailingAnchor.constraint(equalTo: headerStackView.trailingAnchor),
+                        
+              
+             // Header content stack view constraints
+             headerContentStackView.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: 30),
+             headerContentStackView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+             headerContentStackView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
+             headerContentStackView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
+             headerContentStackView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
              
-            // Header content stack view constraints
-            headerContentStackView.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: 30),
-            headerContentStackView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
-            headerContentStackView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
-            headerContentStackView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
-            headerContentStackView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
-            
-            //(1)채팅방링크 뷰
-            // Constraints for chatLinkLabel
-            chatLinkLabel.leadingAnchor.constraint(equalTo: chatLinkStackView.leadingAnchor, constant: 16),
-            chatLinkLabel.trailingAnchor.constraint(equalTo: chatLinkStackView.trailingAnchor, constant: 10),
-            
-            // Constraints for descriptionLabel
-            descriptionLabel.leadingAnchor.constraint(equalTo: chatLinkStackView.leadingAnchor, constant: 16),
-            descriptionLabel.trailingAnchor.constraint(equalTo: chatLinkStackView.trailingAnchor, constant: 100),
-            
-            // Constraints for chatLinkTextField
-            chatLinkTextField.leadingAnchor.constraint(equalTo: chatLinkStackView.leadingAnchor, constant: 16),
-            chatLinkTextField.trailingAnchor.constraint(equalTo: chatLinkStackView.trailingAnchor),
-            chatLinkTextField.widthAnchor.constraint(equalTo: chatLinkStackView.widthAnchor, constant: -50),
-            
-            //(2)스터디소개 뷰
-            // Constraints for chatLinkLabel
-            studytitleLabel.leadingAnchor.constraint(equalTo: studyinfoStackView.leadingAnchor, constant: 16),
-            studytitleLabel.trailingAnchor.constraint(equalTo: studyinfoStackView.trailingAnchor, constant: 5),
-            
-            // Constraints for descriptionLabel
-            studytitleTextField.leadingAnchor.constraint(equalTo: studyinfoStackView.leadingAnchor, constant: 16),
-            studytitleTextField.trailingAnchor.constraint(equalTo: studyinfoStackView.trailingAnchor, constant: 100),
-            
-            // Constraints for chatLinkLabel
-            studyproduceLabel.leadingAnchor.constraint(equalTo: studyinfoStackView.leadingAnchor, constant: 16),
-            studyproduceLabel.trailingAnchor.constraint(equalTo: studyinfoStackView.trailingAnchor, constant: 10),
-    
-            
-            // Constraints for chatLinkTextField
-            studyproduceTextField.leadingAnchor.constraint(equalTo: studyinfoStackView.leadingAnchor, constant: 16),
-            studyproduceTextField.trailingAnchor.constraint(equalTo: studyinfoStackView.trailingAnchor),
-            studyproduceTextField.widthAnchor.constraint(equalTo: studyinfoStackView.widthAnchor, constant: -50),
-            
-            //(3)카테고리 뷰
-            // Constraints for chatLinkLabel
-//            categoryTitleStackView.leadingAnchor.constraint(equalTo: categoryStackView.leadingAnchor, constant: 16),
-//            categoryTitleStackView.trailingAnchor.constraint(equalTo: categoryStackView.trailingAnchor),
-//
-//            categoryButton.leadingAnchor.constraint(equalTo: categoryTitleStackView.leadingAnchor, constant: 300),
-//            categoryButton.trailingAnchor.constraint(equalTo: categoryTitleStackView.trailingAnchor),
-//
-//            // Constraints for descriptionLabel
-//            description2Label.leadingAnchor.constraint(equalTo: categoryStackView.leadingAnchor, constant: 16),
-//            description2Label.trailingAnchor.constraint(equalTo: categoryStackView.trailingAnchor, constant: 100),
-//
-//
-//            // Constraints for chatLinkTextField
-//            categoryTextField.leadingAnchor.constraint(equalTo: categoryStackView.leadingAnchor, constant: 16),
-//            categoryTextField.trailingAnchor.constraint(equalTo: categoryStackView.trailingAnchor),
-//            categoryTextField.widthAnchor.constraint(equalTo: categoryStackView.widthAnchor, constant: -50),
-//
-//            addButton.centerYAnchor.constraint(equalTo: categoryTextField.centerYAnchor),
-//            addButton.trailingAnchor.constraint(equalTo: categoryTextField.trailingAnchor, constant: -8),
-//            addButton.widthAnchor.constraint(equalToConstant: 40),
-//            addButton.heightAnchor.constraint(equalToConstant: 20),
-//
-//            // Constraints for descriptionLabel
-//            description3Label.leadingAnchor.constraint(equalTo: categoryStackView.leadingAnchor, constant: 200),
-//            description3Label.trailingAnchor.constraint(equalTo: categoryStackView.trailingAnchor, constant: 100),
-        
-            associatedepartStackView.leadingAnchor.constraint(equalTo: categoryStackView.leadingAnchor, constant: 16),
-            associatedepartStackView.trailingAnchor.constraint(equalTo: categoryStackView.trailingAnchor),
-            
-            associatedepartButton.leadingAnchor.constraint(equalTo: associatedepartStackView.leadingAnchor, constant: 300),
-            associatedepartButton.trailingAnchor.constraint(equalTo: associatedepartStackView.trailingAnchor),
-            
-            //(4)스터디멤버 뷰
-            // Constraints for chatLinkLabel
-            studymemberLabel.leadingAnchor.constraint(equalTo: studymemberStackView.leadingAnchor, constant: 16),
-            studymemberLabel.trailingAnchor.constraint(equalTo: studymemberStackView.trailingAnchor, constant: 5),
-            
-            // Constraints for chatLinkLabel
-            grayDividerLine.leadingAnchor.constraint(equalTo: studymemberStackView.leadingAnchor, constant: 0),
-            grayDividerLine.trailingAnchor.constraint(equalTo: studymemberStackView.trailingAnchor, constant: 10),
-            
-            studymembercountLabel.leadingAnchor.constraint(equalTo: studymemberStackView.leadingAnchor, constant: 16),
-            studymembercountLabel.trailingAnchor.constraint(equalTo: studymemberStackView.trailingAnchor, constant: 5),
-        
-            
-            // Constraints for descriptionLabel
-            description4Label.leadingAnchor.constraint(equalTo: studymemberStackView.leadingAnchor, constant: 16),
-            description4Label.trailingAnchor.constraint(equalTo: studymemberStackView.trailingAnchor, constant: 100),
-            
-            // Constraints for chatLinkTextField
-            studymemberTextField.leadingAnchor.constraint(equalTo: studymemberStackView.leadingAnchor, constant: 16),
-            studymemberTextField.trailingAnchor.constraint(equalTo: studymemberStackView.trailingAnchor),
-            studymemberTextField.widthAnchor.constraint(equalTo: studymemberStackView.widthAnchor, constant: -50),
-            
-            countLabel.centerYAnchor.constraint(equalTo: studymemberTextField.centerYAnchor),
-            countLabel.trailingAnchor.constraint(equalTo: studymemberTextField.trailingAnchor, constant: -8),
-            countLabel.widthAnchor.constraint(equalToConstant: 20),
-            countLabel.heightAnchor.constraint(equalToConstant: 20),
-            
-            // Constraints for chatLinkLabel
-            genderLabel.leadingAnchor.constraint(equalTo: studymemberStackView.leadingAnchor, constant: 16),
-            genderLabel.trailingAnchor.constraint(equalTo: studymemberStackView.trailingAnchor, constant: 10),
-            
-            
-            description5Label.leadingAnchor.constraint(equalTo: studymemberStackView.leadingAnchor, constant: 16),
-            description5Label.trailingAnchor.constraint(equalTo: studymemberStackView.trailingAnchor, constant: 10),
-    
-            genderButtonsStackView.trailingAnchor.constraint(equalTo: studymemberStackView.trailingAnchor, constant: -16),
-            genderButtonsStackView.topAnchor.constraint(equalTo: description5Label.bottomAnchor, constant: 8),
-            genderButtonsStackView.heightAnchor.constraint(equalToConstant: 30),
-
-            allGenderButton.widthAnchor.constraint(equalToConstant: 100),
-            maleOnlyButton.widthAnchor.constraint(equalToConstant: 80),
-            femaleOnlyButton.widthAnchor.constraint(equalToConstant: 80),
-            
-            //(5)스터디방식 뷰
-            // Constraints for chatLinkLabel
-            studymethodLabel.leadingAnchor.constraint(equalTo: studymethodStackView.leadingAnchor, constant: 16),
-            studymethodLabel.trailingAnchor.constraint(equalTo: studymethodStackView.trailingAnchor, constant: 5),
-
-
-            meetLabel.leadingAnchor.constraint(equalTo: studymethodStackView.leadingAnchor, constant: 16),
-            meetLabel.trailingAnchor.constraint(equalTo: studymethodStackView.trailingAnchor, constant: 5),
-
-
-            // Constraints for descriptionLabel
-            description6Label.leadingAnchor.constraint(equalTo: studymethodStackView.leadingAnchor, constant: 16),
-            description6Label.trailingAnchor.constraint(equalTo: studymethodStackView.trailingAnchor, constant: 100),
-
-            meetButtonsStackView.trailingAnchor.constraint(equalTo: studymethodStackView.trailingAnchor, constant: -16),
-//            meetButtonsStackView.topAnchor.constraint(equalTo: studymethodStackView.bottomAnchor, constant: 8),
-//            meetButtonsStackView.heightAnchor.constraint(equalToConstant: 30),
-
-            contactButton.widthAnchor.constraint(equalToConstant: 80),
-            untactButton.widthAnchor.constraint(equalToConstant: 100),
-            mixmeetButton.widthAnchor.constraint(equalToConstant: 80),
-            
-            fineLabel.leadingAnchor.constraint(equalTo: studymethodStackView.leadingAnchor, constant: 16),
-            fineLabel.trailingAnchor.constraint(equalTo: studymethodStackView.trailingAnchor, constant: 100),
-            
-            fineButtonsStackView.leadingAnchor.constraint(equalTo: studymethodStackView.leadingAnchor, constant: 16),
-            fineButtonsStackView.trailingAnchor.constraint(equalTo: studymethodStackView.trailingAnchor, constant: 50),
-            
-//            finefixStackView.leadingAnchor.constraint(equalTo: studymethodStackView.leadingAnchor, constant: 16),
-//            finefixStackView.trailingAnchor.constraint(equalTo: studymethodStackView.trailingAnchor, constant: 50),
-
-
-            // Constraints for chatLinkLabel
-            grayDividerLine2.leadingAnchor.constraint(equalTo: studymethodStackView.leadingAnchor, constant: 0),
-            grayDividerLine2.trailingAnchor.constraint(equalTo: studymethodStackView.trailingAnchor, constant: 10),
-            
-            //(6)스터디기간 뷰
-            // Constraints for chatLinkLabel
-            periodLabel.leadingAnchor.constraint(equalTo: periodStackView.leadingAnchor, constant: 16),
-            periodLabel.trailingAnchor.constraint(equalTo: periodStackView.trailingAnchor, constant: 5),
-            
-            // Constraints for chatLinkLabel
-            grayDividerLine3.leadingAnchor.constraint(equalTo: periodStackView.leadingAnchor, constant: 0),
-            grayDividerLine3.trailingAnchor.constraint(equalTo: periodStackView.trailingAnchor, constant: 10),
-            
-            // Constraints for chatLinkLabel
-            startLabel.leadingAnchor.constraint(equalTo: periodStackView.leadingAnchor, constant: 16),
-            startLabel.trailingAnchor.constraint(equalTo: periodStackView.trailingAnchor, constant: 10),
-            
-            startDateButton.leadingAnchor.constraint(equalTo: periodStackView.leadingAnchor, constant: 16),
-            startDateButton.trailingAnchor.constraint(equalTo: periodStackView.trailingAnchor, constant: -16),
-            startDateButton.heightAnchor.constraint(equalToConstant: 50),
-            
-            // Constraints for chatLinkLabel
-            endLabel.leadingAnchor.constraint(equalTo: periodStackView.leadingAnchor, constant: 16),
-            endLabel.trailingAnchor.constraint(equalTo: periodStackView.trailingAnchor, constant: 10),
-        
-
-            endDateButton.leadingAnchor.constraint(equalTo: periodStackView.leadingAnchor, constant: 16),
-            endDateButton.trailingAnchor.constraint(equalTo: periodStackView.trailingAnchor, constant: -16),
-            endDateButton.heightAnchor.constraint(equalToConstant: 50),
-        
-//            completeButton.topAnchor.constraint(equalTo: periodStackView.bottomAnchor, constant: 8),
-            // Add spacing between endDateButton and completeButton
-            endDateButton.bottomAnchor.constraint(equalTo: completeButton.topAnchor, constant: -40), // You can adjust the spacing as needed
-
-
-            
-            // Scroll view constraints
-            scrollView.topAnchor.constraint(equalTo: headerStackView.bottomAnchor, constant: 16),
-            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-       
-        ])
-        
-        // Set the background color of the scrollView to black
-        scrollView.backgroundColor = .white
-        
-        
-        // Set the scroll view's content size to fit the content
-        headerContentStackView.widthAnchor.constraint(equalTo: scrollView.widthAnchor).isActive = true
-    }
-
-    @objc func haveFineButtonTapped(_ sender: UIButton) {
-        sender.isSelected = !sender.isSelected
-        noFineButton.isSelected = !sender.isSelected
-
-        if sender.isSelected {
-            // Create a label for "어떤 벌금인가요?"
-            let fineTypeLabel = UILabel()
-            fineTypeLabel.text = "어떤 벌금인가요?"
-            fineTypeLabel.textColor = UIColor(hexCode: "#49545C")
-            fineTypeLabel.font = UIFont.systemFont(ofSize: 14)
-            fineTypeLabel.translatesAutoresizingMaskIntoConstraints = false
-
-            // Create a text field for chat link input
-            let fineTypesTextField = UITextField()
-            fineTypesTextField.placeholder = "지각비, 결석비"
-            fineTypesTextField.textColor = UIColor(hexCode: "#A1AAB0")
-            fineTypesTextField.font = UIFont.systemFont(ofSize: 14)
-            fineTypesTextField.borderStyle = .roundedRect  // Add rounded border
-            fineTypesTextField.translatesAutoresizingMaskIntoConstraints = false
-            
-            // Create a text field for "얼마인가요?"
-            let fineAmountLabel = UILabel()
-            fineAmountLabel.text = "얼마인가요?"
-            fineAmountLabel.textColor = UIColor(hexCode: "#49545C")
-            fineAmountLabel.font = UIFont.systemFont(ofSize: 14)
-            fineAmountLabel.translatesAutoresizingMaskIntoConstraints = false
-            
-            // Create a text field for chat link input
-            let fineAmountTextField = UITextField()
-            fineAmountTextField.placeholder = "가격을 알려주세요"
-            fineAmountTextField.textColor = UIColor(hexCode: "#A1AAB0")
-            fineAmountTextField.font = UIFont.systemFont(ofSize: 14)
-            fineAmountTextField.borderStyle = .roundedRect  // Add rounded border
-            fineAmountTextField.translatesAutoresizingMaskIntoConstraints = false
-            
-            // Create a label for
-            let countLabel2 = UILabel()
-            countLabel2.text = "원"
-            countLabel2.textColor = UIColor(hexCode: "#68737D")
-            countLabel2.font = UIFont.systemFont(ofSize: 15, weight: .bold)
-            countLabel2.translatesAutoresizingMaskIntoConstraints = false
-            fineAmountTextField.addSubview(countLabel2)
-            
-            // Add the labels and text fields to the fineButtonsStackView
-            finefixStackView.addArrangedSubview(fineTypeLabel)
-            finefixStackView.addArrangedSubview(fineTypesTextField)
-            finefixStackView.addArrangedSubview(fineAmountLabel)
-            finefixStackView.addArrangedSubview(fineAmountTextField)
-            
-            // Set up constraints
-            NSLayoutConstraint.activate([
-                // Constraints for chatLinkTextField
-                fineTypesTextField.leadingAnchor.constraint(equalTo: fineButtonsStackView.leadingAnchor, constant: 0),
-                fineTypesTextField.trailingAnchor.constraint(equalTo: fineButtonsStackView.trailingAnchor),
-                fineTypesTextField.widthAnchor.constraint(equalTo: fineButtonsStackView.widthAnchor, constant: -30),
-                
-                fineAmountTextField.leadingAnchor.constraint(equalTo: fineButtonsStackView.leadingAnchor, constant: 0),
-                fineAmountTextField.trailingAnchor.constraint(equalTo: fineButtonsStackView.trailingAnchor),
-                fineAmountTextField.widthAnchor.constraint(equalTo: fineButtonsStackView.widthAnchor, constant: -30),
-                
-                countLabel2.centerYAnchor.constraint(equalTo: fineAmountTextField.centerYAnchor),
-                countLabel2.trailingAnchor.constraint(equalTo: fineAmountTextField.trailingAnchor, constant: -8),
-                countLabel2.widthAnchor.constraint(equalToConstant: 20),
-                countLabel2.heightAnchor.constraint(equalToConstant: 20),
-            ])
-                
-        } else {
-            // Remove the labels and text fields from the fineButtonsStackView
-            fineButtonsStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
-        }
-        
-        
-    }
-
-    @objc func noFineButtonTapped(_ sender: UIButton) {
-        sender.isSelected = !sender.isSelected
-        haveFineButton.isSelected = !sender.isSelected
-        
-        // Remove the labels and text fields from the finefixStackView
-        finefixStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
-    }
-    
-
-
-    @objc func departmentArrowButtonTapped() {
-        let departmentselectViewController = DepartmentselectViewController()
-        let navigationController = UINavigationController(rootViewController: departmentselectViewController)
-        navigationController.modalPresentationStyle = .fullScreen
-        present(navigationController, animated: true, completion: nil)
-    }
-
-    @objc func genderButtonTapped(_ sender: UIButton) {
-        // Reset colors of all buttons
-        allGenderButton.backgroundColor = .white
-        allGenderButton.setTitleColor(.gray, for: .normal)
-        maleOnlyButton.backgroundColor = .white
-        maleOnlyButton.setTitleColor(.gray, for: .normal)
-        femaleOnlyButton.backgroundColor = .white
-        femaleOnlyButton.setTitleColor(.gray, for: .normal)
-        
-        // Set the tapped button to orange background
-        sender.backgroundColor = UIColor(hexCode: "#FF5530")
-        sender.setTitleColor(.white, for: .normal)
-    }
-    
-    @objc func meetButtonTapped(_ sender: UIButton) {
-        // Reset colors of all buttons
-        contactButton.backgroundColor = .white
-        contactButton.setTitleColor(.gray, for: .normal)
-        untactButton.backgroundColor = .white
-        untactButton.setTitleColor(.gray, for: .normal)
-        mixmeetButton.backgroundColor = .white
-        mixmeetButton.setTitleColor(.gray, for: .normal)
-        
-        // Set the tapped button to orange background
-        sender.backgroundColor = UIColor(hexCode: "#FF5530")
-        sender.setTitleColor(.white, for: .normal)
-    }
-    
-    
-    // Function to handle back button tap and navigate back to HomeViewController
-     @objc func goBack() {
-         // If the SearchViewController is embedded within a UINavigationController
-//                 navigationController?.popViewController(animated: true)
-         let studyViewController = StudyViewController()
-         let navController = UINavigationController(rootViewController: studyViewController) // Wrap the SignUpViewController in a navigation controller
-         navController.modalPresentationStyle = .fullScreen
+             //(1)채팅방링크 뷰
+             // Constraints for chatLinkLabel
+             chatLinkLabel.leadingAnchor.constraint(equalTo: chatLinkStackView.leadingAnchor, constant: 16),
+             chatLinkLabel.trailingAnchor.constraint(equalTo: chatLinkStackView.trailingAnchor, constant: 10),
+             
+             // Constraints for descriptionLabel
+             descriptionLabel.leadingAnchor.constraint(equalTo: chatLinkStackView.leadingAnchor, constant: 16),
+             descriptionLabel.trailingAnchor.constraint(equalTo: chatLinkStackView.trailingAnchor, constant: 100),
+             
+             // Constraints for chatLinkTextField
+             chatLinkTextField.leadingAnchor.constraint(equalTo: chatLinkStackView.leadingAnchor, constant: 16),
+             chatLinkTextField.trailingAnchor.constraint(equalTo: chatLinkStackView.trailingAnchor),
+             chatLinkTextField.widthAnchor.constraint(equalTo: chatLinkStackView.widthAnchor, constant: -50),
+             
+             //(2)스터디소개 뷰
+             // Constraints for chatLinkLabel
+             studytitleLabel.leadingAnchor.constraint(equalTo: studyinfoStackView.leadingAnchor, constant: 16),
+             studytitleLabel.trailingAnchor.constraint(equalTo: studyinfoStackView.trailingAnchor, constant: 5),
+             
+             // Constraints for descriptionLabel
+             studytitleTextField.leadingAnchor.constraint(equalTo: studyinfoStackView.leadingAnchor, constant: 16),
+             studytitleTextField.trailingAnchor.constraint(equalTo: studyinfoStackView.trailingAnchor, constant: 100),
+             
+             // Constraints for chatLinkLabel
+             studyproduceLabel.leadingAnchor.constraint(equalTo: studyinfoStackView.leadingAnchor, constant: 16),
+             studyproduceLabel.trailingAnchor.constraint(equalTo: studyinfoStackView.trailingAnchor, constant: 10),
+     
+             
+             // Constraints for chatLinkTextField
+             studyproduceTextField.leadingAnchor.constraint(equalTo: studyinfoStackView.leadingAnchor, constant: 16),
+             studyproduceTextField.trailingAnchor.constraint(equalTo: studyinfoStackView.trailingAnchor),
+             studyproduceTextField.widthAnchor.constraint(equalTo: studyinfoStackView.widthAnchor, constant: -50),
+             
+             //(3)카테고리 뷰
          
-         _ = UIBarButtonItem(title: "back", style: .plain, target: self, action: #selector(backButtonTapped))
-       
+             associatedepartStackView.leadingAnchor.constraint(equalTo: categoryStackView.leadingAnchor, constant: 16),
+             associatedepartStackView.trailingAnchor.constraint(equalTo: categoryStackView.trailingAnchor),
+             
+             associatedepartButton.leadingAnchor.constraint(equalTo: associatedepartStackView.leadingAnchor, constant: 300),
+             associatedepartButton.trailingAnchor.constraint(equalTo: associatedepartStackView.trailingAnchor),
+             
+     
+             
+             //(4)스터디멤버 뷰
+             // Constraints for chatLinkLabel
+             studymemberLabel.leadingAnchor.constraint(equalTo: studymemberStackView.leadingAnchor, constant: 16),
+             studymemberLabel.trailingAnchor.constraint(equalTo: studymemberStackView.trailingAnchor, constant: 5),
+             
+             // Constraints for chatLinkLabel
+             grayDividerLine.leadingAnchor.constraint(equalTo: studymemberStackView.leadingAnchor, constant: 0),
+             grayDividerLine.trailingAnchor.constraint(equalTo: studymemberStackView.trailingAnchor, constant: 10),
+             
+             studymembercountLabel.leadingAnchor.constraint(equalTo: studymemberStackView.leadingAnchor, constant: 16),
+             studymembercountLabel.trailingAnchor.constraint(equalTo: studymemberStackView.trailingAnchor, constant: 5),
          
-         self.present(navController, animated: true, completion: nil) // Present the navigation controller modally
+             
+             // Constraints for descriptionLabel
+             description4Label.leadingAnchor.constraint(equalTo: studymemberStackView.leadingAnchor, constant: 16),
+             description4Label.trailingAnchor.constraint(equalTo: studymemberStackView.trailingAnchor, constant: 100),
+             
+             // Constraints for chatLinkTextField
+             studymemberTextField.leadingAnchor.constraint(equalTo: studymemberStackView.leadingAnchor, constant: 16),
+             studymemberTextField.trailingAnchor.constraint(equalTo: studymemberStackView.trailingAnchor),
+             studymemberTextField.widthAnchor.constraint(equalTo: studymemberStackView.widthAnchor, constant: -50),
+             
+             countLabel.centerYAnchor.constraint(equalTo: studymemberTextField.centerYAnchor),
+             countLabel.trailingAnchor.constraint(equalTo: studymemberTextField.trailingAnchor, constant: -8),
+             countLabel.widthAnchor.constraint(equalToConstant: 20),
+             countLabel.heightAnchor.constraint(equalToConstant: 20),
+             
+             // Constraints for chatLinkLabel
+             genderLabel.leadingAnchor.constraint(equalTo: studymemberStackView.leadingAnchor, constant: 16),
+             genderLabel.trailingAnchor.constraint(equalTo: studymemberStackView.trailingAnchor, constant: 10),
+             
+             
+             description5Label.leadingAnchor.constraint(equalTo: studymemberStackView.leadingAnchor, constant: 16),
+             description5Label.trailingAnchor.constraint(equalTo: studymemberStackView.trailingAnchor, constant: 10),
+     
+             genderButtonsStackView.trailingAnchor.constraint(equalTo: studymemberStackView.trailingAnchor, constant: -16),
+             genderButtonsStackView.topAnchor.constraint(equalTo: description5Label.bottomAnchor, constant: 8),
+             genderButtonsStackView.heightAnchor.constraint(equalToConstant: 30),
 
+             allGenderButton.widthAnchor.constraint(equalToConstant: 100),
+             maleOnlyButton.widthAnchor.constraint(equalToConstant: 80),
+             femaleOnlyButton.widthAnchor.constraint(equalToConstant: 80),
+             
+             //(5)스터디방식 뷰
+             // Constraints for chatLinkLabel
+             studymethodLabel.leadingAnchor.constraint(equalTo: studymethodStackView.leadingAnchor, constant: 16),
+             studymethodLabel.trailingAnchor.constraint(equalTo: studymethodStackView.trailingAnchor, constant: 5),
+
+
+             meetLabel.leadingAnchor.constraint(equalTo: studymethodStackView.leadingAnchor, constant: 16),
+             meetLabel.trailingAnchor.constraint(equalTo: studymethodStackView.trailingAnchor, constant: 5),
+
+
+             // Constraints for descriptionLabel
+             description6Label.leadingAnchor.constraint(equalTo: studymethodStackView.leadingAnchor, constant: 16),
+             description6Label.trailingAnchor.constraint(equalTo: studymethodStackView.trailingAnchor, constant: 100),
+
+             meetButtonsStackView.trailingAnchor.constraint(equalTo: studymethodStackView.trailingAnchor, constant: -16),
+ //            meetButtonsStackView.topAnchor.constraint(equalTo: studymethodStackView.bottomAnchor, constant: 8),
+ //            meetButtonsStackView.heightAnchor.constraint(equalToConstant: 30),
+
+             contactButton.widthAnchor.constraint(equalToConstant: 80),
+             untactButton.widthAnchor.constraint(equalToConstant: 100),
+             mixmeetButton.widthAnchor.constraint(equalToConstant: 80),
+             
+             fineLabel.leadingAnchor.constraint(equalTo: studymethodStackView.leadingAnchor, constant: 16),
+             fineLabel.trailingAnchor.constraint(equalTo: studymethodStackView.trailingAnchor, constant: 100),
+             
+             fineButtonsStackView.leadingAnchor.constraint(equalTo: studymethodStackView.leadingAnchor, constant: 16),
+             fineButtonsStackView.trailingAnchor.constraint(equalTo: studymethodStackView.trailingAnchor, constant: 50),
+             
+ //            finefixStackView.leadingAnchor.constraint(equalTo: studymethodStackView.leadingAnchor, constant: 16),
+ //            finefixStackView.trailingAnchor.constraint(equalTo: studymethodStackView.trailingAnchor, constant: 50),
+
+
+             // Constraints for chatLinkLabel
+             grayDividerLine2.leadingAnchor.constraint(equalTo: studymethodStackView.leadingAnchor, constant: 0),
+             grayDividerLine2.trailingAnchor.constraint(equalTo: studymethodStackView.trailingAnchor, constant: 10),
+             
+             //(6)스터디기간 뷰
+             // Constraints for chatLinkLabel
+             periodLabel.leadingAnchor.constraint(equalTo: periodStackView.leadingAnchor, constant: 16),
+             periodLabel.trailingAnchor.constraint(equalTo: periodStackView.trailingAnchor, constant: 5),
+             
+             // Constraints for chatLinkLabel
+             grayDividerLine3.leadingAnchor.constraint(equalTo: periodStackView.leadingAnchor, constant: 0),
+             grayDividerLine3.trailingAnchor.constraint(equalTo: periodStackView.trailingAnchor, constant: 10),
+             
+             // Constraints for chatLinkLabel
+             startLabel.leadingAnchor.constraint(equalTo: periodStackView.leadingAnchor, constant: 16),
+             startLabel.trailingAnchor.constraint(equalTo: periodStackView.trailingAnchor, constant: 10),
+             
+             startDateButton.leadingAnchor.constraint(equalTo: periodStackView.leadingAnchor, constant: 16),
+             startDateButton.trailingAnchor.constraint(equalTo: periodStackView.trailingAnchor, constant: -16),
+             startDateButton.heightAnchor.constraint(equalToConstant: 50),
+             
+             // Constraints for chatLinkLabel
+             endLabel.leadingAnchor.constraint(equalTo: periodStackView.leadingAnchor, constant: 16),
+             endLabel.trailingAnchor.constraint(equalTo: periodStackView.trailingAnchor, constant: 10),
+         
+
+             endDateButton.leadingAnchor.constraint(equalTo: periodStackView.leadingAnchor, constant: 16),
+             endDateButton.trailingAnchor.constraint(equalTo: periodStackView.trailingAnchor, constant: -16),
+             endDateButton.heightAnchor.constraint(equalToConstant: 50),
+         
+ //            completeButton.topAnchor.constraint(equalTo: periodStackView.bottomAnchor, constant: 8),
+             // Add spacing between endDateButton and completeButton
+             endDateButton.bottomAnchor.constraint(equalTo: completeButton.topAnchor, constant: -40), // You can adjust the spacing as needed
+
+
+             
+             // Scroll view constraints
+             scrollView.topAnchor.constraint(equalTo: headerStackView.bottomAnchor, constant: 16),
+             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+             scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+             scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+        
+         ])
+         
+         // Set the background color of the scrollView to black
+         scrollView.backgroundColor = .white
+         
+         
+         // Set the scroll view's content size to fit the content
+         headerContentStackView.widthAnchor.constraint(equalTo: scrollView.widthAnchor).isActive = true
+     }
+    
+    
+    // 키보드 내리기 위한 탭 제스처 핸들러
+    @objc func handleTap() {
+        // 키보드를 내립니다.
+        view.endEditing(true)
+    }
+
+     @objc func haveFineButtonTapped(_ sender: UIButton) {
+         sender.isSelected = !sender.isSelected
+         noFineButton.isSelected = !sender.isSelected
+
+         if sender.isSelected {
+             // Create a label for "어떤 벌금인가요?"
+             let fineTypeLabel = UILabel()
+             fineTypeLabel.text = "어떤 벌금인가요?"
+             fineTypeLabel.textColor = UIColor(hexCode: "#49545C")
+             fineTypeLabel.font = UIFont.systemFont(ofSize: 14)
+             fineTypeLabel.translatesAutoresizingMaskIntoConstraints = false
+
+             // Create a text field for chat link input
+             let fineTypesTextField = UITextField()
+             fineTypesTextField.placeholder = "지각비, 결석비"
+             fineTypesTextField.textColor = UIColor(hexCode: "#A1AAB0")
+             fineTypesTextField.font = UIFont.systemFont(ofSize: 14)
+             fineTypesTextField.borderStyle = .roundedRect  // Add rounded border
+             fineTypesTextField.translatesAutoresizingMaskIntoConstraints = false
+             
+             // Create a text field for "얼마인가요?"
+             let fineAmountLabel = UILabel()
+             fineAmountLabel.text = "얼마인가요?"
+             fineAmountLabel.textColor = UIColor(hexCode: "#49545C")
+             fineAmountLabel.font = UIFont.systemFont(ofSize: 14)
+             fineAmountLabel.translatesAutoresizingMaskIntoConstraints = false
+             
+             // Create a text field for chat link input
+             let fineAmountTextField = UITextField()
+             fineAmountTextField.placeholder = "가격을 알려주세요"
+             fineAmountTextField.textColor = UIColor(hexCode: "#A1AAB0")
+             fineAmountTextField.font = UIFont.systemFont(ofSize: 14)
+             fineAmountTextField.borderStyle = .roundedRect  // Add rounded border
+             fineAmountTextField.translatesAutoresizingMaskIntoConstraints = false
+             
+             // Create a label for
+             let countLabel2 = UILabel()
+             countLabel2.text = "원"
+             countLabel2.textColor = UIColor(hexCode: "#68737D")
+             countLabel2.font = UIFont.systemFont(ofSize: 15, weight: .bold)
+             countLabel2.translatesAutoresizingMaskIntoConstraints = false
+             fineAmountTextField.addSubview(countLabel2)
+             
+             // Add the labels and text fields to the fineButtonsStackView
+             finefixStackView.addArrangedSubview(fineTypeLabel)
+             finefixStackView.addArrangedSubview(fineTypesTextField)
+             finefixStackView.addArrangedSubview(fineAmountLabel)
+             finefixStackView.addArrangedSubview(fineAmountTextField)
+             
+             // Set up constraints
+             NSLayoutConstraint.activate([
+                 // Constraints for chatLinkTextField
+                 fineTypesTextField.leadingAnchor.constraint(equalTo: fineButtonsStackView.leadingAnchor, constant: 0),
+                 fineTypesTextField.trailingAnchor.constraint(equalTo: fineButtonsStackView.trailingAnchor),
+                 fineTypesTextField.widthAnchor.constraint(equalTo: fineButtonsStackView.widthAnchor, constant: -30),
+                 
+                 fineAmountTextField.leadingAnchor.constraint(equalTo: fineButtonsStackView.leadingAnchor, constant: 0),
+                 fineAmountTextField.trailingAnchor.constraint(equalTo: fineButtonsStackView.trailingAnchor),
+                 fineAmountTextField.widthAnchor.constraint(equalTo: fineButtonsStackView.widthAnchor, constant: -30),
+                 
+                 countLabel2.centerYAnchor.constraint(equalTo: fineAmountTextField.centerYAnchor),
+                 countLabel2.trailingAnchor.constraint(equalTo: fineAmountTextField.trailingAnchor, constant: -8),
+                 countLabel2.widthAnchor.constraint(equalToConstant: 20),
+                 countLabel2.heightAnchor.constraint(equalToConstant: 20),
+             ])
+                 
+         } else {
+             // Remove the labels and text fields from the fineButtonsStackView
+             fineButtonsStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
+         }
+         
          
      }
-     @objc func backButtonTapped() {
+
+     @objc func noFineButtonTapped(_ sender: UIButton) {
+         sender.isSelected = !sender.isSelected
+         haveFineButton.isSelected = !sender.isSelected
+         
+         // Remove the labels and text fields from the finefixStackView
+         finefixStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
+     }
+     
+
+
+     @objc func departmentArrowButtonTapped() {
+         let departmentselectViewController = DepartmentselectViewController()
+         let navigationController = UINavigationController(rootViewController: departmentselectViewController)
+         navigationController.modalPresentationStyle = .fullScreen
+         present(navigationController, animated: true, completion: nil)
+     }
+
+     @objc func genderButtonTapped(_ sender: UIButton) {
+         // Reset colors of all buttons
+         allGenderButton.backgroundColor = .white
+         allGenderButton.setTitleColor(.gray, for: .normal)
+         maleOnlyButton.backgroundColor = .white
+         maleOnlyButton.setTitleColor(.gray, for: .normal)
+         femaleOnlyButton.backgroundColor = .white
+         femaleOnlyButton.setTitleColor(.gray, for: .normal)
+         
+         // Set the tapped button to orange background
+         sender.backgroundColor = UIColor(hexCode: "#FF5530")
+         sender.setTitleColor(.white, for: .normal)
+     }
+     
+     @objc func meetButtonTapped(_ sender: UIButton) {
+         // Reset colors of all buttons
+         contactButton.backgroundColor = .white
+         contactButton.setTitleColor(.gray, for: .normal)
+         untactButton.backgroundColor = .white
+         untactButton.setTitleColor(.gray, for: .normal)
+         mixmeetButton.backgroundColor = .white
+         mixmeetButton.setTitleColor(.gray, for: .normal)
+         
+         // Set the tapped button to orange background
+         sender.backgroundColor = UIColor(hexCode: "#FF5530")
+         sender.setTitleColor(.white, for: .normal)
+     }
+     
+     @objc func startDateButtonTapped() {
+         // Create a date picker
+         startDatePicker.datePickerMode = .date
+         startDatePicker.preferredDatePickerStyle = .inline // You can choose the style you prefer
+         startDatePicker.addTarget(self, action: #selector(datePickerValueChanged), for: .valueChanged)
+
+         // Create an input view for the date picker
+         startDateTextField.inputView = startDatePicker
+
+
+         // Set titleTextField's inputAccessoryView to a toolbar with a done button
+         let toolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 44))
+                 let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(dismissDatePicker))
+                 let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+                 toolbar.setItems([flexibleSpace, doneButton], animated: false)
+         startDateTextField.inputAccessoryView = toolbar
+
+         // Assign the toolbar as the input accessory view for the date picker
+         startDateTextField.inputAccessoryView = toolbar
+
+         // Add the text field to the view
+         view.addSubview(startDateTextField)
+
+         // Set up constraints for the text field (adjust as needed)
+         startDateTextField.translatesAutoresizingMaskIntoConstraints = false
+         startDateTextField.topAnchor.constraint(equalTo: startDateButton.bottomAnchor, constant: -35).isActive = true
+         startDateTextField.leadingAnchor.constraint(equalTo: periodStackView.leadingAnchor, constant: 40).isActive = true
+         startDateTextField.trailingAnchor.constraint(equalTo: periodStackView.trailingAnchor, constant: -16).isActive = true
+
+         // Show the date picker
+         startDateTextField.becomeFirstResponder()
+     }
+
+     @objc func datePickerValueChanged() {
+         // Update the selectedStartDate when the date picker's value changes
+         selectedStartDate = startDatePicker.date
+         updateStartDateTextField() // Update the text field to display the selected date
+     }
+
+     @objc func dismissDatePicker() {
+         // Dismiss the date picker when the Done button is tapped
+         startDateTextField.resignFirstResponder()
+     }
+
+     func updateStartDateTextField() {
+         // Update the text field with the selected date
+         let dateFormatter = DateFormatter()
+         dateFormatter.dateFormat = "yyyy년 MM월 dd일" // You can choose the date format you prefer
+         startDateTextField.text = dateFormatter.string(from: selectedStartDate ?? Date())
+         // Hide the "선택하기" title of startDateButton
+         startDateButton.setTitle("", for: .normal)
+     }
+    
+    @objc func endDateButtonTapped() {
+        // Create a date picker
+        endDatePicker.datePickerMode = .date
+        endDatePicker.preferredDatePickerStyle = .inline // You can choose the style you prefer
+        endDatePicker.addTarget(self, action: #selector(endDatePickerValueChanged), for: .valueChanged)
+
+        // Create an input view for the date picker
+        endDateTextField.inputView = endDatePicker
+
+        // Set titleTextField's inputAccessoryView to a toolbar with a done button
+        let toolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 44))
+        let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(dismissEndDatePicker))
+        let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        toolbar.setItems([flexibleSpace, doneButton], animated: false)
+        endDateTextField.inputAccessoryView = toolbar
+
+        // Assign the toolbar as the input accessory view for the date picker
+        endDateTextField.inputAccessoryView = toolbar
+
+        // Add the text field to the view
+        view.addSubview(endDateTextField)
+
+        // Set up constraints for the text field (adjust as needed)
+        endDateTextField.translatesAutoresizingMaskIntoConstraints = false
+        endDateTextField.topAnchor.constraint(equalTo: endDateButton.bottomAnchor, constant: -35).isActive = true
+        endDateTextField.leadingAnchor.constraint(equalTo: periodStackView.leadingAnchor, constant: 40).isActive = true
+        endDateTextField.trailingAnchor.constraint(equalTo: periodStackView.trailingAnchor, constant: -16).isActive = true
+
+        // Show the date picker
+        endDateTextField.becomeFirstResponder()
+    }
+
+    @objc func endDatePickerValueChanged() {
+        // Update the selectedEndDate when the date picker's value changes
+        selectedEndDate = endDatePicker.date
+        updateEndDateTextField() // Update the text field to display the selected date
+    }
+
+    @objc func dismissEndDatePicker() {
+        // Dismiss the date picker when the Done button is tapped
+        endDateTextField.resignFirstResponder()
+    }
+
+    func updateEndDateTextField() {
+        // Update the text field with the selected date
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy년 MM월 dd일" // You can choose the date format you prefer
+        endDateTextField.text = dateFormatter.string(from: selectedEndDate ?? Date())
+        // Hide the "선택하기" title of endDateButton
+        endDateButton.setTitle("", for: .normal)
+    }
+     
+     
+     // Function to handle back button tap and navigate back to HomeViewController
+     @objc func goBack() {
+         
+         //         let studyViewController = StudyViewController()
+         //         let navController = UINavigationController(rootViewController: studyViewController)
+         //         navController.modalPresentationStyle = .fullScreen
+         //
+         //         _ = UIBarButtonItem(title: "back", style: .plain, target: self, action: #selector(backButtonTapped))
+         //
+         //
+         //         self.present(navController, animated: true, completion: nil) // Present the navigation controller modally
+         //
+         //
+         //     }
+         //     @objc func backButtonTapped() {
+         //         self.dismiss(animated: true, completion: nil)
+         //     }
+         
          self.dismiss(animated: true, completion: nil)
      }
-    
+     
+ }
+// 문자열의 너비를 계산하는 확장 함수
+extension String {
+    func width(withConstrainedHeight height: CGFloat, font: UIFont) -> CGFloat {
+        let constraintRect = CGSize(width: .greatestFiniteMagnitude, height: height)
+        let boundingBox = self.boundingRect(with: constraintRect, options: .usesLineFragmentOrigin, attributes: [NSAttributedString.Key.font: font], context: nil)
+        return ceil(boundingBox.width)
+    }
 }

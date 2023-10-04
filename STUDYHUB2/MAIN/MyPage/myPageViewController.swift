@@ -79,7 +79,7 @@ class myPageViewController: UIViewController {
         
         // Create a stack view for login and registration options
         let gotologinStackView = UIStackView()
-        gotologinStackView.axis = .vertical
+        gotologinStackView.axis = .horizontal
         gotologinStackView.spacing = 8
         gotologinStackView.translatesAutoresizingMaskIntoConstraints = false
         
@@ -87,8 +87,11 @@ class myPageViewController: UIViewController {
         let chevronButton = UIButton(type: .system)
         chevronButton.setImage(UIImage(systemName: "chevron.right"), for: .normal)
         chevronButton.tintColor = .black
+        chevronButton.addTarget(self, action: #selector(chevronButtonTapped), for: .touchUpInside)
         chevronButton.translatesAutoresizingMaskIntoConstraints = false
         
+        // Add the loginOrStackView to the headerContentStackView
+        gotologinStackView.addArrangedSubview(loginOrStackView)
         gotologinStackView.addArrangedSubview(chevronButton)
         
         // Add the loginOrStackView to the headerContentStackView
@@ -159,14 +162,8 @@ class myPageViewController: UIViewController {
         bookmarkButton.translatesAutoresizingMaskIntoConstraints = false
         bookmarkButton.widthAnchor.constraint(equalToConstant: 115).isActive = true
         bookmarkButton.heightAnchor.constraint(equalToConstant: 87).isActive = true
+        bookmarkButton.addTarget(self, action: #selector(bookmarkpageButtonTapped), for: .touchUpInside)
         
-        
-        // Add a label for the "북마크" text
-        let bookmarkLabel = UILabel()
-        bookmarkLabel.text = "북마크"
-        bookmarkLabel.textColor = .gray
-        bookmarkLabel.font = UIFont.systemFont(ofSize: 14)
-        bookmarkLabel.translatesAutoresizingMaskIntoConstraints = false
         
         // Add a label for the "0" text
         let bookmarkCountLabel = UILabel()
@@ -175,9 +172,18 @@ class myPageViewController: UIViewController {
         bookmarkCountLabel.font = UIFont.systemFont(ofSize: 16, weight: .bold)
         bookmarkCountLabel.translatesAutoresizingMaskIntoConstraints = false
         
+        // Add a label for the "북마크" text
+        let bookmarkLabel = UILabel()
+        bookmarkLabel.text = "북마크"
+        bookmarkLabel.textColor = .gray
+        bookmarkLabel.font = UIFont.systemFont(ofSize: 14)
+        bookmarkLabel.translatesAutoresizingMaskIntoConstraints = false
+        
+        
         // Add the labels to the button
-        bookmarkButton.addSubview(bookmarkLabel)
         bookmarkButton.addSubview(bookmarkCountLabel)
+        bookmarkButton.addSubview(bookmarkLabel)
+      
         
         
         // Add the buttons to the buttonboxesStackView
@@ -200,35 +206,36 @@ class myPageViewController: UIViewController {
         normalButtonStackView.axis = .vertical
         normalButtonStackView.spacing = 16
         normalButtonStackView.translatesAutoresizingMaskIntoConstraints = false
+        normalButtonStackView.alignment = .leading // 정렬을 왼쪽(leading)으로 설정
 
         // Create the "공지사항" button
         let informButton = UIButton(type: .system)
         informButton.setTitle("공지사항", for: .normal)
-        informButton.setTitleColor(.gray, for: .normal)
+        informButton.setTitleColor(UIColor(hexCode: "#49545C"), for: .normal)
         informButton.translatesAutoresizingMaskIntoConstraints = false
 
         // Create the "문의하기" button
         let askButton = UIButton(type: .system)
         askButton.setTitle("문의하기", for: .normal)
-        askButton.setTitleColor(.gray, for: .normal)
+        askButton.setTitleColor(UIColor(hexCode: "#49545C"), for: .normal)
         askButton.translatesAutoresizingMaskIntoConstraints = false
         
         // Create the "이용방법" button
         let howtouseButton = UIButton(type: .system)
         howtouseButton.setTitle("이용방법", for: .normal)
-        howtouseButton.setTitleColor(.gray, for: .normal)
+        howtouseButton.setTitleColor(UIColor(hexCode: "#49545C"), for: .normal)
         howtouseButton.translatesAutoresizingMaskIntoConstraints = false
         
         // Create the "서비스 이용약관" button
         let serviceButton = UIButton(type: .system)
         serviceButton.setTitle("서비스 이용약관", for: .normal)
-        serviceButton.setTitleColor(.gray, for: .normal)
+        serviceButton.setTitleColor(UIColor(hexCode: "#49545C"), for: .normal)
         serviceButton.translatesAutoresizingMaskIntoConstraints = false
         
         // Create the "개인 정보 처리 방침" button
         let informhandleButton = UIButton(type: .system)
         informhandleButton.setTitle("개인정보 처리 방침", for: .normal)
-        informhandleButton.setTitleColor(.gray, for: .normal)
+        informhandleButton.setTitleColor(UIColor(hexCode: "#49545C"), for: .normal)
         informhandleButton.translatesAutoresizingMaskIntoConstraints = false
         
        
@@ -271,40 +278,40 @@ class myPageViewController: UIViewController {
             grayTextLabel.leadingAnchor.constraint(equalTo: loginOrStackView.leadingAnchor, constant: 16),
             grayTextLabel.trailingAnchor.constraint(equalTo: loginOrStackView.trailingAnchor, constant: 10),
             
-            chevronButton.topAnchor.constraint(equalTo: gotologinStackView.topAnchor, constant: -85),
-            chevronButton.leadingAnchor.constraint(equalTo: gotologinStackView.leadingAnchor, constant: 300),
-            chevronButton.trailingAnchor.constraint(equalTo: gotologinStackView.trailingAnchor, constant: 10),
-        
+            chevronButton.topAnchor.constraint(equalTo: loginOrStackView.topAnchor, constant: 50),
+            chevronButton.trailingAnchor.constraint(equalTo: loginOrStackView.trailingAnchor, constant: 60),
+
+          
+            writtenCountLabel.centerXAnchor.constraint(equalTo: writtenButton.centerXAnchor),
+            writtenCountLabel.topAnchor.constraint(equalTo: writtenButton.topAnchor, constant: 20),
             
             writtenLabel.centerXAnchor.constraint(equalTo: writtenButton.centerXAnchor),
-            writtenLabel.topAnchor.constraint(equalTo: writtenButton.topAnchor, constant: 8),
-            
-            writtenCountLabel.centerXAnchor.constraint(equalTo: writtenButton.centerXAnchor),
-            writtenCountLabel.topAnchor.constraint(equalTo: writtenLabel.bottomAnchor, constant: 4),
+            writtenLabel.topAnchor.constraint(equalTo: writtenCountLabel.bottomAnchor, constant: 4),
   
-            joinstudyLabel.centerXAnchor.constraint(equalTo: joinstudyButton.centerXAnchor),
-            joinstudyLabel.topAnchor.constraint(equalTo: joinstudyButton.topAnchor, constant: 8),
-            
             joinstudyCountLabel.centerXAnchor.constraint(equalTo: joinstudyButton.centerXAnchor),
-            joinstudyCountLabel.topAnchor.constraint(equalTo: joinstudyLabel.bottomAnchor, constant: 4),
-  
-            bookmarkLabel.centerXAnchor.constraint(equalTo: bookmarkButton.centerXAnchor),
-            bookmarkLabel.topAnchor.constraint(equalTo: bookmarkButton.topAnchor, constant: 8),
+            joinstudyCountLabel.topAnchor.constraint(equalTo: joinstudyButton.topAnchor, constant: 20),
             
+            joinstudyLabel.centerXAnchor.constraint(equalTo: joinstudyButton.centerXAnchor),
+            joinstudyLabel.topAnchor.constraint(equalTo: joinstudyCountLabel.bottomAnchor, constant: 4),
+  
             bookmarkCountLabel.centerXAnchor.constraint(equalTo: bookmarkButton.centerXAnchor),
-            bookmarkCountLabel.topAnchor.constraint(equalTo: bookmarkLabel.bottomAnchor, constant: 4),
+            bookmarkCountLabel.topAnchor.constraint(equalTo: bookmarkButton.topAnchor, constant: 20),
+            
+            bookmarkLabel.centerXAnchor.constraint(equalTo: bookmarkButton.centerXAnchor),
+            bookmarkLabel.topAnchor.constraint(equalTo: bookmarkCountLabel.bottomAnchor, constant: 4),
             
 //            buttonboxesStackView.topAnchor.constraint(equalTo: headerContentStackView.bottomAnchor, constant: 8),
-            buttonboxesStackView.leadingAnchor.constraint(equalTo: headerContentStackView.leadingAnchor, constant: 20),
+            buttonboxesStackView.leadingAnchor.constraint(equalTo: headerContentStackView.leadingAnchor, constant: 10),
             buttonboxesStackView.trailingAnchor.constraint(equalTo: headerContentStackView.trailingAnchor, constant: -20),
-            
-            normalButtonStackView.leadingAnchor.constraint(equalTo: headerContentStackView.leadingAnchor, constant: -200),
-            normalButtonStackView.trailingAnchor.constraint(equalTo: headerContentStackView.trailingAnchor, constant: -20),
-            
+  
 //            informButton.leadingAnchor.constraint(equalTo: normalButtonStackView.leadingAnchor, constant: -280),
 //            informButton.trailingAnchor.constraint(equalTo: normalButtonStackView.trailingAnchor, constant: -10),
             
+            boxesDividerLine.leadingAnchor.constraint(equalTo: headerContentStackView.leadingAnchor),
+            boxesDividerLine.trailingAnchor.constraint(equalTo: headerContentStackView.trailingAnchor),
             
+            normalButtonStackView.leadingAnchor.constraint(equalTo: headerContentStackView.leadingAnchor, constant: 20),
+   
             
             // Scroll view constraints
             scrollView.topAnchor.constraint(equalTo: headerStackView.bottomAnchor, constant: 16),
@@ -317,6 +324,7 @@ class myPageViewController: UIViewController {
         ])
         
         
+        
         // Set the background color of the scrollView to white
         scrollView.backgroundColor = .white
         
@@ -325,4 +333,27 @@ class myPageViewController: UIViewController {
     
         
       }
+    
+    @objc func bookmarkpageButtonTapped() {
+        let bookmarkViewController = BookmarkViewController()
+        // Create a UINavigationController with HomeViewController as the root view controller
+        let navigationController = UINavigationController(rootViewController: bookmarkViewController)
+        navigationController.modalPresentationStyle = .fullScreen
+        
+        // Present the UINavigationController modally
+        present(navigationController, animated: true, completion: nil)
+    }
+    
+    @objc func chevronButtonTapped() {
+        // Create an instance of ViewController (assuming that's the name of your ViewController class)
+        let viewController = ViewController()
+        
+        // If you want to present it modally, you can use the following code
+        let navigationController = UINavigationController(rootViewController: viewController)
+        navigationController.modalPresentationStyle = .fullScreen
+        
+        // Present the ViewController modally
+        present(navigationController, animated: true, completion: nil)
+    }
+    
   }

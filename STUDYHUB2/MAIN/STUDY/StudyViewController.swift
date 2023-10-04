@@ -117,7 +117,6 @@ class StudyViewController: UIViewController {
         addButton.addTarget(self, action: #selector(addButtonTapped), for: .touchUpInside)
         view.addSubview(addButton)
 
-        
     
         // Set up constraints
         NSLayoutConstraint.activate([
@@ -143,7 +142,7 @@ class StudyViewController: UIViewController {
             
             // Constraints for verticalGrayLine
             verticalGrayLine.widthAnchor.constraint(equalToConstant: 1),
-            popularButton.leadingAnchor.constraint(equalTo: recentButton.trailingAnchor, constant: -260), // 6 points to the right of recentButton
+            popularButton.trailingAnchor.constraint(equalTo: sortingButtonsStackView.trailingAnchor, constant:100 ), // 6 points to the right of recentButton
             
             
             // Constraints for centerImageView

@@ -1,4 +1,3 @@
-
 import UIKit
 
 class DepartmentViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate {
@@ -137,9 +136,9 @@ class DepartmentViewController: UIViewController, UITableViewDataSource, UITable
         // 학과 선택에 따라 major 값을 설정
         if let selectedDepartment = selectedDepartment {
             if selectedDepartment == "컴퓨터공학과" {
-                major = "COMPUTER"
+                major = "COMPUTER_SCIENCE_ENGINEERING"
             } else if selectedDepartment == "정보통신공학과" {
-                major = "INFORMATION"
+                major = "INFORMATION_TELECOMMUNICATION_ENGINEERING"
             }
         }
         
@@ -151,32 +150,36 @@ class DepartmentViewController: UIViewController, UITableViewDataSource, UITable
              "nickname": nickname ?? "",
              "password": password ?? "",
          ]
+//        print("departmentVC - email:\(email)")
+//        print("departmentVC - gender:\(gender)")
+//        print("departmentVC - major:\(major)")
+//        print("departmentVC - nickname:\(nickname)")
+//        print("departmentVC - password:\(password)")
         
-        // JSON 데이터 -> 서버
-         if let jsonData = try? JSONSerialization.data(withJSONObject: userData),
-            let url = URL(string: "https://study-hub.site:443/api/users/signup") {
-
-             
-             var request = URLRequest(url: url)
-             request.httpMethod = "POST"
-             request.httpBody = jsonData
-             request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-
-             URLSession.shared.dataTask(with: request) { (data, response, error) in
-                 if let data = data {
-                     // 서버 응답 데이터 처리
-                     if let json = try? JSONSerialization.jsonObject(with: data, options: []) {
-                         print("서버 응답: \(json)")
-                     }
-                 } else if let error = error {
-                     print("네트워크 오류: \(error.localizedDescription)")
-                 }
-             }.resume()
-         }
-         
-         // Use the navigation controller to push the CompleteViewController onto the navigation stack
-         navigationController?.pushViewController(completeViewController, animated: true)
-     }
+        // JSON 데이터를 서버로 전송
+        if let jsonData = try? JSONSerialization.data(withJSONObject: userData),
+           let url = URL(string: "https://study-hub.site:443/api/users/signup") {
+            
+            var request = URLRequest(url: url)
+            request.httpMethod = "POST"
+            request.httpBody = jsonData
+            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            
+            URLSession.shared.dataTask(with: request) { (data, response, error) in
+                if let data = data {
+                    // 서버 응답 데이터 처리
+                    if let json = try? JSONSerialization.jsonObject(with: data, options: []) {
+                        print("서버 응답: \(json)")
+                    }
+                } else if let error = error {
+                    print("네트워크 오류: \(error.localizedDescription)")
+                }
+            }.resume()
+        }
+        
+        // Use the navigation controller to push the CompleteViewController onto the navigation stack
+        navigationController?.pushViewController(completeViewController, animated: true)
+    }
     
     // UITableViewDataSource methods
         func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

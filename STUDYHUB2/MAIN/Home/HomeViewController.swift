@@ -10,6 +10,15 @@ class HomeViewController: UIViewController, UIScrollViewDelegate, UISearchBarDel
         view.backgroundColor = .black
         
         
+//        // Access Token을 가져옴
+//        if let accessToken = UserManager.shared.getAccessToken() {
+//            // Access Token을 사용하여 필요한 작업 수행
+//            print("Access Token: \(accessToken)")
+//        } else {
+//            // Access Token이 없는 경우 로그아웃 또는 로그인 화면으로 리디렉션
+//            // 예: 사용자가 로그아웃한 경우
+//        }
+        
         // Create a tab bar controller
         let tabBarController = UITabBarController()
         
@@ -164,6 +173,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate, UISearchBarDel
         viewAllButton.setTitle("전체>", for: .normal)
         viewAllButton.setTitleColor(.gray, for: .normal)
         viewAllButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 15)
+//        viewAllButton.addTarget(self, action: #selector(viewAllButtonTapped), for: .touchUpInside)
         viewAllButton.translatesAutoresizingMaskIntoConstraints = false
         
        
@@ -180,7 +190,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate, UISearchBarDel
         interestButton.backgroundColor = UIColor(hexCode: "#FFF1EE")
         interestButton.layer.cornerRadius = 8
         interestButton.translatesAutoresizingMaskIntoConstraints = false
-        interestButton.addTarget(self, action: #selector(OpenNewPage), for: .touchUpInside)
+//        interestButton.addTarget(self, action: #selector(OpenNewPage), for: .touchUpInside)
         
         // Create a "제목" label
         let titleLabel = UILabel()
@@ -353,7 +363,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate, UISearchBarDel
             headerContentStackView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
             
             // Large image view constraints (assuming fixed height)
-            largeImageView.heightAnchor.constraint(equalToConstant: 225),
+            largeImageView.heightAnchor.constraint(equalToConstant: 234),
             largeImageView.leadingAnchor.constraint(equalTo: headerContentStackView.leadingAnchor), // No left margin
             largeImageView.trailingAnchor.constraint(equalTo: headerContentStackView.trailingAnchor), // No right margin
             
@@ -369,6 +379,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate, UISearchBarDel
             // Search Bar constraints
             searchBar.heightAnchor.constraint(equalToConstant: 40),
             searchBar.topAnchor.constraint(equalTo: detailsButton.bottomAnchor, constant: 40),
+            
             
             // Stack view constraints
             newStudyLabel.topAnchor.constraint(equalTo: labelButtonStackView.topAnchor, constant: -10),
@@ -456,7 +467,6 @@ class HomeViewController: UIViewController, UIScrollViewDelegate, UISearchBarDel
     
     
     
-    
     // Function to handle bookmark button tap
     @objc func bookmarkButtonTapped() {
         if bookmarkIconButton.tintColor == UIColor(hexCode: "#C2C8CC") {
@@ -467,9 +477,19 @@ class HomeViewController: UIViewController, UIScrollViewDelegate, UISearchBarDel
         }
     }
     
-    // Function to handle button tap and open new page
-    @objc func OpenNewPage() {
-        let newPageViewController = OpenNewPageViewController() // Your new view controller
-        navigationController?.pushViewController(newPageViewController, animated: true)
-    }
+//    // Function to handle button tap and open new page
+//    @objc func OpenNewPage() {
+//        let newPageViewController = OpenNewPageViewController() // Your new view controller
+//        navigationController?.pushViewController(newPageViewController, animated: true)
+//    }
+    
+//    @objc func viewAllButtonTapped() {
+//        let studyViewController = StudyViewController()
+//        // Create a UINavigationController with HomeViewController as the root view controller
+//        let navigationController = UINavigationController(rootViewController: studyViewController)
+//        navigationController.modalPresentationStyle = .fullScreen
+//
+//        // Present the UINavigationController modally
+//        present(navigationController, animated: true, completion: nil)
+//    }
 }

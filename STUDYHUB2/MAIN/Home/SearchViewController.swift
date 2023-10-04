@@ -20,7 +20,6 @@ class SearchViewController:UIViewController{
         backButton.tintColor = .white
         backButton.addTarget(self, action: #selector(goBack), for: .touchUpInside)
         backButton.translatesAutoresizingMaskIntoConstraints = false
-        
 
         
         // Add the backButton and studyLabel to the header stack view
@@ -30,6 +29,7 @@ class SearchViewController:UIViewController{
         let bookmarkButton = UIButton(type: .system)
         bookmarkButton.setImage(UIImage(systemName: "bookmark"), for: .normal)
         bookmarkButton.tintColor = .white
+        bookmarkButton.addTarget(self, action: #selector(bookmarkpageButtonTapped), for: .touchUpInside)
         bookmarkButton.translatesAutoresizingMaskIntoConstraints = false
         
         // Bell button
@@ -57,7 +57,8 @@ class SearchViewController:UIViewController{
         headerContentStackView.spacing = 16
         headerContentStackView.translatesAutoresizingMaskIntoConstraints = false
       
-
+        
+        
         // Search Bar
         let searchBar = UISearchBar()
         searchBar.placeholder = "관심있는 스터디를 검색해 보세요"
@@ -65,6 +66,8 @@ class SearchViewController:UIViewController{
         searchBar.translatesAutoresizingMaskIntoConstraints = false
         // Add the search icon button to the search bar
         headerContentStackView.addArrangedSubview(searchBar)
+        
+        
         
         //최근검색어
         let recentallStackView = UIStackView()
@@ -154,6 +157,12 @@ class SearchViewController:UIViewController{
             searchBar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
    
             
+//            searchIconButton.centerYAnchor.constraint(equalTo: searchBar.centerYAnchor),
+//            searchIconButton.trailingAnchor.constraint(equalTo: searchBar.trailingAnchor, constant: -8),
+//            searchIconButton.widthAnchor.constraint(equalToConstant: 20),
+//            searchIconButton.heightAnchor.constraint(equalToConstant: 20),
+            
+            
             // Header content stack view constraints
             headerContentStackView.topAnchor.constraint(equalTo: scrollView.topAnchor),
             headerContentStackView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
@@ -194,22 +203,36 @@ class SearchViewController:UIViewController{
     
     // Function to handle back button tap and navigate back to HomeViewController
      @objc func goBack() {
-         // If the SearchViewController is embedded within a UINavigationController
-//                 navigationController?.popViewController(animated: true)
-         let homeViewController = HomeViewController()
-         let navController = UINavigationController(rootViewController: homeViewController) // Wrap the SignUpViewController in a navigation controller
-         navController.modalPresentationStyle = .fullScreen
-         
-         _ = UIBarButtonItem(title: "back", style: .plain, target: self, action: #selector(backButtonTapped))
-       
-         
-         self.present(navController, animated: true, completion: nil) // Present the navigation controller modally
-         
-         
-     }
-     @objc func backButtonTapped() {
+//
+//         let homeViewController = HomeViewController()
+//         let navController = UINavigationController(rootViewController: homeViewController) // Wrap the SignUpViewController in a navigation controller
+//         navController.modalPresentationStyle = .fullScreen
+//
+//         _ = UIBarButtonItem(title: "back", style: .plain, target: self, action: #selector(backButtonTapped))
+//
+//
+//         self.present(navController, animated: true, completion: nil) // Present the navigation controller modally
+//
+//
+//     }
+//     @objc func backButtonTapped() {
+//         self.dismiss(animated: true, completion: nil)
          self.dismiss(animated: true, completion: nil)
      }
+    
+    
+    @objc func bookmarkpageButtonTapped() {
+        let bookmarkViewController = BookmarkViewController()
+        // Create a UINavigationController with HomeViewController as the root view controller
+        let navigationController = UINavigationController(rootViewController: bookmarkViewController)
+        navigationController.modalPresentationStyle = .fullScreen
+        
+        
+        
+        // Present the UINavigationController modally
+        present(navigationController, animated: true, completion: nil)
+    }
+    
          
  
     

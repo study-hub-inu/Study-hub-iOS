@@ -1,10 +1,11 @@
-
 import UIKit
 
 class NicknameViewController: UIViewController {
     
     var email: String?
     var password: String?
+    var gender: String?
+    var nickname: String?
     
     private let femaleButton = UIButton(type: .system)
     private let maleButton = UIButton(type: .system)
@@ -46,7 +47,7 @@ class NicknameViewController: UIViewController {
         genderfixLabel.font = UIFont.systemFont(ofSize: 13)
         genderfixLabel.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(genderfixLabel)
-       
+        
         // '닉네임' 텍스트
         let nicknameLabel = UILabel()
         nicknameLabel.text = "닉네임"
@@ -68,13 +69,19 @@ class NicknameViewController: UIViewController {
         nicknameTextField.borderStyle = .roundedRect
         nicknameTextField.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(nicknameTextField)
+        // 키보드 생성
+        nicknameTextField.becomeFirstResponder()
+        
+        // 키보드 내리기를 위한 탭 제스처 추가
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap))
+        view.addGestureRecognizer(tapGesture)
         
         let genderLabel = UILabel()
         genderLabel.text = "성별"
         genderLabel.textColor = .white
         genderLabel.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(genderLabel)
-
+        
         femaleButton.setTitle("여자", for: .normal)
         femaleButton.setTitleColor(UIColor(hexCode: "#8F8F8F"), for: .normal)
         femaleButton.backgroundColor = UIColor(hexCode: "#363636")
@@ -84,7 +91,7 @@ class NicknameViewController: UIViewController {
         femaleButton.layer.borderColor = UIColor(hexCode: "#636363").cgColor
         femaleButton.addTarget(self, action: #selector(genderButtonTapped(_:)), for: .touchUpInside)
         view.addSubview(femaleButton)
-
+        
         maleButton.setTitle("남자", for: .normal)
         maleButton.setTitleColor(UIColor(hexCode: "#8F8F8F"), for: .normal)
         maleButton.backgroundColor = UIColor(hexCode: "#363636")
@@ -156,6 +163,12 @@ class NicknameViewController: UIViewController {
         ])
     }
     
+    // 키보드 내리기 위한 탭 제스처 핸들러
+    @objc func handleTap() {
+        // 키보드를 내립니다.
+        view.endEditing(true)
+    }
+    
     @objc func genderButtonTapped(_ sender: UIButton) {
         // Reset button colors
         femaleButton.backgroundColor = UIColor(hexCode: "#363636")
@@ -170,33 +183,95 @@ class NicknameViewController: UIViewController {
         sender.backgroundColor = UIColor(hexCode: "#6F2B1C")
         sender.setTitleColor(UIColor(hexCode: "#FFD7CC"), for: .normal)
         sender.layer.borderColor = UIColor(hexCode: "#FF5530").cgColor
+        
+        if sender == femaleButton {
+            gender = "FEMALE"
+        } else if sender == maleButton {
+            gender = "MALE"
+        }
     }
-   
- 
+    
+    
     @objc func nextButtonTapped() {
-        let departmentViewController = DepartmentViewController()
+        let nickname = nicknameTextField.text
         
-        // 성별과 닉네임 값을 설정
-        departmentViewController.email = email
-        departmentViewController.password = password
-        
-        if femaleButton.backgroundColor == UIColor(hexCode: "#6F2B1C") {
-            departmentViewController.gender = "FEMALE"
-        } else {
-            departmentViewController.gender = "MALE"
+        // 서버에 POST 요청을 보냅니다.
+        sendNicknameToServer(nickname: nickname)
+    }
+    
+    // 서버에 GET 요청을 보내는 메서드
+    func sendNicknameToServer(nickname: String?) {
+        guard let nickname = nickname, !nickname.isEmpty else {
+            // 닉네임이 비어있을 경우에 대한 처리
+            return
         }
         
-        departmentViewController.nickname = nicknameTextField.text
+        // API 엔드포인트 URL과 쿼리 파라미터 준비
+        var urlComponents = URLComponents(string: "https://study-hub.site:443/api/users/duplication-nickname")!
+        urlComponents.queryItems = [URLQueryItem(name: "nickname", value: nickname)]
         
-        // Use the navigation controller to push the PasswordViewController onto the navigation stack
-        navigationController?.pushViewController(departmentViewController, animated: true)
+        guard let url = urlComponents.url else {
+            // 잘못된 URL 처리
+            return
+        }
         
-
-          }
+        // URLRequest 생성 (GET 요청으로 수정)
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        
+        // URLSession을 사용하여 서버 요청을 보냅니다.
+        let task = URLSession.shared.dataTask(with: request) { [weak self] (data, response, error) in
+            // 서버 응답 처리
+            if let data = data,
+               let response = response as? HTTPURLResponse,
+               response.statusCode == 200 {
+                // 서버로부터 ACCEPTED 응답을 받았을 때의 처리
+                if let responseString = String(data: data, encoding: .utf8) {
+                    print("서버 응답: \(responseString)")
+                }
+                DispatchQueue.main.async {
+                    // "사용 가능한 닉네임입니다" 알림 표시
+                    self?.showAlert(message: "사용 가능한 닉네임입니다") {
+                        // 확인 버튼을 눌렀을 때 실행할 코드
+                        self?.navigateToDepartmentViewController()
+                    }
+                }
+            } else {
+                // 기타 오류 응답일 때의 처리
+                if let responseString = String(data: data ?? Data(), encoding: .utf8) {
+                    print("서버 응답: \(responseString)")
+                }
+                DispatchQueue.main.async {
+                    // nicknameTextFielddividerLine 색상을 빨강색으로 변경
+                    // "중복된 닉네임입니다" 경고 표시
+                    self?.showAlert(message: "중복된 닉네임입니다") {
+                        // 확인 버튼을 눌렀을 때 실행할 코드 (예를 들어 다른 처리나 다이얼로그 닫기)
+                    }
+                }
+            }
+        }
+        task.resume()
+    }
+    
+    // UIAlertController를 사용하여 알림을 표시하는 메서드
+    func showAlert(message: String, completion: (() -> Void)?) {
+        let alert = UIAlertController(title: "알림", message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "확인", style: .default) { _ in
+            // 확인 버튼을 눌렀을 때 실행할 코드
+            completion?()
+        })
+        present(alert, animated: true, completion: nil)
+    }
+    
+    // DepartmentViewController로 화면 전환하는 메서드
+    func navigateToDepartmentViewController() {
+        let departmentVC = DepartmentViewController()
+        departmentVC.email = email
+        departmentVC.password = password
+        departmentVC.gender = gender
+        departmentVC.nickname = nicknameTextField.text
+        
+        // Use the navigation controller to push the DepartmentViewController onto the navigation stack
+        navigationController?.pushViewController(departmentVC, animated: true)
+    }
 }
-
-
-
-
-
-
