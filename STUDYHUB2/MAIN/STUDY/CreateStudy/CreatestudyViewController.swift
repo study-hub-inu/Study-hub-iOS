@@ -47,7 +47,7 @@ class CreateStudyViewController: UIViewController {
         
     }
 
-    
+    private let completeButton = UIButton()
     let departmentButton = UIButton(type: .system)
     private let categoryStackView = UIStackView()
     private let departmentButtonStackView = UIStackView()
@@ -73,6 +73,12 @@ class CreateStudyViewController: UIViewController {
     private let endDateButton = UIButton()
     
     private var selectedDepartments: [String] = [] // 선택된 학과를 저장할 배열
+    
+    private let chatLinkTextField = UITextField()
+    private let studyproduceTextField = UITextField()
+    private let fineAmountTextField = UITextField()
+    private let studymemberTextField = UITextField()
+    private let studytitleTextField = UITextField()
 
     
     // Add these properties to your UIViewController
@@ -154,7 +160,6 @@ class CreateStudyViewController: UIViewController {
         descriptionLabel.translatesAutoresizingMaskIntoConstraints = false
         
         // Create a text field for chat link input
-        let chatLinkTextField = UITextField()
         chatLinkTextField.placeholder = "채팅방 링크를 첨부해 주세요"
         chatLinkTextField.textColor = .gray
         chatLinkTextField.font = UIFont.systemFont(ofSize: 14)
@@ -193,7 +198,6 @@ class CreateStudyViewController: UIViewController {
         studytitleLabel.translatesAutoresizingMaskIntoConstraints = false
         
         // Create a text field for chat link input
-        let studytitleTextField = UITextField()
         studytitleTextField.placeholder = "제목입니다"
         studytitleTextField.textColor = .gray
         studytitleTextField.font = UIFont.systemFont(ofSize: 14)
@@ -208,7 +212,6 @@ class CreateStudyViewController: UIViewController {
         studyproduceLabel.translatesAutoresizingMaskIntoConstraints = false
         
         // Create a text field for chat link input
-        let studyproduceTextField = UITextField()
         studyproduceTextField.placeholder = "스터디에 대해 알려주세요"
         studyproduceTextField.textColor = .gray
         studyproduceTextField.font = UIFont.systemFont(ofSize: 14)
@@ -317,7 +320,6 @@ class CreateStudyViewController: UIViewController {
         description4Label.translatesAutoresizingMaskIntoConstraints = false
         
         // Create a text field for chat link input
-        let studymemberTextField = UITextField()
         studymemberTextField.placeholder = "인원을 알려주세요"
         studymemberTextField.textColor = .gray
         studymemberTextField.font = UIFont.systemFont(ofSize: 14)
@@ -603,13 +605,12 @@ class CreateStudyViewController: UIViewController {
          endDateButton.addTarget(self, action: #selector(endDateButtonTapped), for: .touchUpInside)
          
          // Create a button for "완료하기"
-         let completeButton = UIButton()
          completeButton.setTitle("완료하기", for: .normal)
          completeButton.setTitleColor(.white, for: .normal)
          completeButton.backgroundColor = UIColor(hexCode: "#FF5530")
          completeButton.layer.cornerRadius = 5
          completeButton.translatesAutoresizingMaskIntoConstraints = false
-         
+         completeButton.addTarget(self, action: #selector(completeButtonTapped), for: .touchUpInside)
      
          // Add UI elements to the headerContentStackView
          periodStackView.addArrangedSubview(periodLabel)
@@ -863,7 +864,6 @@ class CreateStudyViewController: UIViewController {
              fineAmountLabel.translatesAutoresizingMaskIntoConstraints = false
              
              // Create a text field for chat link input
-             let fineAmountTextField = UITextField()
              fineAmountTextField.placeholder = "가격을 알려주세요"
              fineAmountTextField.textColor = UIColor(hexCode: "#A1AAB0")
              fineAmountTextField.font = UIFont.systemFont(ofSize: 14)
@@ -909,6 +909,111 @@ class CreateStudyViewController: UIViewController {
          
      }
 
+//    @objc func completeButtonTapped() {
+//        self.dismiss(animated: true, completion: nil)
+//    }
+//
+    @objc func completeButtonTapped() {
+        // 입력된 정보 JSON
+        let chatUrl = chatLinkTextField.text ?? ""
+        let content = studyproduceTextField.text ?? ""
+        
+//        // 선택한 학과에 따라 major 값을 설정
+        var major = "COMPUTER_SCIENCE_ENGINEERING"
+//        if selectedDepartment == "컴퓨터공학과" {
+//            major = "COMPUTER_SCIENCE_ENGINEERING"
+//        } else if selectedDepartment == "정보통신공학과" {
+//            major = "INFORMATION_TELECOMMUNICATION_ENGINEERING"
+//        }
+        
+        let penalty = Int(fineAmountTextField.text ?? "0") ?? 0
+        let studyEndDate = endDateTextField.text ?? ""
+        let studyPerson = Int(studymemberTextField.text ?? "0") ?? 0
+        let studyStartDate = startDateTextField.text ?? ""
+        var gender = ""
+        if maleOnlyButton.isSelected {
+            gender = "MALE"
+        } else if femaleOnlyButton.isSelected {
+            gender = "FEMALE"
+        } else {
+            gender = "ALLGENDER"
+        }
+        var studyWay = ""
+        if contactButton.isSelected {
+            studyWay = "CONTACT"
+        } else if untactButton.isSelected {
+            studyWay = "UNCONTACT"
+        } else {
+            studyWay = "MIXMEET"
+        }
+        let title = studytitleTextField.text ?? ""
+        
+        // JSON 데이터 생성
+        let studyData: [String: Any] = [
+            "chatUrl": chatUrl,
+            "close": false,
+            "content": content,
+            "gender": gender,
+            "major": major,
+            "penalty": penalty,
+            "studyEndDate": studyEndDate,
+            "studyPerson": studyPerson,
+            "studyStartDate": studyStartDate,
+            "studyWay": studyWay,
+            "title": title
+        ]
+        
+        // JSON 데이터를 서버로 전송
+        if let url = URL(string: "https://study-hub.site:443/api/study-posts") {
+            var request = URLRequest(url: url)
+            request.httpMethod = "POST"
+            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            do {
+                let jsonData = try JSONSerialization.data(withJSONObject: studyData, options: .prettyPrinted)
+                request.httpBody = jsonData
+                
+                let task = URLSession.shared.dataTask(with: request) { data, response, error in
+                    if let error = error {
+                        print("Error: \(error)")
+                    } else if let response = response as? HTTPURLResponse {
+                        if (200...299).contains(response.statusCode) {
+                            // 서버 응답이 200대 범위일 때 (성공적인 응답)
+                            DispatchQueue.main.async {
+                                self.dismiss(animated: true, completion: nil)
+                            }
+                        } else {
+                            // 서버 응답이 오류인 경우
+                            print("Server Error: \(response.statusCode)")
+                        }
+                    }
+
+                    if let data = data {
+                        if let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
+                            print("\(chatUrl)")
+                            print("\(close)")
+                            print("\(content)")
+                            print("\(gender)")
+                            print("\(major)")
+                            print("\(penalty)")
+                            print("\(studyEndDate)")
+                            print("\(studyPerson)")
+                            print("\(studyStartDate)")
+                            print("\(studyWay)")
+                            print("\(title)")
+
+                            
+                            print("Response JSON: \(json)")
+                            // 서버 응답을 처리하는 코드를 추가하세요.
+                        }
+                    }
+                }
+                task.resume()
+            } catch {
+                print("Error creating JSON: \(error)")
+            }
+        }
+    }
+    
      @objc func noFineButtonTapped(_ sender: UIButton) {
          sender.isSelected = !sender.isSelected
          haveFineButton.isSelected = !sender.isSelected
@@ -1080,6 +1185,8 @@ class CreateStudyViewController: UIViewController {
          
          self.dismiss(animated: true, completion: nil)
      }
+    
+
      
  }
 // 문자열의 너비를 계산하는 확장 함수
