@@ -179,7 +179,19 @@ class BookmarkViewController:UIViewController{
         // Set the scroll view's content size to fit the content
         headerContentStackView.widthAnchor.constraint(equalTo: scrollView.widthAnchor).isActive = true
     }
-    
+  // MARK: - setUpLayout
+  func setUpLayout(){
+    [
+
+    ].forEach {
+      view.addSubview($0)
+    }
+  }
+  
+  // MARK: - makeUI
+  func makeUI(){
+   
+  }
     // Function to handle back button tap and navigate back to HomeViewController
      @objc func goBack() {
 //         let homeViewController = HomeViewController()

@@ -1,6 +1,6 @@
 import UIKit
 
-class myPageViewController: UIViewController {
+class MyPageViewController: UIViewController {
     
     private let recentButton = UIButton(type: .system)
     private let popularButton = UIButton(type: .system)
@@ -346,7 +346,7 @@ class myPageViewController: UIViewController {
     
     @objc func chevronButtonTapped() {
         // Create an instance of ViewController (assuming that's the name of your ViewController class)
-        let viewController = ViewController()
+        let viewController = LoginViewController()
         
         // If you want to present it modally, you can use the following code
         let navigationController = UINavigationController(rootViewController: viewController)

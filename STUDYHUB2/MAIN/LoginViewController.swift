@@ -1,0 +1,424 @@
+//
+//  ViewController.swift
+//  STUDYHUB2
+//
+//  Created by HYERYEONG on 2023/08/05.
+//
+
+import UIKit
+import SnapKit
+
+final class LoginViewController: UIViewController {
+  let tokenManager = TokenManager.shared
+  
+  // MARK: - 화면구성
+  lazy var emailTextField: UITextField =  {
+    let emailTF = UITextField()
+    emailTF.attributedPlaceholder = NSAttributedString(string: "이메일 주소를 입력해주세요 (@inu.ac.kr)",
+                                                       attributes: [NSAttributedString.Key.foregroundColor: UIColor.gray])
+    emailTF.textColor = .white
+    emailTF.backgroundColor = .black
+    emailTF.borderStyle = .roundedRect
+    emailTF.addTarget(self,
+                      action: #selector(emailTextFieldDidChange),
+                      for: .editingChanged)
+    // 키보드 생성
+    emailTF.becomeFirstResponder()
+    return emailTF
+  }()
+
+  private let emailTextFielddividerLine: UIView = {
+    let lineView = UIView()
+    lineView.backgroundColor = .gray
+    return lineView
+  }()
+
+  lazy var passwordTextField: UITextField = {
+    let passwordTF = UITextField()
+    passwordTF.attributedPlaceholder = NSAttributedString(string: "비밀번호를 입력해주세요",
+                                                          attributes: [NSAttributedString.Key.foregroundColor: UIColor.gray])
+    passwordTF.textColor = .white
+    passwordTF.backgroundColor = .black
+    passwordTF.borderStyle = .roundedRect
+    passwordTF.addTarget(self,
+                         action: #selector(passwordTextFieldDidChange),
+                         for: .editingChanged)
+    passwordTF.isSecureTextEntry = true
+    return passwordTF
+  }()
+
+  private let passwordTextFielddividerLine: UIView = {
+    let passwordLine = UIView()
+    passwordLine.backgroundColor = .gray
+    return passwordLine
+  }()
+
+  private let mainImageView: UIImageView = {
+    let imageView = UIImageView()
+    imageView.image = UIImage(named: "Image 7") // Set the image name
+    imageView.contentMode = .scaleAspectFit // Adjust content mode as needed
+    return imageView
+  }()
+
+  private let emailLabel: UILabel = {
+    let emailLabel = UILabel()
+    emailLabel.text = "이메일"
+    emailLabel.textColor = .white
+    return emailLabel
+  }()
+
+  private let passwordLabel: UILabel = {
+    // '비밀번호' 텍스트
+    let passwordLabel = UILabel()
+    passwordLabel.text = "비밀번호"
+    passwordLabel.textColor = .white
+    return passwordLabel
+  }()
+
+  lazy var loginButton: UIButton = {
+    let loginButton = UIButton(type: .system)
+    loginButton.setTitle("로그인하기", for: .normal)
+    loginButton.setTitleColor(.white, for: .normal)
+    loginButton.backgroundColor = UIColor(hexCode: "FF5935")
+    loginButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 20)
+    loginButton.layer.cornerRadius = 10
+    loginButton.addTarget(self,
+                          action: #selector(loginButtonTapped),
+                          for: .touchUpInside)
+    return loginButton
+  }()
+
+  private let forgotPasswordButton: UIButton = {
+    let forgotPasswordButton = UIButton(type: .system)
+    forgotPasswordButton.setTitle("비밀번호가 기억나지 않으시나요?",
+                                  for: .normal)
+    forgotPasswordButton.setTitleColor(.gray,
+                                       for: .normal)
+    forgotPasswordButton.titleLabel?.font = UIFont.systemFont(ofSize: 14)
+    return forgotPasswordButton
+  }()
+
+  lazy var exploreButton: UIButton = {
+    let exploreButton = UIButton(type: .system)
+    exploreButton.setTitle("둘러보기",
+                           for: .normal)
+    exploreButton.setTitleColor(.white,
+                                for: .normal)
+    exploreButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
+    exploreButton.addTarget(self,
+                            action: #selector(exploreButtonTapped),
+                            for: .touchUpInside)
+    return exploreButton
+  }()
+
+  lazy var signUpButton: UIButton = {
+    let signUpButton = UIButton(type: .system)
+    signUpButton.setTitle("회원가입",
+                          for: .normal)
+    signUpButton.setTitleColor(UIColor(hexCode: "FF5935"),
+                               for: .normal)
+    signUpButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
+    signUpButton.addTarget(self,
+                           action: #selector(signUpButtonTapped),
+                           for: .touchUpInside)
+    return signUpButton
+  }()
+
+  // MARK: - ViewDidLoad
+  override func viewDidLoad() {
+    super.viewDidLoad()
+
+    view.backgroundColor = .black
+    
+    print(tokenManager.loadAccessToken())
+    
+    setUpLayout()
+    makeUI()
+  }
+
+  // MARK: - setUpLayout
+  func setUpLayout(){
+    [
+      mainImageView,
+      emailLabel,
+      emailTextField,
+      emailTextFielddividerLine,
+      passwordLabel,
+      passwordTextField,
+      passwordTextFielddividerLine,
+      loginButton,
+      forgotPasswordButton,
+      exploreButton,
+      signUpButton
+    ].forEach {
+      view.addSubview($0)
+    }
+  }
+  
+  // MARK: - makeUI
+  func makeUI(){
+    mainImageView.snp.makeConstraints { make in
+      make.centerX.equalToSuperview()
+      make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(-20)
+      make.width.equalTo(400)
+      make.height.equalTo(200)
+    }
+    
+    emailLabel.snp.makeConstraints { make in
+      make.top.equalTo(mainImageView.snp.bottom).offset(20)
+      make.leading.equalTo(view).offset(15)
+    }
+    
+    emailTextField.snp.makeConstraints { make in
+      make.leading.equalTo(emailLabel)
+      make.trailing.equalTo(view).offset(-20)
+      make.top.equalTo(emailLabel.snp.bottom).offset(5)
+      make.height.equalTo(30)
+    }
+    
+    emailTextFielddividerLine.snp.makeConstraints { make in
+      make.leading.trailing.equalTo(view)
+      make.top.equalTo(emailTextField.snp.bottom).offset(5)
+      make.height.equalTo(1)
+    }
+    
+    passwordLabel.snp.makeConstraints { make in
+      make.leading.equalTo(view).offset(20)
+      make.top.equalTo(emailTextFielddividerLine.snp.bottom).offset(40)
+    }
+    
+    passwordTextField.snp.makeConstraints { make in
+      make.leading.equalTo(passwordLabel)
+      make.trailing.equalTo(view).offset(-20)
+      make.top.equalTo(passwordLabel.snp.bottom).offset(5)
+      make.height.equalTo(30)
+    }
+    
+    passwordTextFielddividerLine.snp.makeConstraints { make in
+      make.leading.trailing.equalTo(view)
+      make.top.equalTo(passwordTextField.snp.bottom).offset(5)
+      make.height.equalTo(1)
+    }
+    
+    loginButton.snp.makeConstraints { make in
+      make.centerX.equalTo(view)
+      make.top.equalTo(passwordTextFielddividerLine.snp.bottom).offset(40)
+      make.height.equalTo(55)
+      make.width.equalTo(400)
+    }
+    
+    forgotPasswordButton.snp.makeConstraints { make in
+      make.centerX.equalTo(view)
+      make.top.equalTo(loginButton.snp.bottom).offset(10)
+    }
+    
+    exploreButton.snp.makeConstraints { make in
+      make.leading.equalTo(view).offset(120)
+      make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-20)
+    }
+    
+    signUpButton.snp.makeConstraints { make in
+      make.leading.equalTo(exploreButton.snp.trailing).offset(50)
+      make.centerY.equalTo(exploreButton)
+    }
+  }
+  
+  // MARK: - 함수
+  func validatePassword(password: String) -> Bool {
+    let passwordRegex = "(?=.*[a-zA-Z0-9])(?=.*[^a-zA-Z0-9]).{10,}"
+    return NSPredicate(format: "SELF MATCHES %@", passwordRegex).evaluate(with: password)
+  }
+  
+  // MARK: - 로그인 버튼 눌리는 함수 - 기능분리 필요
+  @objc func loginButtonTapped() {
+    // 이메일 없으면 경고
+    guard let email = emailTextField.text, !email.isEmpty else {
+      emailTextFielddividerLine.backgroundColor = .red
+      
+      let alert = UIAlertController(title: "경고",
+                                    message: "이메일을 입력해주세요.",
+                                    preferredStyle: .alert)
+      alert.addAction(UIAlertAction(title: "확인",
+                                    style: .default,
+                                    handler: nil))
+      present(alert, animated: true, completion: nil)
+      
+      return
+    }
+    // 페스워트 없으면 경고
+    guard let password = passwordTextField.text,
+              !password.isEmpty else {
+      passwordTextFielddividerLine.backgroundColor = .red
+      
+      let alert = UIAlertController(title: "경고",
+                                    message: "비밀번호를 입력해주세요.",
+                                    preferredStyle: .alert)
+      
+      alert.addAction(UIAlertAction(title: "확인",
+                                    style: .default,
+                                    handler: nil))
+      
+      present(alert, animated: true, completion: nil)
+      return
+    }
+    // 이메일 형식 다르면 경고
+    if let email = emailTextField.text {
+      let isValidEmail = email.hasSuffix("@inu.ac.kr")
+      
+      // Check if the entered email follows the '@inu.ac.kr' format
+      emailTextFielddividerLine.backgroundColor = isValidEmail ? .green : .red
+      
+      if !isValidEmail {
+        // Show an alert if email format is invalid
+        let alertController = UIAlertController(title: "경고",
+                                                message: "잘못된 이메일 주소입니다. 다시 입력해주세요",
+                                                preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "확인",
+                                     style: .default,
+                                     handler: nil)
+        alertController.addAction(okAction)
+        present(alertController, animated: true, completion: nil)
+        return
+      }
+      else {
+        emailTextFielddividerLine.backgroundColor = .green
+      }
+    }
+    // 비밀번호 10자리 아니면 경고
+    if !validatePassword(password: password) {
+      let alert = UIAlertController(title: "경고",
+                                    message: "비밀번호는 10자리 이상이거나 특수문자를 포함해야 합니다.",
+                                    preferredStyle: .alert)
+      alert.addAction(UIAlertAction(title: "확인",
+                                    style: .default,
+                                    handler: nil))
+      present(alert, animated: true, completion: nil)
+      
+      passwordTextFielddividerLine.backgroundColor = .red
+      return
+    } else {
+      passwordTextFielddividerLine.backgroundColor = .green
+    }
+    
+    guard let loginURL = URL(string: "https://study-hub.site:443/api/users/login") else {
+      return
+    }
+    
+    // Create a dictionary to represent the login data
+    let loginData: [String: Any] = [
+      "email": emailTextField.text ?? "",
+      "password": passwordTextField.text ?? ""
+    ]
+    
+    // Convert the loginData dictionary to JSON data
+    do {
+      let jsonData = try JSONSerialization.data(withJSONObject: loginData, options: [])
+      
+      // Create a URLRequest with the login URL
+      var request = URLRequest(url: loginURL)
+      request.httpMethod = "POST"
+      request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+      request.httpBody = jsonData
+      
+      // Create a URLSessionDataTask to perform the request
+      let task = URLSession.shared.dataTask(with: request) { [weak self] data, response, error in
+        // Handle the response
+        if let data = data,
+           let response = response as? HTTPURLResponse,
+           response.statusCode == 200 {
+          // Login successful
+          do {
+            if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
+              if let data = json["data"] as? [String: Any],
+                 let accessToken = data["accessToken"] as? String {
+                // Store the access token in Keychain
+                print(accessToken)
+                self?.tokenManager.saveAccessToken(accessToken)
+                
+                // Navigate to HomeViewController
+                DispatchQueue.main.async {
+                  let homeViewController = HomeViewController()
+                  let navigationController = UINavigationController(rootViewController: homeViewController)
+                  navigationController.modalPresentationStyle = .fullScreen
+                  
+                  // Assuming this code is within a UIViewController subclass
+                  self?.present(navigationController, animated: true, completion: nil)
+                }
+              }
+            }
+            
+          } catch {
+            // Handle JSON parsing error
+            print("JSON Parsing Error: \(error)")
+          }
+        } else {
+          // Login failed, show an alert
+          DispatchQueue.main.async {
+            let alert = UIAlertController(title: "로그인 실패",
+                                          message: "존재하지 않는 사용자입니다.",
+                                          preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "확인",
+                                          style: .default,
+                                          handler: nil))
+            
+            // Assuming this code is within a UIViewController subclass
+            self?.present(alert, animated: true, completion: nil)
+          }
+        }
+      }
+      
+      // Start the URLSessionDataTask
+      task.resume()
+      
+    } catch {
+      // Handle JSON serialization error
+      print("JSON Serialization Error: \(error)")
+    }
+  }
+  
+  // MARK: - email action 함수
+  @objc func emailTextFieldDidChange() {
+    if let email = emailTextField.text {
+      // Check if the entered email follows the '@inu.ac.kr' format
+      let isValidEmail = email.hasSuffix("@inu.ac.kr")
+      
+      // Change the color of the emailTextFielddividerLine based on the validation result
+      emailTextFielddividerLine.backgroundColor = isValidEmail ? .green : .red
+    }
+    
+  }
+  
+  // MARK: - password action 함수
+  @objc func passwordTextFieldDidChange() {
+    if let password = passwordTextField.text {
+      // Check if the entered password meets the required criteria
+      let isValidPassword = validatePassword(password: password)
+      
+      // Change the color of the passwordTextFielddividerLine based on the validation result
+      passwordTextFielddividerLine.backgroundColor = isValidPassword ? .green : .red
+    }
+  }
+  
+  // MARK: - 둘러보기 함수
+  @objc func exploreButtonTapped() {
+    let homeViewController = HomeViewController()
+    let navigationController = UINavigationController(rootViewController: homeViewController)
+    navigationController.modalPresentationStyle = .fullScreen
+    present(navigationController, animated: true, completion: nil)
+  }
+  
+  // Action for the "회원가입" (Signup) button
+  @objc func signUpButtonTapped() {
+    let signUpViewController = SignUpViewController()
+    
+    let backButton = UIBarButtonItem(title: "back", style: .plain, target: self, action: #selector(backButtonTapped))
+    signUpViewController.navigationItem.leftBarButtonItem = backButton
+    
+    navigationController?.pushViewController(signUpViewController, animated: true)
+  }
+  
+  @objc func backButtonTapped() {
+    navigationController?.popViewController(animated: true)
+  }
+}
+

@@ -7,15 +7,18 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5F9DE9DF024CF7309683C4D9 /* Pods_STUDYHUB2Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FBF19D90E98D2A473BB1FACD /* Pods_STUDYHUB2Tests.framework */; };
+		7D888F985F7235D92986BA8C /* Pods_STUDYHUB2_STUDYHUB2UITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A3D4E6F9B68D080EFA421F2 /* Pods_STUDYHUB2_STUDYHUB2UITests.framework */; };
+		903CF32160A1EDD2ADE8AA03 /* Pods_STUDYHUB2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD0AEF76B97F2D81A35C2224 /* Pods_STUDYHUB2.framework */; };
+		EE271F1C2AD04ACE00190E7A /* TokenManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE271F1B2AD04ACE00190E7A /* TokenManager.swift */; };
+		EE271F1E2AD04BB300190E7A /* UserToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE271F1D2AD04BB300190E7A /* UserToken.swift */; };
+		EE271F202AD0584100190E7A /* UIColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE271F1F2AD0584100190E7A /* UIColorExtension.swift */; };
 		F80421922A7D6816006C6B87 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F80421912A7D6816006C6B87 /* AppDelegate.swift */; };
 		F80421942A7D6816006C6B87 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F80421932A7D6816006C6B87 /* SceneDelegate.swift */; };
-		F80421962A7D6816006C6B87 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F80421952A7D6816006C6B87 /* ViewController.swift */; };
+		F80421962A7D6816006C6B87 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F80421952A7D6816006C6B87 /* LoginViewController.swift */; };
 		F80421992A7D6816006C6B87 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F80421972A7D6816006C6B87 /* Main.storyboard */; };
 		F804219B2A7D6818006C6B87 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F804219A2A7D6818006C6B87 /* Assets.xcassets */; };
 		F804219E2A7D6818006C6B87 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F804219C2A7D6818006C6B87 /* LaunchScreen.storyboard */; };
-		F80421A92A7D6818006C6B87 /* STUDYHUB2Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F80421A82A7D6818006C6B87 /* STUDYHUB2Tests.swift */; };
-		F80421B32A7D6818006C6B87 /* STUDYHUB2UITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F80421B22A7D6818006C6B87 /* STUDYHUB2UITests.swift */; };
-		F80421B52A7D6818006C6B87 /* STUDYHUB2UITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F80421B42A7D6818006C6B87 /* STUDYHUB2UITestsLaunchTests.swift */; };
 		F80421C82A7D800E006C6B87 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F80421C72A7D800E006C6B87 /* SignUpViewController.swift */; };
 		F80421CA2A7D9534006C6B87 /* PasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F80421C92A7D9534006C6B87 /* PasswordViewController.swift */; };
 		F80421CC2A7D9BC3006C6B87 /* NicknameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F80421CB2A7D9BC3006C6B87 /* NicknameViewController.swift */; };
@@ -23,7 +26,7 @@
 		F8085D3E2A7E9E270067D4DE /* CompleteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8085D3D2A7E9E270067D4DE /* CompleteViewController.swift */; };
 		F8085D412A815DCD0067D4DE /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8085D402A815DCD0067D4DE /* HomeViewController.swift */; };
 		F8085D442A81846C0067D4DE /* StudyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8085D432A81846C0067D4DE /* StudyViewController.swift */; };
-		F8085D462A8184800067D4DE /* myPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8085D452A8184800067D4DE /* myPageViewController.swift */; };
+		F8085D462A8184800067D4DE /* MyPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8085D452A8184800067D4DE /* MyPageViewController.swift */; };
 		F86E031F2A8BBAE600164976 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F86E031E2A8BBAE600164976 /* SearchViewController.swift */; };
 		F86E03212A8BFC8000164976 /* DetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F86E03202A8BFC8000164976 /* DetailsViewController.swift */; };
 		F87377592AA850940055B041 /* DepartmentselectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F87377582AA850940055B041 /* DepartmentselectViewController.swift */; };
@@ -52,19 +55,27 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		16AE9AD51C6A978718771E4F /* Pods-STUDYHUB2.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-STUDYHUB2.release.xcconfig"; path = "Target Support Files/Pods-STUDYHUB2/Pods-STUDYHUB2.release.xcconfig"; sourceTree = "<group>"; };
+		3B7F694AC03A7D0B3AD86F5E /* Pods-STUDYHUB2Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-STUDYHUB2Tests.debug.xcconfig"; path = "Target Support Files/Pods-STUDYHUB2Tests/Pods-STUDYHUB2Tests.debug.xcconfig"; sourceTree = "<group>"; };
+		584F15E61753B04A30CF0551 /* Pods-STUDYHUB2.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-STUDYHUB2.debug.xcconfig"; path = "Target Support Files/Pods-STUDYHUB2/Pods-STUDYHUB2.debug.xcconfig"; sourceTree = "<group>"; };
+		5A3D4E6F9B68D080EFA421F2 /* Pods_STUDYHUB2_STUDYHUB2UITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_STUDYHUB2_STUDYHUB2UITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		71A24E26719E78765C8CE193 /* Pods-STUDYHUB2-STUDYHUB2UITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-STUDYHUB2-STUDYHUB2UITests.debug.xcconfig"; path = "Target Support Files/Pods-STUDYHUB2-STUDYHUB2UITests/Pods-STUDYHUB2-STUDYHUB2UITests.debug.xcconfig"; sourceTree = "<group>"; };
+		DCCACD447CB2D4D12DF49A45 /* Pods-STUDYHUB2Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-STUDYHUB2Tests.release.xcconfig"; path = "Target Support Files/Pods-STUDYHUB2Tests/Pods-STUDYHUB2Tests.release.xcconfig"; sourceTree = "<group>"; };
+		DD0AEF76B97F2D81A35C2224 /* Pods_STUDYHUB2.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_STUDYHUB2.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		EAB52A4B4B6D3895E3DD2852 /* Pods-STUDYHUB2-STUDYHUB2UITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-STUDYHUB2-STUDYHUB2UITests.release.xcconfig"; path = "Target Support Files/Pods-STUDYHUB2-STUDYHUB2UITests/Pods-STUDYHUB2-STUDYHUB2UITests.release.xcconfig"; sourceTree = "<group>"; };
+		EE271F1B2AD04ACE00190E7A /* TokenManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenManager.swift; sourceTree = "<group>"; };
+		EE271F1D2AD04BB300190E7A /* UserToken.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserToken.swift; sourceTree = "<group>"; };
+		EE271F1F2AD0584100190E7A /* UIColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColorExtension.swift; sourceTree = "<group>"; };
 		F804218E2A7D6816006C6B87 /* STUDYHUB2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = STUDYHUB2.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F80421912A7D6816006C6B87 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F80421932A7D6816006C6B87 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		F80421952A7D6816006C6B87 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		F80421952A7D6816006C6B87 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		F80421982A7D6816006C6B87 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		F804219A2A7D6818006C6B87 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		F804219D2A7D6818006C6B87 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		F804219F2A7D6818006C6B87 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F80421A42A7D6818006C6B87 /* STUDYHUB2Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = STUDYHUB2Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		F80421A82A7D6818006C6B87 /* STUDYHUB2Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STUDYHUB2Tests.swift; sourceTree = "<group>"; };
 		F80421AE2A7D6818006C6B87 /* STUDYHUB2UITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = STUDYHUB2UITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		F80421B22A7D6818006C6B87 /* STUDYHUB2UITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STUDYHUB2UITests.swift; sourceTree = "<group>"; };
-		F80421B42A7D6818006C6B87 /* STUDYHUB2UITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STUDYHUB2UITestsLaunchTests.swift; sourceTree = "<group>"; };
 		F80421C72A7D800E006C6B87 /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
 		F80421C92A7D9534006C6B87 /* PasswordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordViewController.swift; sourceTree = "<group>"; };
 		F80421CB2A7D9BC3006C6B87 /* NicknameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NicknameViewController.swift; sourceTree = "<group>"; };
@@ -72,7 +83,7 @@
 		F8085D3D2A7E9E270067D4DE /* CompleteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompleteViewController.swift; sourceTree = "<group>"; };
 		F8085D402A815DCD0067D4DE /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		F8085D432A81846C0067D4DE /* StudyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudyViewController.swift; sourceTree = "<group>"; };
-		F8085D452A8184800067D4DE /* myPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = myPageViewController.swift; sourceTree = "<group>"; };
+		F8085D452A8184800067D4DE /* MyPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageViewController.swift; sourceTree = "<group>"; };
 		F86E031E2A8BBAE600164976 /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		F86E03202A8BFC8000164976 /* DetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailsViewController.swift; sourceTree = "<group>"; };
 		F87377582AA850940055B041 /* DepartmentselectViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DepartmentselectViewController.swift; sourceTree = "<group>"; };
@@ -81,6 +92,7 @@
 		F88AB33E2A95236B001D619C /* CreatestudyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatestudyViewController.swift; sourceTree = "<group>"; };
 		F89A010F2A8686ED00B4C10D /* OpenNewPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenNewPageViewController.swift; sourceTree = "<group>"; };
 		F8D5BC652AB71DDA00B2B154 /* Singleton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Singleton.swift; sourceTree = "<group>"; };
+		FBF19D90E98D2A473BB1FACD /* Pods_STUDYHUB2Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_STUDYHUB2Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -88,6 +100,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				903CF32160A1EDD2ADE8AA03 /* Pods_STUDYHUB2.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -95,6 +108,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5F9DE9DF024CF7309683C4D9 /* Pods_STUDYHUB2Tests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -102,19 +116,60 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7D888F985F7235D92986BA8C /* Pods_STUDYHUB2_STUDYHUB2UITests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		A95864503778D56C2593BD60 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				584F15E61753B04A30CF0551 /* Pods-STUDYHUB2.debug.xcconfig */,
+				16AE9AD51C6A978718771E4F /* Pods-STUDYHUB2.release.xcconfig */,
+				71A24E26719E78765C8CE193 /* Pods-STUDYHUB2-STUDYHUB2UITests.debug.xcconfig */,
+				EAB52A4B4B6D3895E3DD2852 /* Pods-STUDYHUB2-STUDYHUB2UITests.release.xcconfig */,
+				3B7F694AC03A7D0B3AD86F5E /* Pods-STUDYHUB2Tests.debug.xcconfig */,
+				DCCACD447CB2D4D12DF49A45 /* Pods-STUDYHUB2Tests.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		EE271F212AD0584900190E7A /* Extension */ = {
+			isa = PBXGroup;
+			children = (
+				EE271F1F2AD0584100190E7A /* UIColorExtension.swift */,
+			);
+			path = Extension;
+			sourceTree = "<group>";
+		};
+		EE271F222AD0FB3F00190E7A /* Token */ = {
+			isa = PBXGroup;
+			children = (
+				EE271F1D2AD04BB300190E7A /* UserToken.swift */,
+				EE271F1B2AD04ACE00190E7A /* TokenManager.swift */,
+			);
+			path = Token;
+			sourceTree = "<group>";
+		};
+		F4E2C96E19FEA11B39F5379C /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				DD0AEF76B97F2D81A35C2224 /* Pods_STUDYHUB2.framework */,
+				5A3D4E6F9B68D080EFA421F2 /* Pods_STUDYHUB2_STUDYHUB2UITests.framework */,
+				FBF19D90E98D2A473BB1FACD /* Pods_STUDYHUB2Tests.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		F80421852A7D6816006C6B87 = {
 			isa = PBXGroup;
 			children = (
 				F80421902A7D6816006C6B87 /* STUDYHUB2 */,
-				F80421A72A7D6818006C6B87 /* STUDYHUB2Tests */,
-				F80421B12A7D6818006C6B87 /* STUDYHUB2UITests */,
 				F804218F2A7D6816006C6B87 /* Products */,
+				A95864503778D56C2593BD60 /* Pods */,
+				F4E2C96E19FEA11B39F5379C /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -133,9 +188,8 @@
 			children = (
 				F80421912A7D6816006C6B87 /* AppDelegate.swift */,
 				F80421932A7D6816006C6B87 /* SceneDelegate.swift */,
-				F80421952A7D6816006C6B87 /* ViewController.swift */,
+				EE271F212AD0584900190E7A /* Extension */,
 				F8085D3F2A815DB00067D4DE /* MAIN */,
-				F80421C42A7D7C25006C6B87 /* SignUp */,
 				F873775A2AACD41D0055B041 /* BookmarkViewController.swift */,
 				F8D5BC652AB71DDA00B2B154 /* Singleton.swift */,
 				F80421972A7D6816006C6B87 /* Main.storyboard */,
@@ -146,26 +200,10 @@
 			path = STUDYHUB2;
 			sourceTree = "<group>";
 		};
-		F80421A72A7D6818006C6B87 /* STUDYHUB2Tests */ = {
-			isa = PBXGroup;
-			children = (
-				F80421A82A7D6818006C6B87 /* STUDYHUB2Tests.swift */,
-			);
-			path = STUDYHUB2Tests;
-			sourceTree = "<group>";
-		};
-		F80421B12A7D6818006C6B87 /* STUDYHUB2UITests */ = {
-			isa = PBXGroup;
-			children = (
-				F80421B22A7D6818006C6B87 /* STUDYHUB2UITests.swift */,
-				F80421B42A7D6818006C6B87 /* STUDYHUB2UITestsLaunchTests.swift */,
-			);
-			path = STUDYHUB2UITests;
-			sourceTree = "<group>";
-		};
 		F80421C42A7D7C25006C6B87 /* SignUp */ = {
 			isa = PBXGroup;
 			children = (
+				EE271F222AD0FB3F00190E7A /* Token */,
 				F80421C72A7D800E006C6B87 /* SignUpViewController.swift */,
 				F80421C92A7D9534006C6B87 /* PasswordViewController.swift */,
 				F80421CB2A7D9BC3006C6B87 /* NicknameViewController.swift */,
@@ -178,6 +216,8 @@
 		F8085D3F2A815DB00067D4DE /* MAIN */ = {
 			isa = PBXGroup;
 			children = (
+				F80421952A7D6816006C6B87 /* LoginViewController.swift */,
+				F80421C42A7D7C25006C6B87 /* SignUp */,
 				F89A010E2A8686B500B4C10D /* Home */,
 				F89A01652A87FAE000B4C10D /* STUDY */,
 				F89A01662A87FAF600B4C10D /* MyPage */,
@@ -218,7 +258,7 @@
 		F89A01662A87FAF600B4C10D /* MyPage */ = {
 			isa = PBXGroup;
 			children = (
-				F8085D452A8184800067D4DE /* myPageViewController.swift */,
+				F8085D452A8184800067D4DE /* MyPageViewController.swift */,
 			);
 			path = MyPage;
 			sourceTree = "<group>";
@@ -230,9 +270,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = F80421B82A7D6818006C6B87 /* Build configuration list for PBXNativeTarget "STUDYHUB2" */;
 			buildPhases = (
+				3CE1BAD53981BF7967B3017A /* [CP] Check Pods Manifest.lock */,
 				F804218A2A7D6816006C6B87 /* Sources */,
 				F804218B2A7D6816006C6B87 /* Frameworks */,
 				F804218C2A7D6816006C6B87 /* Resources */,
+				9EE2C9E0385B3798360F0103 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -247,6 +289,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = F80421BB2A7D6818006C6B87 /* Build configuration list for PBXNativeTarget "STUDYHUB2Tests" */;
 			buildPhases = (
+				4C148D8830B6434724138CF3 /* [CP] Check Pods Manifest.lock */,
 				F80421A02A7D6818006C6B87 /* Sources */,
 				F80421A12A7D6818006C6B87 /* Frameworks */,
 				F80421A22A7D6818006C6B87 /* Resources */,
@@ -265,9 +308,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = F80421BE2A7D6818006C6B87 /* Build configuration list for PBXNativeTarget "STUDYHUB2UITests" */;
 			buildPhases = (
+				758E8DDF82C61A95D414E95D /* [CP] Check Pods Manifest.lock */,
 				F80421AA2A7D6818006C6B87 /* Sources */,
 				F80421AB2A7D6818006C6B87 /* Frameworks */,
 				F80421AC2A7D6818006C6B87 /* Resources */,
+				6D4C2E81E832B74BCE613BE4 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -349,15 +394,119 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		3CE1BAD53981BF7967B3017A /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-STUDYHUB2-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		4C148D8830B6434724138CF3 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-STUDYHUB2Tests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		6D4C2E81E832B74BCE613BE4 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-STUDYHUB2-STUDYHUB2UITests/Pods-STUDYHUB2-STUDYHUB2UITests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-STUDYHUB2-STUDYHUB2UITests/Pods-STUDYHUB2-STUDYHUB2UITests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-STUDYHUB2-STUDYHUB2UITests/Pods-STUDYHUB2-STUDYHUB2UITests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		758E8DDF82C61A95D414E95D /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-STUDYHUB2-STUDYHUB2UITests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		9EE2C9E0385B3798360F0103 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-STUDYHUB2/Pods-STUDYHUB2-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-STUDYHUB2/Pods-STUDYHUB2-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-STUDYHUB2/Pods-STUDYHUB2-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		F804218A2A7D6816006C6B87 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				F8085D442A81846C0067D4DE /* StudyViewController.swift in Sources */,
-				F80421962A7D6816006C6B87 /* ViewController.swift in Sources */,
+				F80421962A7D6816006C6B87 /* LoginViewController.swift in Sources */,
 				F8D5BC662AB71DDA00B2B154 /* Singleton.swift in Sources */,
 				F873775B2AACD41D0055B041 /* BookmarkViewController.swift in Sources */,
+				EE271F1E2AD04BB300190E7A /* UserToken.swift in Sources */,
 				F80421CA2A7D9534006C6B87 /* PasswordViewController.swift in Sources */,
 				F80421922A7D6816006C6B87 /* AppDelegate.swift in Sources */,
 				F86E03212A8BFC8000164976 /* DetailsViewController.swift in Sources */,
@@ -371,7 +520,9 @@
 				F88AB33B2A951AFF001D619C /* CategoryViewController.swift in Sources */,
 				F8085D412A815DCD0067D4DE /* HomeViewController.swift in Sources */,
 				F80421942A7D6816006C6B87 /* SceneDelegate.swift in Sources */,
-				F8085D462A8184800067D4DE /* myPageViewController.swift in Sources */,
+				EE271F1C2AD04ACE00190E7A /* TokenManager.swift in Sources */,
+				EE271F202AD0584100190E7A /* UIColorExtension.swift in Sources */,
+				F8085D462A8184800067D4DE /* MyPageViewController.swift in Sources */,
 				F8085D3E2A7E9E270067D4DE /* CompleteViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -380,7 +531,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F80421A92A7D6818006C6B87 /* STUDYHUB2Tests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -388,8 +538,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F80421B32A7D6818006C6B87 /* STUDYHUB2UITests.swift in Sources */,
-				F80421B52A7D6818006C6B87 /* STUDYHUB2UITestsLaunchTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -544,6 +692,7 @@
 		};
 		F80421B92A7D6818006C6B87 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 584F15E61753B04A30CF0551 /* Pods-STUDYHUB2.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -557,6 +706,7 @@
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -564,14 +714,18 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.HYERYEONG.STUDYHUB2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
 		F80421BA2A7D6818006C6B87 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 16AE9AD51C6A978718771E4F /* Pods-STUDYHUB2.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -585,6 +739,7 @@
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -592,14 +747,18 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.HYERYEONG.STUDYHUB2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
 		F80421BC2A7D6818006C6B87 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3B7F694AC03A7D0B3AD86F5E /* Pods-STUDYHUB2Tests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -620,6 +779,7 @@
 		};
 		F80421BD2A7D6818006C6B87 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = DCCACD447CB2D4D12DF49A45 /* Pods-STUDYHUB2Tests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -640,6 +800,7 @@
 		};
 		F80421BF2A7D6818006C6B87 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 71A24E26719E78765C8CE193 /* Pods-STUDYHUB2-STUDYHUB2UITests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
@@ -658,6 +819,7 @@
 		};
 		F80421C02A7D6818006C6B87 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = EAB52A4B4B6D3895E3DD2852 /* Pods-STUDYHUB2-STUDYHUB2UITests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
