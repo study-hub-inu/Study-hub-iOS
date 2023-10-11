@@ -138,7 +138,6 @@ final class DepartmentViewController: UIViewController, UITableViewDataSource, U
     ].forEach {
       scrollView.addSubview($0)
     }
-
   }
   
   // MARK: - makeUI
@@ -178,7 +177,7 @@ final class DepartmentViewController: UIViewController, UITableViewDataSource, U
     }
     
   }
-  
+    
   // MARK: - 함수
   @objc func nextButtonTapped() {
     let completeViewController = CompleteViewController()
