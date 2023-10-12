@@ -10,6 +10,7 @@ import SnapKit
 
 final class LoginViewController: UIViewController {
   let tokenManager = TokenManager.shared
+  let loginManager = LoginManager.shared
   
   // MARK: - 화면구성
   lazy var emailTextField: UITextField =  {
@@ -26,13 +27,13 @@ final class LoginViewController: UIViewController {
     emailTF.becomeFirstResponder()
     return emailTF
   }()
-
+  
   private let emailTextFielddividerLine: UIView = {
     let lineView = UIView()
     lineView.backgroundColor = .gray
     return lineView
   }()
-
+  
   lazy var passwordTextField: UITextField = {
     let passwordTF = UITextField()
     passwordTF.attributedPlaceholder = NSAttributedString(string: "비밀번호를 입력해주세요",
@@ -46,27 +47,27 @@ final class LoginViewController: UIViewController {
     passwordTF.isSecureTextEntry = true
     return passwordTF
   }()
-
+  
   private let passwordTextFielddividerLine: UIView = {
     let passwordLine = UIView()
     passwordLine.backgroundColor = .gray
     return passwordLine
   }()
-
+  
   private let mainImageView: UIImageView = {
     let imageView = UIImageView()
     imageView.image = UIImage(named: "Image 7") // Set the image name
     imageView.contentMode = .scaleAspectFit // Adjust content mode as needed
     return imageView
   }()
-
+  
   private let emailLabel: UILabel = {
     let emailLabel = UILabel()
     emailLabel.text = "이메일"
     emailLabel.textColor = .white
     return emailLabel
   }()
-
+  
   private let passwordLabel: UILabel = {
     // '비밀번호' 텍스트
     let passwordLabel = UILabel()
@@ -74,7 +75,7 @@ final class LoginViewController: UIViewController {
     passwordLabel.textColor = .white
     return passwordLabel
   }()
-
+  
   lazy var loginButton: UIButton = {
     let loginButton = UIButton(type: .system)
     loginButton.setTitle("로그인하기", for: .normal)
@@ -87,7 +88,7 @@ final class LoginViewController: UIViewController {
                           for: .touchUpInside)
     return loginButton
   }()
-
+  
   private let forgotPasswordButton: UIButton = {
     let forgotPasswordButton = UIButton(type: .system)
     forgotPasswordButton.setTitle("비밀번호가 기억나지 않으시나요?",
@@ -97,7 +98,7 @@ final class LoginViewController: UIViewController {
     forgotPasswordButton.titleLabel?.font = UIFont.systemFont(ofSize: 14)
     return forgotPasswordButton
   }()
-
+  
   lazy var exploreButton: UIButton = {
     let exploreButton = UIButton(type: .system)
     exploreButton.setTitle("둘러보기",
@@ -110,7 +111,7 @@ final class LoginViewController: UIViewController {
                             for: .touchUpInside)
     return exploreButton
   }()
-
+  
   lazy var signUpButton: UIButton = {
     let signUpButton = UIButton(type: .system)
     signUpButton.setTitle("회원가입",
@@ -123,11 +124,11 @@ final class LoginViewController: UIViewController {
                            for: .touchUpInside)
     return signUpButton
   }()
-
+  
   // MARK: - ViewDidLoad
   override func viewDidLoad() {
     super.viewDidLoad()
-
+    
     view.backgroundColor = .black
     
     print(tokenManager.loadAccessToken())
@@ -135,7 +136,7 @@ final class LoginViewController: UIViewController {
     setUpLayout()
     makeUI()
   }
-
+  
   // MARK: - setUpLayout
   func setUpLayout(){
     [
@@ -229,36 +230,26 @@ final class LoginViewController: UIViewController {
     return NSPredicate(format: "SELF MATCHES %@", passwordRegex).evaluate(with: password)
   }
   
-  // MARK: - 로그인 버튼 눌리는 함수 - 기능분리 필요
+  
+  // MARK: - 로그인 버튼 눌리는 함수
   @objc func loginButtonTapped() {
     // 이메일 없으면 경고
-    guard let email = emailTextField.text, !email.isEmpty else {
+    guard let email = emailTextField.text,
+          !email.isEmpty else {
       emailTextFielddividerLine.backgroundColor = .red
       
-      let alert = UIAlertController(title: "경고",
-                                    message: "이메일을 입력해주세요.",
-                                    preferredStyle: .alert)
-      alert.addAction(UIAlertAction(title: "확인",
-                                    style: .default,
-                                    handler: nil))
-      present(alert, animated: true, completion: nil)
-      
+      alertShow(title: "경고",
+                message: "이메일을 입력해주세요.")
       return
     }
+    
     // 페스워트 없으면 경고
     guard let password = passwordTextField.text,
-              !password.isEmpty else {
+          !password.isEmpty else {
       passwordTextFielddividerLine.backgroundColor = .red
       
-      let alert = UIAlertController(title: "경고",
-                                    message: "비밀번호를 입력해주세요.",
-                                    preferredStyle: .alert)
-      
-      alert.addAction(UIAlertAction(title: "확인",
-                                    style: .default,
-                                    handler: nil))
-      
-      present(alert, animated: true, completion: nil)
+      alertShow(title: "경고",
+                message: "비밀번호를 입력해주세요.")
       return
     }
     // 이메일 형식 다르면 경고
@@ -269,15 +260,8 @@ final class LoginViewController: UIViewController {
       emailTextFielddividerLine.backgroundColor = isValidEmail ? .green : .red
       
       if !isValidEmail {
-        // Show an alert if email format is invalid
-        let alertController = UIAlertController(title: "경고",
-                                                message: "잘못된 이메일 주소입니다. 다시 입력해주세요",
-                                                preferredStyle: .alert)
-        let okAction = UIAlertAction(title: "확인",
-                                     style: .default,
-                                     handler: nil)
-        alertController.addAction(okAction)
-        present(alertController, animated: true, completion: nil)
+        alertShow(title: "경고",
+                  message: "잘못된 이메일 주소입니다. 다시 입력해주세요")
         return
       }
       else {
@@ -286,13 +270,8 @@ final class LoginViewController: UIViewController {
     }
     // 비밀번호 10자리 아니면 경고
     if !validatePassword(password: password) {
-      let alert = UIAlertController(title: "경고",
-                                    message: "비밀번호는 10자리 이상이거나 특수문자를 포함해야 합니다.",
-                                    preferredStyle: .alert)
-      alert.addAction(UIAlertAction(title: "확인",
-                                    style: .default,
-                                    handler: nil))
-      present(alert, animated: true, completion: nil)
+      alertShow(title: "경고",
+                message: "비밀번호는 10자리 이상이거나 특수문자를 포함해야 합니다.")
       
       passwordTextFielddividerLine.backgroundColor = .red
       return
@@ -300,82 +279,23 @@ final class LoginViewController: UIViewController {
       passwordTextFielddividerLine.backgroundColor = .green
     }
     
-    guard let loginURL = URL(string: "https://study-hub.site:443/api/users/login") else {
-      return
-    }
     
-    // Create a dictionary to represent the login data
-    let loginData: [String: Any] = [
-      "email": emailTextField.text ?? "",
-      "password": passwordTextField.text ?? ""
-    ]
+    loginManager.login(email: emailTextField.text ?? "",
+                              password: passwordTextField.text ?? "")
     
-    // Convert the loginData dictionary to JSON data
-    do {
-      let jsonData = try JSONSerialization.data(withJSONObject: loginData, options: [])
-      
-      // Create a URLRequest with the login URL
-      var request = URLRequest(url: loginURL)
-      request.httpMethod = "POST"
-      request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-      request.httpBody = jsonData
-      
-      // Create a URLSessionDataTask to perform the request
-      let task = URLSession.shared.dataTask(with: request) { [weak self] data, response, error in
-        // Handle the response
-        if let data = data,
-           let response = response as? HTTPURLResponse,
-           response.statusCode == 200 {
-          // Login successful
-          do {
-            if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
-              if let data = json["data"] as? [String: Any],
-                 let accessToken = data["accessToken"] as? String {
-                // Store the access token in Keychain
-                print(accessToken)
-                self?.tokenManager.saveAccessToken(accessToken)
-                
-                // Navigate to HomeViewController
-                DispatchQueue.main.async {
-                  let homeViewController = HomeViewController()
-                  let navigationController = UINavigationController(rootViewController: homeViewController)
-                  navigationController.modalPresentationStyle = .fullScreen
-                  
-                  // Assuming this code is within a UIViewController subclass
-                  self?.present(navigationController, animated: true, completion: nil)
-                }
-              }
-            }
-            
-          } catch {
-            // Handle JSON parsing error
-            print("JSON Parsing Error: \(error)")
-          }
-        } else {
-          // Login failed, show an alert
-          DispatchQueue.main.async {
-            let alert = UIAlertController(title: "로그인 실패",
-                                          message: "존재하지 않는 사용자입니다.",
-                                          preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "확인",
-                                          style: .default,
-                                          handler: nil))
-            
-            // Assuming this code is within a UIViewController subclass
-            self?.present(alert, animated: true, completion: nil)
-          }
-        }
+   // MARK: - 로그인하여 토큰이 생기는 경우 로그인
+    if (tokenManager.loadAccessToken() != nil) {
+      DispatchQueue.main.async {
+        let tapbarcontroller = TabBarController()
+        let navigationController = UINavigationController(rootViewController: tapbarcontroller)
+        navigationController.modalPresentationStyle = .fullScreen
+        
+        self.present(navigationController, animated: true, completion: nil)
       }
-      
-      // Start the URLSessionDataTask
-      task.resume()
-      
-    } catch {
-      // Handle JSON serialization error
-      print("JSON Serialization Error: \(error)")
     }
+    
   }
-  
+
   // MARK: - email action 함수
   @objc func emailTextFieldDidChange() {
     if let email = emailTextField.text {
@@ -401,17 +321,21 @@ final class LoginViewController: UIViewController {
   
   // MARK: - 둘러보기 함수
   @objc func exploreButtonTapped() {
-    let homeViewController = HomeViewController()
-    let navigationController = UINavigationController(rootViewController: homeViewController)
+    let tapbarcontroller = TabBarController()
+    let navigationController = UINavigationController(rootViewController: tapbarcontroller)
     navigationController.modalPresentationStyle = .fullScreen
-    present(navigationController, animated: true, completion: nil)
+    
+    self.present(navigationController, animated: true, completion: nil)
   }
   
   // Action for the "회원가입" (Signup) button
   @objc func signUpButtonTapped() {
     let signUpViewController = SignUpViewController()
     
-    let backButton = UIBarButtonItem(title: "back", style: .plain, target: self, action: #selector(backButtonTapped))
+    let backButton = UIBarButtonItem(title: "back",
+                                     style: .plain,
+                                     target: self,
+                                     action: #selector(backButtonTapped))
     signUpViewController.navigationItem.leftBarButtonItem = backButton
     
     navigationController?.pushViewController(signUpViewController, animated: true)

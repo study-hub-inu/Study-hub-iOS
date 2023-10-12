@@ -12,58 +12,26 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
   var window: UIWindow?
   
   func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
-    
-    // Create view controllers for each tab
-    let homeViewController = HomeViewController() // Your HomeViewController instance
-    let studyViewController = StudyViewController() // Your StudyViewController instance
-    let myPageViewController = MyPageViewController() // Your MyPageViewController instance
-    
-    // Set the view controllers for the tab bar controller
-    let tabBarController = UITabBarController()
-    tabBarController.viewControllers = [homeViewController, studyViewController, myPageViewController]
-    
-    // Set tab bar item titles and images
-    homeViewController.tabBarItem = UITabBarItem(title: "홈", image: UIImage(systemName: "house"), tag: 0)
-    studyViewController.tabBarItem = UITabBarItem(title: "스터디", image: UIImage(systemName: "book"), tag: 1)
-    myPageViewController.tabBarItem = UITabBarItem(title: "마이페이지", image: UIImage(systemName: "person"), tag: 2)
-    
-    // Create a line view to wrap the tab bar controller
-    let lineView = UIView()
-    lineView.backgroundColor = UIColor.black // Set the color of the line
-    lineView.translatesAutoresizingMaskIntoConstraints = false
-    
-    // Add line view to the tab bar controller's view
-    tabBarController.view.addSubview(lineView)
-    
-    // Set constraints for the line view (placing it at the top of the tab bar)
-    NSLayoutConstraint.activate([
-      lineView.leadingAnchor.constraint(equalTo: tabBarController.view.leadingAnchor),
-      lineView.trailingAnchor.constraint(equalTo: tabBarController.view.trailingAnchor),
-      lineView.topAnchor.constraint(equalTo: tabBarController.view.topAnchor),
-      lineView.heightAnchor.constraint(equalToConstant: 1) // Adjust the height as needed
-    ])
-    
-    // Create a navigation controller for the tab bar controller
-    let navigationController = UINavigationController(rootViewController: tabBarController)
-    
-    // Set the window's root view controller to the navigation controller
     guard let windowScene = (scene as? UIWindowScene) else { return }
     window = UIWindow(windowScene: windowScene)
     
-    // MARK: - 자동 로그인?
-    if let accessToken = TokenManager.shared.loadAccessToken() {
+    let accessToken = TokenManager.shared.loadAccessToken()
+    
+    // api연결해서 refresh 토근 던져주고 acess와 같으면 로그인 
+    if accessToken == "a" {
       // 로그인 성공한 경우 HomeViewController 표시
-      let homeViewController = HomeViewController()
-      tabBarController.selectedIndex = 0 // 홈 탭 선택
-      window?.rootViewController = navigationController
+      let tabBarController = TabBarController()
+      window?.rootViewController = tabBarController
     } else {
       // 로그인하지 않은 경우 LoginViewController 표시
-      let loginViewController = LoginViewController()// Fixed typo
+      let loginViewController = LoginViewController()
+      let navigationController = UINavigationController(rootViewController: loginViewController)
       window?.rootViewController = navigationController
     }
     
     window?.makeKeyAndVisible()
   }
+  
   
   
   
