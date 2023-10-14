@@ -15,37 +15,7 @@ class CreateStudyViewController: UIViewController {
       }
     }
   }
-  
-  // 선택한 학과에 대한 버튼을 생성하고 departmentButtonStackView에 추가하는 함수
-  func addDepartmentButton(_ department: String) {
-    // Department 버튼과 삭제 버튼을 수평으로 나열하는 스택 뷰 생성
-    lazy var buttonStackView: UIStackView = createStackView(axis: .horizontal, spacing: 0)
-    
-    
-    departmentButtonStackView.addArrangedSubview(buttonStackView)
-    
-    // Department 버튼 생성
-    let departmentButton = UIButton(type: .system)
-    departmentButton.backgroundColor = UIColor(hexCode: "F3F5F6")
-    departmentButton.setTitleColor(UIColor(hexCode: "68737D"), for: .normal)
-    departmentButton.setTitle(department, for: .normal)
-    departmentButton.layer.cornerRadius = 20
-    departmentButton.titleLabel?.font = UIFont.systemFont(ofSize: 16)
-    departmentButton.contentHorizontalAlignment = .center // 텍스트 정렬
-    
-    // 삭제 버튼 생성
-    let deleteButton = UIButton(type: .system)
-    deleteButton.setImage(UIImage(systemName: "xmark.circle.fill"), for: .normal)
-    deleteButton.tintColor = .lightGray
-    
-    // 문자열 길이에 따라 버튼 가로 길이 동적 조절
-    let buttonWidth = department.width(withConstrainedHeight: 30, font: departmentButton.titleLabel!.font)
-    departmentButton.widthAnchor.constraint(equalToConstant: buttonWidth + 50).isActive = true
-    
-    buttonStackView.addArrangedSubview(departmentButton)
-    buttonStackView.addArrangedSubview(deleteButton)
-  }
-  
+
   // MARK: - UI설정
   private lazy var completeButton: UIButton = {
     let completeButton = UIButton()
@@ -287,6 +257,7 @@ class CreateStudyViewController: UIViewController {
     makeUI()
   }
   
+  // MARK: - setUpLayout
   func setUpLayout(){
     headerStackView.addArrangedSubview(backButton)
     headerStackView.addArrangedSubview(createStudyLabel)
@@ -593,74 +564,36 @@ class CreateStudyViewController: UIViewController {
       make.trailing.equalTo(view)
       make.bottom.equalTo(view)
     }
+  }
+ 
+  // 선택한 학과에 대한 버튼을 생성하고 departmentButtonStackView에 추가하는 함수
+  func addDepartmentButton(_ department: String) {
+    // Department 버튼과 삭제 버튼을 수평으로 나열하는 스택 뷰 생성
+    lazy var buttonStackView: UIStackView = createStackView(axis: .horizontal, spacing: 0)
     
-  }
-  // MARK: - UI 생성 함수
-  func createContactButton(title: String, selector: Selector) -> UIButton {
-    let button = UIButton()
-    button.setTitle(title, for: .normal)
-    button.setTitleColor(UIColor(hexCode: "#A1AAB0"), for: .normal)
-    button.layer.borderWidth = 1
-    button.layer.borderColor = UIColor(hexCode: "#D8DCDE").cgColor
-    button.layer.cornerRadius = 5
-    button.backgroundColor = .white
-    button.addTarget(self, action: selector, for: .touchUpInside)
-    return button
-  }
-  
-  func createFineButton(title: String, selector: Selector) -> UIButton {
-    let button = UIButton()
-    button.setImage(UIImage(named: "circle"), for: .normal)
-    button.setImage(UIImage(named: "checkmark.circle."), for: .selected)
-    button.tintColor = UIColor(hexCode: "#FF5530")
-    button.addTarget(self, action: #selector(haveFineButtonTapped(_:)), for: .touchUpInside)
-    return button
-  }
-  
-  // 날짜 선택하는 버튼
-  func createDateButton(selector: Selector) -> UIButton{
-    let button = UIButton()
-    button.setTitle("선택하기", for: .normal)
-    button.setTitleColor(UIColor(hexCode: "#A1AAB0"), for: .normal)
-    button.titleLabel?.font = UIFont.systemFont(ofSize: 16)
-    button.backgroundColor = .white
-    button.layer.borderWidth = 1
-    button.layer.borderColor = UIColor(hexCode: "#D8DCDE").cgColor
-    button.layer.cornerRadius = 2
-    button.addTarget(self, action: selector, for: .touchUpInside)
-    return button
-  }
-  
-  // info
-  func createTextField(title: String) -> UITextField {
-    let textField = UITextField()
-    textField.placeholder = title
-    textField.textColor = .gray
-    textField.font = UIFont.systemFont(ofSize: 14)
-    textField.borderStyle = .roundedRect
-    return textField
-  }
-  
-  func createLabel(title: String, textColor: UIColor, fontSize: CGFloat) -> UILabel {
-    let label = UILabel()
-    label.text = title
-    label.textColor = textColor
-    label.font = UIFont.systemFont(ofSize: fontSize, weight: .bold)
-    return label
-  }
-  
-  func createStackView(axis: NSLayoutConstraint.Axis, spacing: CGFloat) -> UIStackView {
-    let stackView = UIStackView()
-    stackView.axis = axis
-    stackView.spacing = spacing
-    return stackView
-  }
-  
-  func createDividerLine(height: CGFloat) -> UIView {
-    let dividerLine = UIView()
-    dividerLine.backgroundColor = UIColor(hexCode: "#F3F5F6")
-    dividerLine.heightAnchor.constraint(equalToConstant: height).isActive = true
-    return dividerLine
+    
+    departmentButtonStackView.addArrangedSubview(buttonStackView)
+    
+    // Department 버튼 생성
+    let departmentButton = UIButton(type: .system)
+    departmentButton.backgroundColor = UIColor(hexCode: "F3F5F6")
+    departmentButton.setTitleColor(UIColor(hexCode: "68737D"), for: .normal)
+    departmentButton.setTitle(department, for: .normal)
+    departmentButton.layer.cornerRadius = 20
+    departmentButton.titleLabel?.font = UIFont.systemFont(ofSize: 16)
+    departmentButton.contentHorizontalAlignment = .center // 텍스트 정렬
+    
+    // 삭제 버튼 생성
+    let deleteButton = UIButton(type: .system)
+    deleteButton.setImage(UIImage(systemName: "xmark.circle.fill"), for: .normal)
+    deleteButton.tintColor = .lightGray
+    
+    // 문자열 길이에 따라 버튼 가로 길이 동적 조절
+    let buttonWidth = department.width(withConstrainedHeight: 30, font: departmentButton.titleLabel!.font)
+    departmentButton.widthAnchor.constraint(equalToConstant: buttonWidth + 50).isActive = true
+    
+    buttonStackView.addArrangedSubview(departmentButton)
+    buttonStackView.addArrangedSubview(deleteButton)
   }
   
   // 키보드 내리기 위한 탭 제스처 핸들러
@@ -722,7 +655,6 @@ class CreateStudyViewController: UIViewController {
         make.width.equalTo(20)
         make.height.equalTo(20)
       }
-      
       
     } else {
       // Remove the labels and text fields from the fineButtonsStackView
@@ -982,7 +914,6 @@ class CreateStudyViewController: UIViewController {
     // Hide the "선택하기" title of endDateButton
     endDateButton.setTitle("", for: .normal)
   }
-  
   
   // Function to handle back button tap and navigate back to HomeViewController
   @objc func goBack() {
