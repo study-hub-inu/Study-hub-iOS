@@ -18,6 +18,7 @@
 		EE271F282AD7852900190E7A /* TapBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE271F272AD7852900190E7A /* TapBar.swift */; };
 		EE271F2A2AD8B9FA00190E7A /* String+.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE271F292AD8B9FA00190E7A /* String+.swift */; };
 		EE271F2C2AD9250F00190E7A /* UIView+.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE271F2B2AD9250F00190E7A /* UIView+.swift */; };
+		EE271F2E2ADA6D3700190E7A /* InfoManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE271F2D2ADA6D3700190E7A /* InfoManager.swift */; };
 		F80421922A7D6816006C6B87 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F80421912A7D6816006C6B87 /* AppDelegate.swift */; };
 		F80421942A7D6816006C6B87 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F80421932A7D6816006C6B87 /* SceneDelegate.swift */; };
 		F80421962A7D6816006C6B87 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F80421952A7D6816006C6B87 /* LoginViewController.swift */; };
@@ -76,6 +77,7 @@
 		EE271F272AD7852900190E7A /* TapBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TapBar.swift; sourceTree = "<group>"; };
 		EE271F292AD8B9FA00190E7A /* String+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+.swift"; sourceTree = "<group>"; };
 		EE271F2B2AD9250F00190E7A /* UIView+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+.swift"; sourceTree = "<group>"; };
+		EE271F2D2ADA6D3700190E7A /* InfoManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoManager.swift; sourceTree = "<group>"; };
 		F804218E2A7D6816006C6B87 /* STUDYHUB2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = STUDYHUB2.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F80421912A7D6816006C6B87 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F80421932A7D6816006C6B87 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -273,6 +275,7 @@
 		F89A01662A87FAF600B4C10D /* MyPage */ = {
 			isa = PBXGroup;
 			children = (
+				EE271F2D2ADA6D3700190E7A /* InfoManager.swift */,
 				F8085D452A8184800067D4DE /* MyPageViewController.swift */,
 			);
 			path = MyPage;
@@ -520,6 +523,7 @@
 				F8085D442A81846C0067D4DE /* StudyViewController.swift in Sources */,
 				F80421962A7D6816006C6B87 /* LoginViewController.swift in Sources */,
 				F8D5BC662AB71DDA00B2B154 /* Singleton.swift in Sources */,
+				EE271F2E2ADA6D3700190E7A /* InfoManager.swift in Sources */,
 				F873775B2AACD41D0055B041 /* BookmarkViewController.swift in Sources */,
 				EE271F1E2AD04BB300190E7A /* UserToken.swift in Sources */,
 				F80421CA2A7D9534006C6B87 /* PasswordViewController.swift in Sources */,

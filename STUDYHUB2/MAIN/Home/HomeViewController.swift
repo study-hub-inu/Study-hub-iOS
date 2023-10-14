@@ -294,6 +294,7 @@ final class HomeViewController: UIViewController, UIScrollViewDelegate, UISearch
   
   // MARK: - makeUI
   func makeUI(){
+    // 상단바 stackView 알림, 북마크 , titleLabel
     headerStackView.snp.makeConstraints { make in
       make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(16)
       make.leading.equalTo(view.snp.leading).offset(16)

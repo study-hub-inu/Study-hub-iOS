@@ -4,6 +4,8 @@ import SnapKit
 
 class MyPageViewController: UIViewController {
   
+  var loginStatus: Bool = false
+  
   private let recentButton = UIButton(type: .system)
   private let popularButton = UIButton(type: .system)
   
@@ -35,6 +37,21 @@ class MyPageViewController: UIViewController {
   private lazy var loginOrStackView = createStackView(axis: .vertical,
                                                       spacing: 8)
   
+  // 로그인 하면 보이는 라벨
+  private lazy var profileImageView: UIImageView = {
+    let imageView = UIImageView()
+    imageView.layer.cornerRadius = 15
+    imageView.image = UIImage(named: "ProfileAvatar")
+    return imageView
+  }()
+  
+  private lazy var majorLabel = createLabel(title: "",
+                                                textColor: .gray,
+                                                fontSize: 18)
+  private lazy var nickNameLabel = createLabel(title: "",
+                                                textColor: .black,
+                                                fontSize: 18)
+  // 로그인 안하면 보이는 라벨
   private lazy var grayTextLabel = createLabel(title: "나의 스터디 팀원을 만나보세요",
                                                textColor: .gray,
                                                fontSize: 16)
@@ -42,6 +59,7 @@ class MyPageViewController: UIViewController {
   private lazy var blackTextLabel = createLabel(title: "로그인 / 회원가입",
                                                 textColor: .black,
                                                 fontSize: 18)
+  
   private lazy var gotologinStackView = createStackView(axis: .horizontal,
                                                         spacing: 8)
   
@@ -138,15 +156,37 @@ class MyPageViewController: UIViewController {
     super.viewDidLoad()
     view.backgroundColor = .black
     
+    scrollView.backgroundColor = .white
+    
+    fetchUserData()
+    setUpLayout()
+    makeUI()
+  }
+  
+  // MARK: - setUpLayout
+  func setUpLayout(){
     headerStackView.addArrangedSubview(studyHubLabel)
     headerStackView.addArrangedSubview(spacerView)
     headerStackView.addArrangedSubview(bellButton)
     
     view.addSubview(headerStackView)
     
-    loginOrStackView.addArrangedSubview(grayTextLabel)
-    loginOrStackView.addArrangedSubview(blackTextLabel)
+    if loginStatus == false {
+      //로그인 관련
+      print("로그인실패")
+      print(loginStatus)
+      loginOrStackView.addArrangedSubview(grayTextLabel)
+      loginOrStackView.addArrangedSubview(blackTextLabel)
     
+    } else {
+      //로그인 관련
+      print(loginStatus)
+      print("로그인성공")
+      loginOrStackView.addArrangedSubview(profileImageView)
+      loginOrStackView.addArrangedSubview(majorLabel)
+      loginOrStackView.addArrangedSubview(nickNameLabel)
+    }
+
     headerContentStackView.addArrangedSubview(loginOrStackView)
     
     gotologinStackView.addArrangedSubview(loginOrStackView)
@@ -159,7 +199,6 @@ class MyPageViewController: UIViewController {
     
     writtenButton.addSubview(writtenLabel)
     writtenButton.addSubview(writtenCountLabel)
-    // writtenLabel constraints
     
     joinstudyButton.addSubview(joinstudyLabel)
     joinstudyButton.addSubview(joinstudyCountLabel)
@@ -177,20 +216,11 @@ class MyPageViewController: UIViewController {
     normalButtonStackView.addArrangedSubview(askButton)
     normalButtonStackView.addArrangedSubview(informhandleButton)
     
-    // Create a scroll view to make the content scrollable
     scrollView.translatesAutoresizingMaskIntoConstraints = false
     scrollView.addSubview(headerContentStackView)
     view.addSubview(scrollView)
-    
-    
-    // Set the background color of the scrollView to white
-    scrollView.backgroundColor = .white
-    
-    // Set the scroll view's content size to fit the content
-
-        
-    makeUI()
   }
+  
   // MARK: - makeUI
   func makeUI(){
     headerStackView.snp.makeConstraints { make in
@@ -207,8 +237,8 @@ class MyPageViewController: UIViewController {
       make.bottom.equalTo(scrollView.snp.bottom)
       make.width.equalTo(scrollView.snp.width)
     }
-    
-    // Add other constraints similarly using SnapKit
+
+    //로그인 관련
     grayTextLabel.snp.makeConstraints { make in
       make.top.equalTo(loginOrStackView.snp.top).offset(16)
       make.leading.equalTo(loginOrStackView.snp.leading).offset(16)
@@ -271,6 +301,35 @@ class MyPageViewController: UIViewController {
       make.trailing.equalTo(view.snp.trailing)
       make.bottom.equalTo(view.snp.bottom)
     }
+  }
+  
+  // MARK: - 유저 정보 가저오는 함수
+  func fetchUserData() {
+    InfoManager.shared.fetchUser { result in
+      switch result {
+      case .success(let userData):
+        // 사용자 정보를 사용하여 원하는 작업을 수행합니다.
+        print("Email: \(userData.email)")
+        print("Gender: \(userData.gender)")
+        print(userData)
+//        self.setUserData(data: userData)
+        self.loginStatus = true
+        // 나머지 정보도 마찬가지로 출력하거나 사용합니다.
+      case .failure(let error):
+        // 네트워크 오류 또는 데이터 파싱 오류를 처리합니다.
+        print("Error: \(error)")
+      }
+    }
+  }
+  
+  func setUserData(data: UserData) {
+    // string to image 로 변환해서 넣기
+//    profileImageView.image = data.imageURL
+    majorLabel.text = data.major
+    nickNameLabel.text = data.nickname
+//    writtenCountLabel.text = String(data.postCount)
+//    joinstudyCountLabel.text = String(data.participateCount)
+//    bookmarkCountLabel.text = String(data.bookmarkCount)
   }
   
   @objc func bookmarkpageButtonTapped() {

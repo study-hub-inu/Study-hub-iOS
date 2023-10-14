@@ -10,6 +10,7 @@ import UIKit
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
   let tokenManager = TokenManager.shared
   let loginManager = LoginManager.shared
+  let infoManager = InfoManager.shared
   var window: UIWindow?
   
   func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
@@ -23,9 +24,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
       let tabBarController = TabBarController()
       window?.rootViewController = tabBarController
     } else {
-      loginManager.autoLogin()
-
-
+  
       // 로그인하지 않은 경우 LoginViewController 표시
       let loginViewController = LoginViewController()
       let navigationController = UINavigationController(rootViewController: loginViewController)
