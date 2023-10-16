@@ -15,10 +15,10 @@ enum NetworkError: Error {
 }
 
 struct UserData: Codable {
-  let bookmarkCount: Int?
-  let email, gender, imageURL, major: String?
-  let nickname: String?
-  let participateCount, postCount: Int?
+  var bookmarkCount: Int?
+  var email, gender, imageURL, major: String?
+  var nickname: String?
+  var participateCount, postCount: Int?
   
   enum CodingKeys: String, CodingKey {
     case bookmarkCount, email, gender

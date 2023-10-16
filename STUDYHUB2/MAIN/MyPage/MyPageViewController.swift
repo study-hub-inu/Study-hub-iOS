@@ -35,10 +35,10 @@ class MyPageViewController: UIViewController {
   private lazy var headerContentStackView = createStackView(axis: .vertical,
                                                             spacing: 16)
   
-  private lazy var loginOrStackView = createStackView(axis: .vertical,
-                                                      spacing: 8)
   
   // 로그인 하면 보이는 라벨
+  private lazy var loginSuccessStackView = createStackView(axis: .vertical,
+                                                           spacing: 5)
   private lazy var profileImageView: UIImageView = {
     let imageView = UIImageView()
     imageView.layer.cornerRadius = 15
@@ -48,13 +48,16 @@ class MyPageViewController: UIViewController {
     return imageView
   }()
   
-  private lazy var majorLabel = createLabel(title: "",
+  private lazy var majorLabel = createLabel(title: myPageUserData?.major ?? "비어있음",
                                             textColor: .gray,
                                             fontSize: 18)
-  private lazy var nickNameLabel = createLabel(title: "",
+  private lazy var nickNameLabel = createLabel(title: myPageUserData?.nickname ?? "비어있음",
                                                textColor: .black,
                                                fontSize: 18)
   // 로그인 안하면 보이는 라벨
+  private lazy var loginOrStackView = createStackView(axis: .vertical,
+                                                      spacing: 8)
+  
   private lazy var grayTextLabel = createLabel(title: "나의 스터디 팀원을 만나보세요",
                                                textColor: .gray,
                                                fontSize: 16)
@@ -62,10 +65,11 @@ class MyPageViewController: UIViewController {
   private lazy var blackTextLabel = createLabel(title: "로그인 / 회원가입",
                                                 textColor: .black,
                                                 fontSize: 18)
-  
+  // 사용자 프로필, 로그인 화면으로 가는 버튼을 담은 스택뷰
   private lazy var gotologinStackView = createStackView(axis: .horizontal,
                                                         spacing: 8)
   
+  // 북마크, 글 횟수 등의 버튼을 담은 스택뷰
   private lazy var buttonboxesStackView = createStackView(axis: .horizontal,
                                                           spacing: 8)
   
@@ -178,19 +182,19 @@ class MyPageViewController: UIViewController {
       print(loginStatus)
       loginOrStackView.addArrangedSubview(grayTextLabel)
       loginOrStackView.addArrangedSubview(blackTextLabel)
-      
+
+      gotologinStackView.addArrangedSubview(loginOrStackView)
     } else {
       //로그인 관련
       print(loginStatus)
       print("로그인성공")
-      loginOrStackView.addArrangedSubview(profileImageView)
-      loginOrStackView.addArrangedSubview(majorLabel)
-      loginOrStackView.addArrangedSubview(nickNameLabel)
+      loginSuccessStackView.addArrangedSubview(majorLabel)
+      loginSuccessStackView.addArrangedSubview(nickNameLabel)
+      
+      gotologinStackView.addArrangedSubview(profileImageView)
+      gotologinStackView.addArrangedSubview(loginSuccessStackView)
     }
-    
-    headerContentStackView.addArrangedSubview(loginOrStackView)
-    
-    gotologinStackView.addArrangedSubview(loginOrStackView)
+        
     gotologinStackView.addArrangedSubview(chevronButton)
     
     headerContentStackView.addArrangedSubview(gotologinStackView)
@@ -251,26 +255,11 @@ class MyPageViewController: UIViewController {
       //로그인 관련
       print(loginStatus)
       print("로그인성공")
-      profileImageView.snp.makeConstraints { make in
-        make.top.equalTo(loginOrStackView.snp.top).offset(16)
-        make.leading.equalTo(loginOrStackView.snp.leading).offset(16)
-        make.trailing.equalTo(majorLabel.snp.leading).offset(10)
-      }
-      
-      majorLabel.snp.makeConstraints { make in
-        make.top.equalTo(profileImageView.snp.bottom).offset(10)
-        make.leading.equalTo(profileImageView.snp.trailing).offset(10)
-      }
-      
-      nickNameLabel.snp.makeConstraints { make in
-        make.top.equalTo(majorLabel.snp.bottom).offset(10)
-      }
-      
     }
     
     chevronButton.snp.makeConstraints { make in
-      make.top.equalTo(loginOrStackView.snp.top).offset(50)
-      make.trailing.equalTo(loginOrStackView.snp.trailing).offset(60)
+      make.top.equalTo(gotologinStackView.snp.top)
+      make.trailing.equalTo(gotologinStackView.snp.trailing)
     }
     
     
@@ -337,8 +326,10 @@ class MyPageViewController: UIViewController {
         print("Email: \(userData.email)")
         print("Gender: \(userData.gender)")
         
-        self.myPageUserData = userData
-        self.loginStatus = true
+        if userData.email != nil {
+          self.myPageUserData = userData
+          self.loginStatus = true
+        }
         
         DispatchQueue.main.async {
           self.setUpLayout()
@@ -352,8 +343,10 @@ class MyPageViewController: UIViewController {
     }
   }
   
+  // 학과 조회api연동해야함
   func setUserData(data: UserData) {
-    
+    myPageUserData?.major = data.major
+    myPageUserData?.nickname = data.nickname
   }
   
   @objc func bookmarkpageButtonTapped() {
