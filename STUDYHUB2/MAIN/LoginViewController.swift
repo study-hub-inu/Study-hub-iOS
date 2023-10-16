@@ -130,9 +130,7 @@ final class LoginViewController: UIViewController {
     super.viewDidLoad()
     
     view.backgroundColor = .black
-    
-    print(tokenManager.loadAccessToken())
-    
+        
     setUpLayout()
     makeUI()
   }

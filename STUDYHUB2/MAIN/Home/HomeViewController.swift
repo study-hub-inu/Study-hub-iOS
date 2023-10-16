@@ -10,8 +10,6 @@ final class HomeViewController: UIViewController, UIScrollViewDelegate, UISearch
     
     bookmarkIconButton.setImage(bookmarkIcon, for: .normal)
     bookmarkIconButton.tintColor = UIColor(hexCode: "#C2C8CC")
-    bookmarkIconButton.translatesAutoresizingMaskIntoConstraints = false
-    
     bookmarkIconButton.addTarget(self,
                                  action: #selector(bookmarkButtonTapped),
                                  for: .touchUpInside)
@@ -22,8 +20,9 @@ final class HomeViewController: UIViewController, UIScrollViewDelegate, UISearch
     let bookmarkButton = UIButton(type: .system)
     bookmarkButton.setImage(UIImage(systemName: "bookmark"), for: .normal)
     bookmarkButton.tintColor = .white
-    bookmarkButton.translatesAutoresizingMaskIntoConstraints = false
-    bookmarkButton.addTarget(self, action: #selector(bookmarkpageButtonTapped), for: .touchUpInside)
+    bookmarkButton.addTarget(self,
+                             action: #selector(bookmarkpageButtonTapped),
+                             for: .touchUpInside)
     return bookmarkButton
   }()
   
@@ -31,7 +30,6 @@ final class HomeViewController: UIViewController, UIScrollViewDelegate, UISearch
     let bellButton = UIButton(type: .system)
     bellButton.setImage(UIImage(systemName: "bell.badge"), for: .normal)
     bellButton.tintColor = .white
-    bellButton.translatesAutoresizingMaskIntoConstraints = false
     return bellButton
   }()
   
@@ -41,7 +39,6 @@ final class HomeViewController: UIViewController, UIScrollViewDelegate, UISearch
     studyHubLabel.text = "STUDY HUB"
     studyHubLabel.font = UIFont.boldSystemFont(ofSize: 18)
     studyHubLabel.textColor = .white
-    studyHubLabel.translatesAutoresizingMaskIntoConstraints = false
     return studyHubLabel
   }()
   
@@ -49,13 +46,11 @@ final class HomeViewController: UIViewController, UIScrollViewDelegate, UISearch
     // Image view for the small logo
     let smallLogoImageView = UIImageView(image: UIImage(named: "Image 3"))
     smallLogoImageView.contentMode = .scaleAspectFit
-    smallLogoImageView.translatesAutoresizingMaskIntoConstraints = false
     return smallLogoImageView
   }()
   
   private let spacerView: UIView = {
     let spacerView = UIView()
-    spacerView.translatesAutoresizingMaskIntoConstraints = false
     spacerView.setContentHuggingPriority(.defaultLow, for: .horizontal)
     return spacerView
   }()
@@ -65,7 +60,6 @@ final class HomeViewController: UIViewController, UIScrollViewDelegate, UISearch
     headerStackView.axis = .horizontal
     headerStackView.alignment = .center
     headerStackView.spacing = 8
-    headerStackView.translatesAutoresizingMaskIntoConstraints = false
     return headerStackView
   }()
   
@@ -73,7 +67,6 @@ final class HomeViewController: UIViewController, UIScrollViewDelegate, UISearch
     let headerContentStackView = UIStackView()
     headerContentStackView.axis = .vertical
     headerContentStackView.spacing = 16
-    headerContentStackView.translatesAutoresizingMaskIntoConstraints = false
     return headerContentStackView
   }()
   
@@ -82,7 +75,6 @@ final class HomeViewController: UIViewController, UIScrollViewDelegate, UISearch
     largeImageStackView.axis = .vertical
     largeImageStackView.alignment = .center
     largeImageStackView.spacing = 8
-    largeImageStackView.translatesAutoresizingMaskIntoConstraints = false
     return largeImageStackView
   }()
   
@@ -90,7 +82,6 @@ final class HomeViewController: UIViewController, UIScrollViewDelegate, UISearch
     let largeImageView = UIImageView(image: UIImage(named: "Image 2"))
     largeImageView.contentMode = .scaleAspectFill
     largeImageView.clipsToBounds = true
-    largeImageView.translatesAutoresizingMaskIntoConstraints = false
     return largeImageView
   }()
   
@@ -102,7 +93,6 @@ final class HomeViewController: UIViewController, UIScrollViewDelegate, UISearch
     detailsButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 16)
     detailsButton.layer.cornerRadius = 8
     detailsButton.addTarget(self, action: #selector(detailsButtonTapped), for: .touchUpInside)
-    detailsButton.translatesAutoresizingMaskIntoConstraints = false
     return detailsButton
   }()
   
@@ -111,7 +101,6 @@ final class HomeViewController: UIViewController, UIScrollViewDelegate, UISearch
     labelButtonStackView.axis = .horizontal
     labelButtonStackView.alignment = .center
     labelButtonStackView.spacing = 8
-    labelButtonStackView.translatesAutoresizingMaskIntoConstraints = false
     return labelButtonStackView
   }()
   
@@ -119,16 +108,16 @@ final class HomeViewController: UIViewController, UIScrollViewDelegate, UISearch
     let searchIconButton = UIButton(type: .system)
     searchIconButton.setImage(UIImage(systemName: "magnifyingglass"), for: .normal)
     searchIconButton.tintColor = .black
-    searchIconButton.addTarget(self, action: #selector(searchIconButtonTapped), for: .touchUpInside)
-    searchIconButton.translatesAutoresizingMaskIntoConstraints = false
+    searchIconButton.addTarget(self,
+                               action: #selector(searchIconButtonTapped),
+                               for: .touchUpInside)
     return searchIconButton
   }()
   
   private let searchBar: UISearchBar = {
     let searchBar = UISearchBar()
     searchBar.placeholder = "관심있는 스터디를 검색해 보세요"
-    searchBar.backgroundImage = UIImage() // Remove background image
-    searchBar.translatesAutoresizingMaskIntoConstraints = false
+    searchBar.backgroundImage = UIImage() 
     return searchBar
   }()
   
@@ -137,9 +126,11 @@ final class HomeViewController: UIViewController, UIScrollViewDelegate, UISearch
     newStudyLabel.text = "NEW! 모집 중인 스터디예요"
     newStudyLabel.font = UIFont.boldSystemFont(ofSize: 18)
     newStudyLabel.textColor = .black
-    newStudyLabel.translatesAutoresizingMaskIntoConstraints = false
+    
     let attributedText = NSMutableAttributedString(string: "NEW! 모집 중인 스터디예요")
-    attributedText.addAttribute(.foregroundColor, value: UIColor(hexCode: "FF5935"), range: NSRange(location: 0, length: 4))
+    attributedText.addAttribute(.foregroundColor,
+                                value: UIColor(hexCode: "FF5935"),
+                                range: NSRange(location: 0, length: 4))
     newStudyLabel.attributedText = attributedText
     return newStudyLabel
   }()
@@ -150,7 +141,6 @@ final class HomeViewController: UIViewController, UIScrollViewDelegate, UISearch
     viewAllButton.setTitle("전체>", for: .normal)
     viewAllButton.setTitleColor(.gray, for: .normal)
     viewAllButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 15)
-    viewAllButton.translatesAutoresizingMaskIntoConstraints = false
     return viewAllButton
   }()
   
@@ -161,7 +151,6 @@ final class HomeViewController: UIViewController, UIScrollViewDelegate, UISearch
     interestButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 15)
     interestButton.backgroundColor = UIColor(hexCode: "#FFF1EE")
     interestButton.layer.cornerRadius = 8
-    interestButton.translatesAutoresizingMaskIntoConstraints = false
     return interestButton
   }()
   
@@ -170,7 +159,6 @@ final class HomeViewController: UIViewController, UIScrollViewDelegate, UISearch
     titleLabel.text = "제목 (최대 2줄)"
     titleLabel.font = UIFont.boldSystemFont(ofSize: 18)
     titleLabel.textColor = .black
-    titleLabel.translatesAutoresizingMaskIntoConstraints = false
     return titleLabel
   }()
   
@@ -179,7 +167,6 @@ final class HomeViewController: UIViewController, UIScrollViewDelegate, UISearch
     buttonLabelStackView.axis = .vertical
     buttonLabelStackView.alignment = .center
     buttonLabelStackView.spacing = 8
-    buttonLabelStackView.translatesAutoresizingMaskIntoConstraints = false
     return buttonLabelStackView
   }()
   
@@ -188,7 +175,6 @@ final class HomeViewController: UIViewController, UIScrollViewDelegate, UISearch
     bottomButtonsLabelStackView.axis = .horizontal
     bottomButtonsLabelStackView.alignment = .center
     bottomButtonsLabelStackView.spacing = 8
-    bottomButtonsLabelStackView.translatesAutoresizingMaskIntoConstraints = false
     return bottomButtonsLabelStackView
   }()
   
@@ -198,7 +184,6 @@ final class HomeViewController: UIViewController, UIScrollViewDelegate, UISearch
     grayBorderedView.layer.borderWidth = 1
     grayBorderedView.layer.borderColor = UIColor(hexCode: "#C2C8CC").cgColor
     grayBorderedView.layer.cornerRadius = 8
-    grayBorderedView.translatesAutoresizingMaskIntoConstraints = false
     
     let grayBorderedViewHeightConstraint = grayBorderedView.heightAnchor.constraint(equalToConstant: 179)
     grayBorderedViewHeightConstraint.priority = .defaultHigh
@@ -211,7 +196,6 @@ final class HomeViewController: UIViewController, UIScrollViewDelegate, UISearch
     imageTextLabelStackView.axis = .horizontal
     imageTextLabelStackView.alignment = .center
     imageTextLabelStackView.spacing = 8
-    imageTextLabelStackView.translatesAutoresizingMaskIntoConstraints = false
     return imageTextLabelStackView
   }()
   
@@ -219,7 +203,6 @@ final class HomeViewController: UIViewController, UIScrollViewDelegate, UISearch
     let smallImageView = UIImageView(image: UIImage(systemName: "flame.fill"))
     smallImageView.contentMode = .scaleAspectFit
     smallImageView.tintColor = UIColor(hexCode: "FF5935") // Set color
-    smallImageView.translatesAutoresizingMaskIntoConstraints = false
     return smallImageView
   }()
   
@@ -228,7 +211,6 @@ final class HomeViewController: UIViewController, UIScrollViewDelegate, UISearch
     textLabel.text = "마감이 임박한 스터디예요"
     textLabel.font = UIFont.boldSystemFont(ofSize: 18)
     textLabel.textColor = .black
-    textLabel.translatesAutoresizingMaskIntoConstraints = false
     
     // Apply attributed text to change color of "HUB"
     let textAttributedText = NSMutableAttributedString(string: "마감이 임박한 스터디예요")
@@ -243,13 +225,11 @@ final class HomeViewController: UIViewController, UIScrollViewDelegate, UISearch
     let additionalContentBelowStackView = UIStackView()
     additionalContentBelowStackView.axis = .vertical
     additionalContentBelowStackView.spacing = -30
-    additionalContentBelowStackView.translatesAutoresizingMaskIntoConstraints = false
     return additionalContentBelowStackView
   }()
   
   lazy var scrollView: UIScrollView = {
     let scrollView = UIScrollView()
-    scrollView.translatesAutoresizingMaskIntoConstraints = false
     scrollView.addSubview(headerContentStackView)
     scrollView.backgroundColor = .white
     return scrollView
@@ -314,6 +294,7 @@ final class HomeViewController: UIViewController, UIScrollViewDelegate, UISearch
   
   // MARK: - makeUI
   func makeUI(){
+    // 상단바 stackView 알림, 북마크 , titleLabel
     headerStackView.snp.makeConstraints { make in
       make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(16)
       make.leading.equalTo(view.snp.leading).offset(16)

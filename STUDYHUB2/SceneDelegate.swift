@@ -9,6 +9,8 @@ import UIKit
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
   let tokenManager = TokenManager.shared
+  let loginManager = LoginManager.shared
+  let infoManager = InfoManager.shared
   var window: UIWindow?
   
   func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
@@ -16,13 +18,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     window = UIWindow(windowScene: windowScene)
     
     let accessToken = TokenManager.shared.loadAccessToken()
-    
-    // api연결해서 refresh 토근 던져주고 acess와 같으면 로그인 
+    // api연결해서 refresh 토근 던져주고 acess와 같으면 로그인
     if accessToken == "a" {
       // 로그인 성공한 경우 HomeViewController 표시
       let tabBarController = TabBarController()
       window?.rootViewController = tabBarController
     } else {
+  
       // 로그인하지 않은 경우 LoginViewController 표시
       let loginViewController = LoginViewController()
       let navigationController = UINavigationController(rootViewController: loginViewController)

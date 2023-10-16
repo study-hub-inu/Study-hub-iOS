@@ -74,13 +74,7 @@ class DepartmentselectViewController: UIViewController, UISearchBarDelegate {
         headerContentStackView.axis = .vertical
         headerContentStackView.spacing = 16
         headerContentStackView.translatesAutoresizingMaskIntoConstraints = false
-        
-//        // Create the search icon button
-//        let searchIconButton = UIButton(type: .system)
-//        searchIconButton.setImage(UIImage(systemName: "magnifyingglass"), for: .normal)
-//        searchIconButton.tintColor = .black
-//        searchIconButton.addTarget(self, action: #selector(searchIconButtonTapped), for: .touchUpInside)
-//        searchIconButton.translatesAutoresizingMaskIntoConstraints = false
+
         
         // Search Bar
         searchBar.placeholder = "관련학과를 입력해주세요"
