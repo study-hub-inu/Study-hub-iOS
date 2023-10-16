@@ -5,13 +5,14 @@ import SnapKit
 class MyPageViewController: UIViewController {
   
   var loginStatus: Bool = false
+  var myPageUserData: UserData?
   
   private let recentButton = UIButton(type: .system)
   private let popularButton = UIButton(type: .system)
   
   // MARK: - UI설정
   private lazy var headerStackView = createStackView(axis: .horizontal,
-                                                spacing: 8)
+                                                     spacing: 8)
   
   private lazy var studyHubLabel = createLabel(title: "마이페이지",
                                                textColor: .white,
@@ -42,15 +43,17 @@ class MyPageViewController: UIViewController {
     let imageView = UIImageView()
     imageView.layer.cornerRadius = 15
     imageView.image = UIImage(named: "ProfileAvatar")
+    imageView.frame = CGRect(x: 0, y: 0, width: 56, height: 56)
+    
     return imageView
   }()
   
   private lazy var majorLabel = createLabel(title: "",
-                                                textColor: .gray,
-                                                fontSize: 18)
+                                            textColor: .gray,
+                                            fontSize: 18)
   private lazy var nickNameLabel = createLabel(title: "",
-                                                textColor: .black,
-                                                fontSize: 18)
+                                               textColor: .black,
+                                               fontSize: 18)
   // 로그인 안하면 보이는 라벨
   private lazy var grayTextLabel = createLabel(title: "나의 스터디 팀원을 만나보세요",
                                                textColor: .gray,
@@ -90,7 +93,6 @@ class MyPageViewController: UIViewController {
                                                textColor: .gray,
                                                fontSize: 14)
   
-  
   private lazy var chevronButton: UIButton = {
     let chevronButton = UIButton(type: .system)
     chevronButton.setImage(UIImage(systemName: "chevron.right"),
@@ -107,7 +109,7 @@ class MyPageViewController: UIViewController {
     writtenButton.backgroundColor = UIColor(hexCode: "#F8F9F9")
     writtenButton.layer.cornerRadius = 5
     writtenButton.widthAnchor.constraint(equalToConstant: 115).isActive = true
-     writtenButton.heightAnchor.constraint(equalToConstant: 87).isActive = true
+    writtenButton.heightAnchor.constraint(equalToConstant: 87).isActive = true
     return writtenButton
   }()
   
@@ -117,7 +119,7 @@ class MyPageViewController: UIViewController {
     joinstudyButton.backgroundColor = UIColor(hexCode: "#F8F9F9")
     joinstudyButton.layer.cornerRadius = 5
     joinstudyButton.widthAnchor.constraint(equalToConstant: 115).isActive = true
-      joinstudyButton.heightAnchor.constraint(equalToConstant: 87).isActive = true
+    joinstudyButton.heightAnchor.constraint(equalToConstant: 87).isActive = true
     
     return joinstudyButton
   }()
@@ -157,10 +159,9 @@ class MyPageViewController: UIViewController {
     view.backgroundColor = .black
     
     scrollView.backgroundColor = .white
+    print("@@@@@@@@@@@@@@")
     
     fetchUserData()
-    setUpLayout()
-    makeUI()
   }
   
   // MARK: - setUpLayout
@@ -171,13 +172,13 @@ class MyPageViewController: UIViewController {
     
     view.addSubview(headerStackView)
     
-    if loginStatus == false {
+    if self.loginStatus == false {
       //로그인 관련
       print("로그인실패")
       print(loginStatus)
       loginOrStackView.addArrangedSubview(grayTextLabel)
       loginOrStackView.addArrangedSubview(blackTextLabel)
-    
+      
     } else {
       //로그인 관련
       print(loginStatus)
@@ -186,7 +187,7 @@ class MyPageViewController: UIViewController {
       loginOrStackView.addArrangedSubview(majorLabel)
       loginOrStackView.addArrangedSubview(nickNameLabel)
     }
-
+    
     headerContentStackView.addArrangedSubview(loginOrStackView)
     
     gotologinStackView.addArrangedSubview(loginOrStackView)
@@ -237,12 +238,34 @@ class MyPageViewController: UIViewController {
       make.bottom.equalTo(scrollView.snp.bottom)
       make.width.equalTo(scrollView.snp.width)
     }
-
+    
     //로그인 관련
-    grayTextLabel.snp.makeConstraints { make in
-      make.top.equalTo(loginOrStackView.snp.top).offset(16)
-      make.leading.equalTo(loginOrStackView.snp.leading).offset(16)
-      make.trailing.equalTo(loginOrStackView.snp.trailing).offset(10)
+    if loginStatus == false {
+      //로그인 관련
+      grayTextLabel.snp.makeConstraints { make in
+        make.top.equalTo(loginOrStackView.snp.top).offset(16)
+        make.leading.equalTo(loginOrStackView.snp.leading).offset(16)
+        make.trailing.equalTo(loginOrStackView.snp.trailing).offset(10)
+      }
+    } else {
+      //로그인 관련
+      print(loginStatus)
+      print("로그인성공")
+      profileImageView.snp.makeConstraints { make in
+        make.top.equalTo(loginOrStackView.snp.top).offset(16)
+        make.leading.equalTo(loginOrStackView.snp.leading).offset(16)
+        make.trailing.equalTo(majorLabel.snp.leading).offset(10)
+      }
+      
+      majorLabel.snp.makeConstraints { make in
+        make.top.equalTo(profileImageView.snp.bottom).offset(10)
+        make.leading.equalTo(profileImageView.snp.trailing).offset(10)
+      }
+      
+      nickNameLabel.snp.makeConstraints { make in
+        make.top.equalTo(majorLabel.snp.bottom).offset(10)
+      }
+      
     }
     
     chevronButton.snp.makeConstraints { make in
@@ -305,16 +328,23 @@ class MyPageViewController: UIViewController {
   
   // MARK: - 유저 정보 가저오는 함수
   func fetchUserData() {
-    InfoManager.shared.fetchUser { result in
+    InfoManager.shared.fetchUser { [weak self] result in
+      guard let self = self else { return }
+      
       switch result {
       case .success(let userData):
         // 사용자 정보를 사용하여 원하는 작업을 수행합니다.
         print("Email: \(userData.email)")
         print("Gender: \(userData.gender)")
-        print(userData)
-//        self.setUserData(data: userData)
+        
+        self.myPageUserData = userData
         self.loginStatus = true
-        // 나머지 정보도 마찬가지로 출력하거나 사용합니다.
+        
+        DispatchQueue.main.async {
+          self.setUpLayout()
+          self.makeUI()
+        }
+        
       case .failure(let error):
         // 네트워크 오류 또는 데이터 파싱 오류를 처리합니다.
         print("Error: \(error)")
@@ -323,13 +353,7 @@ class MyPageViewController: UIViewController {
   }
   
   func setUserData(data: UserData) {
-    // string to image 로 변환해서 넣기
-//    profileImageView.image = data.imageURL
-    majorLabel.text = data.major
-    nickNameLabel.text = data.nickname
-//    writtenCountLabel.text = String(data.postCount)
-//    joinstudyCountLabel.text = String(data.participateCount)
-//    bookmarkCountLabel.text = String(data.bookmarkCount)
+    
   }
   
   @objc func bookmarkpageButtonTapped() {
