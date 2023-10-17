@@ -343,7 +343,6 @@ class MyPageViewController: UIViewController {
     }
   }
   
-  // 학과 조회api연동해야함
   func setUserData(data: UserData) {
     myPageUserData?.major = data.major
     myPageUserData?.nickname = data.nickname

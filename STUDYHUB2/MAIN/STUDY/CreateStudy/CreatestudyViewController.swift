@@ -252,7 +252,7 @@ class CreateStudyViewController: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     view.backgroundColor = .black
-    
+        
     setUpLayout()
     makeUI()
   }
@@ -272,7 +272,7 @@ class CreateStudyViewController: UIViewController {
     let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap))
     view.addGestureRecognizer(tapGesture)
     
-    chatLinkDividerLine.heightAnchor.constraint(equalToConstant: 10).isActive = true // Adjust the thickness here
+    chatLinkDividerLine.heightAnchor.constraint(equalToConstant: 10).isActive = true
     
     chatLinkStackView.addArrangedSubview(chatLinkLabel)
     chatLinkStackView.addArrangedSubview(descriptionLabel)
@@ -281,7 +281,7 @@ class CreateStudyViewController: UIViewController {
     studyproduceTextField.heightAnchor.constraint(equalToConstant: 150).isActive = true
     studyproduceTextField.contentVerticalAlignment = .top
     
-    studyinfoStackViewDividerLine.heightAnchor.constraint(equalToConstant: 10).isActive = true // Adjust the thickness here
+    studyinfoStackViewDividerLine.heightAnchor.constraint(equalToConstant: 10).isActive = true
     
     studyinfoStackView.addArrangedSubview(studytitleLabel)
     studyinfoStackView.addArrangedSubview(studytitleTextField)
@@ -398,7 +398,7 @@ class CreateStudyViewController: UIViewController {
     }
     studytitleTextField.snp.makeConstraints { make in
       make.leading.equalTo(studyinfoStackView).offset(16)
-      make.trailing.equalTo(studyinfoStackView).offset(100)
+      make.trailing.equalTo(chatLinkTextField)
     }
     studyproduceLabel.snp.makeConstraints { make in
       make.leading.equalTo(studyinfoStackView).offset(16)
@@ -920,4 +920,6 @@ class CreateStudyViewController: UIViewController {
     
     self.dismiss(animated: true, completion: nil)
   }
+  
+
 }
