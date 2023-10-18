@@ -66,6 +66,7 @@ extension UIViewController {
                                                          attributes: placeholderTextAttributes)
     
     textField.backgroundColor = .white
+    textField.textColor = .black
     textField.font = UIFont.systemFont(ofSize: 14)
     textField.borderStyle = .roundedRect
     textField.layer.cornerRadius = 5
@@ -105,4 +106,15 @@ extension UIViewController {
     button.setTitleColor(UIColor(hexCode: "#49545C"), for: .normal)
     return button
   }
+  
+  // 날짜 변경함수
+  func convertToFormat(dateString: String) -> String {
+    let dateFormatter = DateFormatter()
+    dateFormatter.dateFormat = "yyyy년 MM월 dd일" // 입력된 날짜의 형식
+    guard let date = dateFormatter.date(from: dateString) else { return "" }
+    
+    dateFormatter.dateFormat = "yyyy-MM-dd"
+    return dateFormatter.string(from: date)
+  }
+
 }

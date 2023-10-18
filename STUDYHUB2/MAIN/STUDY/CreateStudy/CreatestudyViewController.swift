@@ -4,6 +4,7 @@ import SnapKit
 
 class CreateStudyViewController: UIViewController {
   
+  let tokenManager = TokenManager.shared
   private var selectedDepartments: [String] = [] // 선택된 학과를 저장할 배열
   
   // 선택한 학과를 저장할 프로퍼티
@@ -15,7 +16,7 @@ class CreateStudyViewController: UIViewController {
       }
     }
   }
-
+  
   // MARK: - UI설정
   private lazy var completeButton: UIButton = {
     let completeButton = UIButton()
@@ -252,7 +253,7 @@ class CreateStudyViewController: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     view.backgroundColor = .black
-        
+    
     setUpLayout()
     makeUI()
   }
@@ -565,7 +566,7 @@ class CreateStudyViewController: UIViewController {
       make.bottom.equalTo(view)
     }
   }
- 
+  
   // 선택한 학과에 대한 버튼을 생성하고 departmentButtonStackView에 추가하는 함수
   func addDepartmentButton(_ department: String) {
     // Department 버튼과 삭제 버튼을 수평으로 나열하는 스택 뷰 생성
@@ -662,24 +663,21 @@ class CreateStudyViewController: UIViewController {
     }
   }
   
+  struct CreateStudyRequest: Codable {
+//    let accessToken: String
+    let chatUrl: String
+    let close: Bool
+    let content, gender, major: String
+    let penalty: Int
+    let penaltyWay, studyEndDate: String
+    let studyPerson: Int
+    let studyStartDate, studyWay, title: String
+    
+  }
+  
   // MARK: - 완료버튼 누를 때 함수
   @objc func completeButtonTapped() {
     // 입력된 정보 JSON
-    let chatUrl = chatLinkTextField.text ?? ""
-    let content = studyproduceTextField.text ?? ""
-    
-    //        // 선택한 학과에 따라 major 값을 설정
-    var major = "COMPUTER_SCIENCE_ENGINEERING"
-    //        if selectedDepartment == "컴퓨터공학과" {
-    //            major = "COMPUTER_SCIENCE_ENGINEERING"
-    //        } else if selectedDepartment == "정보통신공학과" {
-    //            major = "INFORMATION_TELECOMMUNICATION_ENGINEERING"
-    //        }
-    
-    let penalty = Int(fineAmountTextField.text ?? "0") ?? 0
-    let studyEndDate = endDateTextField.text ?? ""
-    let studyPerson = Int(studymemberTextField.text ?? "0") ?? 0
-    let studyStartDate = startDateTextField.text ?? ""
     var gender = ""
     if maleOnlyButton.isSelected {
       gender = "MALE"
@@ -688,6 +686,7 @@ class CreateStudyViewController: UIViewController {
     } else {
       gender = "ALLGENDER"
     }
+    
     var studyWay = ""
     if contactButton.isSelected {
       studyWay = "CONTACT"
@@ -696,73 +695,54 @@ class CreateStudyViewController: UIViewController {
     } else {
       studyWay = "MIXMEET"
     }
-    let title = studytitleTextField.text ?? ""
     
-    // JSON 데이터 생성
-    let studyData: [String: Any] = [
-      "chatUrl": chatUrl,
-      "close": false,
-      "content": content,
-      "gender": gender,
-      "major": major,
-      "penalty": penalty,
-      "studyEndDate": studyEndDate,
-      "studyPerson": studyPerson,
-      "studyStartDate": studyStartDate,
-      "studyWay": studyWay,
-      "title": title
-    ]
+    guard let token = tokenManager.loadAccessToken() else { return }
     
-    // JSON 데이터를 서버로 전송
-    if let url = URL(string: "https://study-hub.site:443/api/study-posts") {
+    let studyData = CreateStudyRequest(
+//            accessToken : token,
+      chatUrl: "www.dfasdf", close: false, content: "화이팅", gender: gender, major: "COMPUTER_SCIENCE_ENGINEERING", penalty: 0, penaltyWay: "지각비", studyEndDate: "2023-12-25", studyPerson: 10, studyStartDate: "2023-08-23", studyWay: studyWay, title: "정보처리기사"
+    )
+    
+    print(studyData)
+    
+    do {
+        let jsonData = try JSONEncoder().encode(studyData)
+   
+      guard let url = URL(string: "https://study-hub.site:443/api/study-posts") else { return }
       var request = URLRequest(url: url)
       request.httpMethod = "POST"
       request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-      do {
-        let jsonData = try JSONSerialization.data(withJSONObject: studyData, options: .prettyPrinted)
-        request.httpBody = jsonData
+      request.setValue("\(token)", forHTTPHeaderField: "Authorization")
+      request.setValue("\(jsonData)", forHTTPHeaderField: "Content-Type")
+//      request.httpBody = jsonData
+      URLSession.shared.dataTask(with:request) { (data, response, error) in
+        guard let dataResponse=data,response != nil,error == nil else{
+          print(error?.localizedDescription ?? "Response Error")
+          return }
         
-        let task = URLSession.shared.dataTask(with: request) { data, response, error in
-          if let error = error {
-            print("Error: \(error)")
-          } else if let response = response as? HTTPURLResponse {
-            if (200...299).contains(response.statusCode) {
-              // 서버 응답이 200대 범위일 때 (성공적인 응답)
-              DispatchQueue.main.async {
-                self.dismiss(animated: true, completion: nil)
-              }
-            } else {
-              // 서버 응답이 오류인 경우
-              print("Server Error: \(response.statusCode)")
-            }
+        do{
+          let jsonResponse = try JSONSerialization.jsonObject(with: dataResponse, options: JSONSerialization.ReadingOptions())
+          
+          print(jsonResponse)
+          
+          DispatchQueue.main.async { [weak self] in
+            self?.dismiss(animated:true, completion:nil)
           }
           
-          if let data = data {
-            if let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
-              print("\(chatUrl)")
-              print("\(close)")
-              print("\(content)")
-              print("\(gender)")
-              print("\(major)")
-              print("\(penalty)")
-              print("\(studyEndDate)")
-              print("\(studyPerson)")
-              print("\(studyStartDate)")
-              print("\(studyWay)")
-              print("\(title)")
-              
-              
-              print("Response JSON: \(json)")
-              // 서버 응답을 처리하는 코드를 추가하세요.
-            }
-          }
+        } catch  {
+          print("JSON decoding error: \(error)")
+
         }
-        task.resume()
-      } catch {
-        print("Error creating JSON: \(error)")
-      }
+        
+      }.resume()
+      
+    } catch {
+      print("JSON encoding error: \(error)")
+
     }
+    
   }
+  
   
   // MARK: - 벌금 없을 때 함수
   @objc func noFineButtonTapped(_ sender: UIButton) {
@@ -858,7 +838,9 @@ class CreateStudyViewController: UIViewController {
     // Update the text field with the selected date
     let dateFormatter = DateFormatter()
     dateFormatter.dateFormat = "yyyy년 MM월 dd일" // You can choose the date format you prefer
+    startDateTextField.textColor = .black
     startDateTextField.text = dateFormatter.string(from: selectedStartDate ?? Date())
+    
     // Hide the "선택하기" title of startDateButton
     startDateButton.setTitle("", for: .normal)
   }
@@ -869,7 +851,7 @@ class CreateStudyViewController: UIViewController {
     endDatePicker.preferredDatePickerStyle = .inline // You can choose the style you prefer
     endDatePicker.addTarget(self, action: #selector(endDatePickerValueChanged), for: .valueChanged)
     
-    // Create an input view for the date picker
+    endDateTextField.textColor = .black
     endDateTextField.inputView = endDatePicker
     
     // Set titleTextField's inputAccessoryView to a toolbar with a done button
@@ -921,5 +903,5 @@ class CreateStudyViewController: UIViewController {
     self.dismiss(animated: true, completion: nil)
   }
   
-
+  
 }

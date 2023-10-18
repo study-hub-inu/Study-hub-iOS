@@ -45,9 +45,6 @@ final class InfoManager {
     urlComponents.path = "/api/users"
 
     guard var token = tokenManager.loadAccessToken() else { return }
-    if token.hasPrefix("Bearer") {
-        token = String(token.dropFirst("Bearer ".count))
-    }
     
     guard let urlString = urlComponents.url?.absoluteString else {
       print("Invalid URL")
@@ -67,8 +64,7 @@ final class InfoManager {
     request.httpMethod = "GET"
     request.setValue("application/json", forHTTPHeaderField: "Content-Type")
     request.setValue("application/json", forHTTPHeaderField: "Accept")
-    
-    request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+    request.setValue("\(token)", forHTTPHeaderField: "Authorization")
 
     URLSession.shared.dataTask(with: request) { data, response, error in
       if let error = error {

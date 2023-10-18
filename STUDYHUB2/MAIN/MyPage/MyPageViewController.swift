@@ -67,7 +67,7 @@ class MyPageViewController: UIViewController {
                                                 fontSize: 18)
   // 사용자 프로필, 로그인 화면으로 가는 버튼을 담은 스택뷰
   private lazy var gotologinStackView = createStackView(axis: .horizontal,
-                                                        spacing: 8)
+                                                        spacing: 10)
   
   // 북마크, 글 횟수 등의 버튼을 담은 스택뷰
   private lazy var buttonboxesStackView = createStackView(axis: .horizontal,
@@ -105,6 +105,8 @@ class MyPageViewController: UIViewController {
     chevronButton.addTarget(self,
                             action: #selector(chevronButtonTapped),
                             for: .touchUpInside)
+    chevronButton.contentHorizontalAlignment = .trailing
+
     return chevronButton
   }()
   
@@ -194,7 +196,8 @@ class MyPageViewController: UIViewController {
       gotologinStackView.addArrangedSubview(profileImageView)
       gotologinStackView.addArrangedSubview(loginSuccessStackView)
     }
-        
+    
+    gotologinStackView.distribution = .fill
     gotologinStackView.addArrangedSubview(chevronButton)
     
     headerContentStackView.addArrangedSubview(gotologinStackView)
@@ -256,12 +259,11 @@ class MyPageViewController: UIViewController {
       print(loginStatus)
       print("로그인성공")
     }
-    
+  
     chevronButton.snp.makeConstraints { make in
       make.top.equalTo(gotologinStackView.snp.top)
       make.trailing.equalTo(gotologinStackView.snp.trailing)
     }
-    
     
     buttonboxesStackView.snp.makeConstraints { make in
       make.leading.equalTo(headerContentStackView.snp.leading).offset(10)
