@@ -10,6 +10,7 @@
 		5F9DE9DF024CF7309683C4D9 /* Pods_STUDYHUB2Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FBF19D90E98D2A473BB1FACD /* Pods_STUDYHUB2Tests.framework */; };
 		7D888F985F7235D92986BA8C /* Pods_STUDYHUB2_STUDYHUB2UITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A3D4E6F9B68D080EFA421F2 /* Pods_STUDYHUB2_STUDYHUB2UITests.framework */; };
 		903CF32160A1EDD2ADE8AA03 /* Pods_STUDYHUB2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD0AEF76B97F2D81A35C2224 /* Pods_STUDYHUB2.framework */; };
+		EE07AD902AE106460096890F /* CreatePostManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE07AD8F2AE106460096890F /* CreatePostManager.swift */; };
 		EE271F1C2AD04ACE00190E7A /* TokenManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE271F1B2AD04ACE00190E7A /* TokenManager.swift */; };
 		EE271F1E2AD04BB300190E7A /* UserToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE271F1D2AD04BB300190E7A /* UserToken.swift */; };
 		EE271F202AD0584100190E7A /* UIColor+.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE271F1F2AD0584100190E7A /* UIColor+.swift */; };
@@ -69,6 +70,7 @@
 		DCCACD447CB2D4D12DF49A45 /* Pods-STUDYHUB2Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-STUDYHUB2Tests.release.xcconfig"; path = "Target Support Files/Pods-STUDYHUB2Tests/Pods-STUDYHUB2Tests.release.xcconfig"; sourceTree = "<group>"; };
 		DD0AEF76B97F2D81A35C2224 /* Pods_STUDYHUB2.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_STUDYHUB2.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		EAB52A4B4B6D3895E3DD2852 /* Pods-STUDYHUB2-STUDYHUB2UITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-STUDYHUB2-STUDYHUB2UITests.release.xcconfig"; path = "Target Support Files/Pods-STUDYHUB2-STUDYHUB2UITests/Pods-STUDYHUB2-STUDYHUB2UITests.release.xcconfig"; sourceTree = "<group>"; };
+		EE07AD8F2AE106460096890F /* CreatePostManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatePostManager.swift; sourceTree = "<group>"; };
 		EE271F1B2AD04ACE00190E7A /* TokenManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenManager.swift; sourceTree = "<group>"; };
 		EE271F1D2AD04BB300190E7A /* UserToken.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserToken.swift; sourceTree = "<group>"; };
 		EE271F1F2AD0584100190E7A /* UIColor+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+.swift"; sourceTree = "<group>"; };
@@ -245,6 +247,7 @@
 		F88AB3472A9E71A4001D619C /* CreateStudy */ = {
 			isa = PBXGroup;
 			children = (
+				EE07AD8F2AE106460096890F /* CreatePostManager.swift */,
 				F88AB33E2A95236B001D619C /* CreatestudyViewController.swift */,
 				F87377582AA850940055B041 /* DepartmentselectViewController.swift */,
 			);
@@ -538,6 +541,7 @@
 				EE271F262AD77CD100190E7A /* UIViewcontroller+.swift in Sources */,
 				EE271F2C2AD9250F00190E7A /* UIView+.swift in Sources */,
 				F80421CC2A7D9BC3006C6B87 /* NicknameViewController.swift in Sources */,
+				EE07AD902AE106460096890F /* CreatePostManager.swift in Sources */,
 				F86E031F2A8BBAE600164976 /* SearchViewController.swift in Sources */,
 				F87377592AA850940055B041 /* DepartmentselectViewController.swift in Sources */,
 				F88AB33B2A951AFF001D619C /* CategoryViewController.swift in Sources */,

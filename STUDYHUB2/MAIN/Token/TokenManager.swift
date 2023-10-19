@@ -16,7 +16,7 @@ final class TokenManager {
   
   // MARK: Keychain
   
-  private let account = "RefreshToken"
+  private let account = "accessToken"
   private let service = Bundle.main.bundleIdentifier
   
   private lazy var query: [CFString: Any]? = {
@@ -26,9 +26,9 @@ final class TokenManager {
       kSecAttrAccount: account]
   }()
   
-  func saveAccessToken(_ refreshToken: String) -> Bool {
+  func saveAccessToken(_ accessToken: String) -> Bool {
     guard let service = self.service,
-          let data = refreshToken.data(using: .utf8) else { return false }
+          let data = accessToken.data(using: .utf8) else { return false }
     
     let query: [CFString: Any] = [kSecClass: kSecClassGenericPassword,
                             kSecAttrService: service,

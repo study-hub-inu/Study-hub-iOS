@@ -664,84 +664,51 @@ class CreateStudyViewController: UIViewController {
   }
   
   struct CreateStudyRequest: Codable {
-//    let accessToken: String
-    let chatUrl: String
-    let close: Bool
-    let content, gender, major: String
-    let penalty: Int
-    let penaltyWay, studyEndDate: String
-    let studyPerson: Int
-    let studyStartDate, studyWay, title: String
+    var chatUrl: String
+    var close: Bool
+    var content, gender, major: String
+    var penalty: Int
+//    let penaltyWay: String
+    var studyEndDate: String
+    var studyPerson: Int
+    var studyStartDate, studyWay, title: String
     
   }
   
   // MARK: - 완료버튼 누를 때 함수
   @objc func completeButtonTapped() {
-    // 입력된 정보 JSON
-    var gender = ""
-    if maleOnlyButton.isSelected {
-      gender = "MALE"
-    } else if femaleOnlyButton.isSelected {
-      gender = "FEMALE"
-    } else {
-      gender = "ALLGENDER"
-    }
-    
-    var studyWay = ""
-    if contactButton.isSelected {
-      studyWay = "CONTACT"
-    } else if untactButton.isSelected {
-      studyWay = "UNCONTACT"
-    } else {
-      studyWay = "MIXMEET"
-    }
-    
-    guard let token = tokenManager.loadAccessToken() else { return }
-    
-    let studyData = CreateStudyRequest(
-//            accessToken : token,
-      chatUrl: "www.dfasdf", close: false, content: "화이팅", gender: gender, major: "COMPUTER_SCIENCE_ENGINEERING", penalty: 0, penaltyWay: "지각비", studyEndDate: "2023-12-25", studyPerson: 10, studyStartDate: "2023-08-23", studyWay: studyWay, title: "정보처리기사"
-    )
-    
-    print(studyData)
-    
-    do {
-        let jsonData = try JSONEncoder().encode(studyData)
-   
-      guard let url = URL(string: "https://study-hub.site:443/api/study-posts") else { return }
-      var request = URLRequest(url: url)
-      request.httpMethod = "POST"
-      request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-      request.setValue("\(token)", forHTTPHeaderField: "Authorization")
-      request.setValue("\(jsonData)", forHTTPHeaderField: "Content-Type")
-//      request.httpBody = jsonData
-      URLSession.shared.dataTask(with:request) { (data, response, error) in
-        guard let dataResponse=data,response != nil,error == nil else{
-          print(error?.localizedDescription ?? "Response Error")
-          return }
-        
-        do{
-          let jsonResponse = try JSONSerialization.jsonObject(with: dataResponse, options: JSONSerialization.ReadingOptions())
-          
-          print(jsonResponse)
-          
-          DispatchQueue.main.async { [weak self] in
-            self?.dismiss(animated:true, completion:nil)
-          }
-          
-        } catch  {
-          print("JSON decoding error: \(error)")
-
-        }
-        
-      }.resume()
+      // 입력된 정보 JSON
+      var gender = ""
+      if maleOnlyButton.isSelected {
+          gender = "MALE"
+      } else if femaleOnlyButton.isSelected {
+          gender = "FEMALE"
+      } else {
+          gender = "null"
+      }
       
-    } catch {
-      print("JSON encoding error: \(error)")
-
-    }
+      var studyWay = ""
+      if contactButton.isSelected {
+          studyWay = "CONTACT"
+      } else if untactButton.isSelected {
+          studyWay = "UNCONTACT"
+      } else {
+          studyWay = "CONTACT"
+      }
     
+    PostManager.shared.fetchUser { [weak self] result in
+      guard let self = self else { return }
+      switch result {
+      case .success(let userData):
+        print(userData)
+      case .failure(let error):
+        print("Error: \(error)")
+      }
+    }
+
   }
+
+
   
   
   // MARK: - 벌금 없을 때 함수

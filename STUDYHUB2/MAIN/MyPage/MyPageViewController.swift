@@ -327,7 +327,6 @@ class MyPageViewController: UIViewController {
         // 사용자 정보를 사용하여 원하는 작업을 수행합니다.
         print("Email: \(userData.email)")
         print("Gender: \(userData.gender)")
-        
         if userData.email != nil {
           self.myPageUserData = userData
           self.loginStatus = true
