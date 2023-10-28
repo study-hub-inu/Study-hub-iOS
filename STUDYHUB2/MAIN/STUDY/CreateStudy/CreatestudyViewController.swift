@@ -663,17 +663,7 @@ class CreateStudyViewController: UIViewController {
     }
   }
   
-  struct CreateStudyRequest: Codable {
-    var chatUrl: String
-    var close: Bool
-    var content, gender, major: String
-    var penalty: Int
-//    let penaltyWay: String
-    var studyEndDate: String
-    var studyPerson: Int
-    var studyStartDate, studyWay, title: String
-    
-  }
+
   
   // MARK: - 완료버튼 누를 때 함수
   @objc func completeButtonTapped() {
@@ -686,7 +676,7 @@ class CreateStudyViewController: UIViewController {
       } else {
           gender = "null"
       }
-      
+    
       var studyWay = ""
       if contactButton.isSelected {
           studyWay = "CONTACT"
@@ -695,8 +685,23 @@ class CreateStudyViewController: UIViewController {
       } else {
           studyWay = "CONTACT"
       }
+    // 성별, 스터디방식 버튼에 따라서 내용이 안바뀜
+    let studyData = CreateStudyRequest(
+      chatUrl: chatLinkTextField.text ?? "",
+      close: false,
+      content: studyproduceTextField.text ?? "",
+      gender: "MALE",
+      major: "COMPUTER_SCIENCE_ENGINEERING",
+      penalty: Int(fineAmountTextField.text ?? "0") ?? 0 ,
+      studyEndDate: (endDateTextField.text ?? "").dateConvert(),
+      studyPerson: Int(studymemberTextField.text ?? "") ?? 0,
+      studyStartDate: (startDateTextField.text ?? "").dateConvert(),
+      studyWay: studyWay,
+      title: studytitleTextField.text ?? "")
     
-    PostManager.shared.fetchUser { [weak self] result in
+    print(studyData)
+    
+    PostManager.shared.fetchUser(postData: studyData) { [weak self] result in
       guard let self = self else { return }
       switch result {
       case .success(let userData):
@@ -705,12 +710,9 @@ class CreateStudyViewController: UIViewController {
         print("Error: \(error)")
       }
     }
-
   }
 
 
-  
-  
   // MARK: - 벌금 없을 때 함수
   @objc func noFineButtonTapped(_ sender: UIButton) {
     sender.isSelected = !sender.isSelected

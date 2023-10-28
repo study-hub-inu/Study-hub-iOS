@@ -29,7 +29,7 @@ final class PostManager {
   typealias NetworkCompletion = (Result<CreateStudyRequest, NetworkError>) -> Void
   
   // 네트워킹 요청하는 함수
-  func fetchUser(completion: @escaping NetworkCompletion) {
+  func fetchUser(postData: CreateStudyRequest,completion: @escaping NetworkCompletion) {
     var urlComponents = URLComponents()
     urlComponents.scheme = "https"
     urlComponents.host = "study-hub.site"
@@ -43,10 +43,11 @@ final class PostManager {
       completion(.failure(.networkingError))
       return
     }
-    getMethod(with: urlString, token: token, completion: completion)
+    getMethod(with: urlString, postData: postData, token: token, completion: completion)
   }
   
-  private func getMethod(with urlString: String, token: String, completion: @escaping NetworkCompletion) {
+  private func getMethod(with urlString: String, postData: CreateStudyRequest,
+                         token: String, completion: @escaping NetworkCompletion) {
     guard let url = URL(string: urlString) else {
       print("Invalid URL")
       completion(.failure(.networkingError))
@@ -57,21 +58,8 @@ final class PostManager {
     request.setValue("application/json", forHTTPHeaderField: "Content-Type")
     request.setValue("application/json", forHTTPHeaderField: "Accept")
     request.setValue("\(token)", forHTTPHeaderField: "Authorization")
-    let studyData = CreateStudyRequest(
-      chatUrl: "www.dfasdf",
-      close: false,
-      content: "화이팅",
-      gender: "FEMALE",
-      major: "COMPUTER_SCIENCE_ENGINEERING",
-      penalty: 0,
-//      penaltyWay: "지각비",
-      studyEndDate: "2023-12-25",
-      studyPerson: 10,
-      studyStartDate: "2023-08-23",
-      studyWay: "CONTACT",
-      title: "정보처리기사")
-
-    guard let uploadData = try? JSONEncoder().encode(studyData) else { return }
+    
+    guard let uploadData = try? JSONEncoder().encode(postData) else { return }
     request.httpBody = uploadData
     
     URLSession.shared.dataTask(with: request) { data, response, error in
