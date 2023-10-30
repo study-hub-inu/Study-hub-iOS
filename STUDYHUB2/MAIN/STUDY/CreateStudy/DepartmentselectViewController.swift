@@ -155,21 +155,6 @@ class DepartmentselectViewController: UIViewController, UISearchBarDelegate {
         headerContentStackView.widthAnchor.constraint(equalTo: scrollView.widthAnchor).isActive = true
     }
     
-//    @objc func searchIconButtonTapped() {
-//        // 검색 바에서 텍스트 가져오기
-//        if let searchText = searchBar.text, !searchText.isEmpty {
-//            // 입력된 텍스트가 비어 있지 않으면 버튼을 만듭니다.
-//            createSearchButton(withText: searchText)
-//
-//            // 검색 바 초기화
-//            searchBar.text = ""
-//
-//            // 라벨 삭제
-//            infoLabel1.removeFromSuperview()
-//            infoLabel2.removeFromSuperview()
-//        }
-//    }
-    
     // UISearchBarDelegate에서 검색 버튼을 누를 때 호출되는 메서드
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         if let searchText = searchBar.text, !searchText.isEmpty {
@@ -257,7 +242,7 @@ class DepartmentselectViewController: UIViewController, UISearchBarDelegate {
 
             // CreateStudyViewController의 categoryStackView에 버튼을 추가
             createVC.addDepartmentButton(selectedDepartment)
-
+            
             // CreateStudyViewController를 표시
             present(createVC, animated: true, completion: nil)
         }

@@ -48,7 +48,7 @@ class MyPageViewController: UIViewController {
     return imageView
   }()
   
-  private lazy var majorLabel = createLabel(title: myPageUserData?.major ?? "비어있음",
+  private lazy var majorLabel = createLabel(title: convertMajor(major: myPageUserData?.major! ?? "") ,
                                             textColor: .gray,
                                             fontSize: 18)
   private lazy var nickNameLabel = createLabel(title: myPageUserData?.nickname ?? "비어있음",
@@ -190,6 +190,7 @@ class MyPageViewController: UIViewController {
       //로그인 관련
       print(loginStatus)
       print("로그인성공")
+      
       loginSuccessStackView.addArrangedSubview(majorLabel)
       loginSuccessStackView.addArrangedSubview(nickNameLabel)
       
@@ -327,6 +328,7 @@ class MyPageViewController: UIViewController {
         // 사용자 정보를 사용하여 원하는 작업을 수행합니다.
         print("Email: \(userData.email)")
         print("Gender: \(userData.gender)")
+   
         if userData.email != nil {
           self.myPageUserData = userData
           self.loginStatus = true
@@ -344,10 +346,6 @@ class MyPageViewController: UIViewController {
     }
   }
   
-  func setUserData(data: UserData) {
-    myPageUserData?.major = data.major
-    myPageUserData?.nickname = data.nickname
-  }
   
   @objc func bookmarkpageButtonTapped() {
     let bookmarkViewController = BookmarkViewController()

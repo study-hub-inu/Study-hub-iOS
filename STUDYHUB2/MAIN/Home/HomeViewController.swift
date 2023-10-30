@@ -1,7 +1,7 @@
 import UIKit
 
 import SnapKit
-final class HomeViewController: UIViewController, UIScrollViewDelegate, UISearchBarDelegate {
+final class HomeViewController: UIViewController, UISearchBarDelegate {
   
   // MARK: - 화면구성
   lazy var bookmarkIconButton: UIButton = {

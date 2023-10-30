@@ -69,8 +69,20 @@ class CreateStudyViewController: UIViewController {
   private lazy var endDateButton = createDateButton(selector: #selector(endDateButtonTapped))
   
   private lazy var chatLinkTextField = createTextField(title: "채팅방 링크를 첨부해 주세요")
-  private lazy var studyproduceTextField = createTextField(title: "스터디에 대해 알려주세요\n (운영방법,대면 여부,벌금,공부 인증 방법 등)")
-  
+
+  private lazy var studyproduceTextView: UITextView = {
+    let tv = UITextView()
+    tv.text = "스터디에 대해 알려주세요\n (운영 방법, 대면 여부,벌금,공부 인증 방법 등)"
+    tv.textColor = UIColor.lightGray
+    tv.font = UIFont.systemFont(ofSize: 15)
+    tv.layer.borderWidth = 1.0
+    tv.layer.borderColor = UIColor.lightGray.cgColor
+    tv.layer.cornerRadius = 5.0
+    tv.delegate = self
+    tv.adjustUITextViewHeight()
+    return tv
+  }()
+
   private lazy var fineAmountTextField = createTextField(title: "금액을 알려주세요")
   
   private lazy var studymemberTextField = createTextField(title: "스터디 인원을 알려주세요")
@@ -248,7 +260,7 @@ class CreateStudyViewController: UIViewController {
     setUpLayout()
     makeUI()
   }
-  
+
   // MARK: - setUpLayout
   func setUpLayout(){
     headerStackView.addArrangedSubview(backButton)
@@ -271,15 +283,14 @@ class CreateStudyViewController: UIViewController {
     chatLinkStackView.addArrangedSubview(descriptionLabel)
     chatLinkStackView.addArrangedSubview(chatLinkTextField)
     
-    studyproduceTextField.heightAnchor.constraint(equalToConstant: 150).isActive = true
-    studyproduceTextField.contentVerticalAlignment = .top
+    studyproduceTextView.heightAnchor.constraint(equalToConstant: 150).isActive = true
     
     studyinfoStackViewDividerLine.heightAnchor.constraint(equalToConstant: 10).isActive = true
     
     studyinfoStackView.addArrangedSubview(studytitleLabel)
     studyinfoStackView.addArrangedSubview(studytitleTextField)
     studyinfoStackView.addArrangedSubview(studyproduceLabel)
-    studyinfoStackView.addArrangedSubview(studyproduceTextField)
+    studyinfoStackView.addArrangedSubview(studyproduceTextView)
     
     headerContentStackView.addArrangedSubview(studyinfoStackViewDividerLine)
     headerContentStackView.addArrangedSubview(categoryStackView)
@@ -410,7 +421,7 @@ class CreateStudyViewController: UIViewController {
       make.trailing.equalTo(studyinfoStackView).offset(10)
     }
     
-    studyproduceTextField.snp.makeConstraints { make in
+    studyproduceTextView.snp.makeConstraints { make in
       make.leading.equalTo(studyinfoStackView).offset(16)
       make.trailing.equalTo(studyinfoStackView)
       make.width.equalTo(studyinfoStackView).offset(-50)
@@ -422,8 +433,8 @@ class CreateStudyViewController: UIViewController {
     }
     
     associatedepartButton.snp.makeConstraints { make in
-      make.leading.equalTo(studyproduceTextField.snp.trailing).offset(-20)
-      make.trailing.equalTo(studyproduceTextField.snp.trailing)
+      make.leading.equalTo(studyproduceTextView.snp.trailing).offset(-20)
+      make.trailing.equalTo(studyproduceTextView.snp.trailing)
     }
     
     // (4) 스터디멤버 뷰
@@ -657,22 +668,18 @@ class CreateStudyViewController: UIViewController {
         make.top.equalTo(fineAmountTextField.snp.bottom).offset(10)
       }
       
-    } else {
-      // Remove the labels and text fields from the fineButtonsStackView
-//      fineButtonsStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
-    }
+    } 
   }
   
 
   
   // MARK: - 완료버튼 누를 때 함수
   @objc func completeButtonTapped() {
- 
     // 성별, 스터디방식 버튼에 따라서 내용이 안바뀜
     let studyData = CreateStudyRequest(
       chatUrl: chatLinkTextField.text ?? "",
       close: false,
-      content: studyproduceTextField.text ?? "",
+      content: studyproduceTextView.text ?? "",
       gender: genderType ?? "null",
       major: "COMPUTER_SCIENCE_ENGINEERING",
       penalty: Int(fineAmountTextField.text ?? "0") ?? 0 ,
@@ -725,8 +732,8 @@ class CreateStudyViewController: UIViewController {
     femaleOnlyButton.setTitleColor(.gray, for: .normal)
     
     // Set the tapped button to orange background
-    sender.backgroundColor = UIColor(hexCode: "#FF5530")
-    sender.setTitleColor(.white, for: .normal)
+    sender.layer.borderColor = UIColor(hexCode: "#FF5530").cgColor
+    sender.setTitleColor(UIColor(hexCode: "#FF5530"), for: .normal)
     
     guard let gender = sender.titleLabel?.text else { return }
     genderType = gender
@@ -755,9 +762,8 @@ class CreateStudyViewController: UIViewController {
     mixmeetButton.setTitleColor(.gray, for: .normal)
     
     // Set the tapped button to orange background
-    sender.backgroundColor = UIColor(hexCode: "#FF5530")
-    sender.setTitleColor(.white, for: .normal)
-    
+    sender.layer.borderColor = UIColor(hexCode: "#FF5530").cgColor
+    sender.setTitleColor(UIColor(hexCode: "#FF5530"), for: .normal)
     // CONTACT UNCONTACT MIX
     guard let contact = sender.titleLabel?.text else{ return }
     contactMethod = contact
