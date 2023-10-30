@@ -2,7 +2,7 @@ import UIKit
 
 import SnapKit
 
-final class SignUpViewController: UIViewController, UITextFieldDelegate {
+final class SignUpViewController: UIViewController {
 
   // MARK: - 화면구성
   private lazy var emailTextField: UITextField = {

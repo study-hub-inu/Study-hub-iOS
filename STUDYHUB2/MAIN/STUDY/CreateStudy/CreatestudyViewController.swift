@@ -6,6 +6,8 @@ class CreateStudyViewController: UIViewController {
   
   let tokenManager = TokenManager.shared
   private var selectedDepartments: [String] = [] // 선택된 학과를 저장할 배열
+  var genderType: String?
+  var contactMethod: String?
   
   // 선택한 학과를 저장할 프로퍼티
   var selectedDepartment: String? {
@@ -33,7 +35,7 @@ class CreateStudyViewController: UIViewController {
   private lazy var departmentButtonStackView = createStackView(axis: .vertical,
                                                                spacing: 16)
   // 성별버튼
-  private lazy var allGenderButton = createContactButton(title: "남녀무관",
+  private lazy var allGenderButton = createContactButton(title: "무관",
                                                          selector: #selector(genderButtonTapped(_:)))
   
   private lazy var maleOnlyButton = createContactButton(title: "남자만",
@@ -51,11 +53,9 @@ class CreateStudyViewController: UIViewController {
                                                        selector: #selector(meetButtonTapped(_:)))
   
   // 벌금버튼
-  private lazy var haveFineButton = createFineButton(title: "circle",
-                                                     selector: #selector(haveFineButtonTapped(_:)))
+  private lazy var haveFineButton = createFineButton(selector: #selector(haveFineButtonTapped(_:)))
   
-  private lazy var noFineButton = createFineButton(title: "circle",
-                                                   selector: #selector(noFineButtonTapped(_:)))
+  private lazy var noFineButton = createFineButton(selector: #selector(noFineButtonTapped(_:)))
   
   private lazy var fineButtonsStackView = createStackView(axis: .horizontal,
                                                           spacing: 10)
@@ -69,19 +69,12 @@ class CreateStudyViewController: UIViewController {
   private lazy var endDateButton = createDateButton(selector: #selector(endDateButtonTapped))
   
   private lazy var chatLinkTextField = createTextField(title: "채팅방 링크를 첨부해 주세요")
-  private lazy var studyproduceTextField = createTextField(title: "스터디에 대해 알려주세요")
+  private lazy var studyproduceTextField = createTextField(title: "스터디에 대해 알려주세요\n (운영방법,대면 여부,벌금,공부 인증 방법 등)")
   
-  private let fineAmountTextField: UITextField = {
-    let fineAmountTextField = UITextField()
-    fineAmountTextField.placeholder = "가격을 알려주세요"
-    fineAmountTextField.textColor = UIColor(hexCode: "#A1AAB0")
-    fineAmountTextField.font = UIFont.systemFont(ofSize: 14)
-    fineAmountTextField.borderStyle = .roundedRect  // Add rounded border
-    return fineAmountTextField
-  }()
+  private lazy var fineAmountTextField = createTextField(title: "금액을 알려주세요")
   
-  private lazy var studymemberTextField = createTextField(title: "스터디에 대해 알려주세요")
-  private lazy var studytitleTextField = createTextField(title: "제목입니다")
+  private lazy var studymemberTextField = createTextField(title: "스터디 인원을 알려주세요")
+  private lazy var studytitleTextField = createTextField(title: "제목을 적어주세요")
   
   let startDatePicker = UIDatePicker()
   let startDateTextField = UITextField()
@@ -138,7 +131,7 @@ class CreateStudyViewController: UIViewController {
   private lazy var studytitleLabel = createLabel(title: "스터디 제목",
                                                  textColor: .black, fontSize: 18)
   
-  private lazy var studyproduceLabel = createLabel(title: "스터디 소개",
+  private lazy var studyproduceLabel = createLabel(title: "내용",
                                                    textColor: .black, fontSize: 18)
   
   private let studyinfoStackViewDividerLine: UIView = {
@@ -150,7 +143,6 @@ class CreateStudyViewController: UIViewController {
   private lazy var associatedepartLabel = createLabel(title: "관련 학과 선택",
                                                       textColor: .black,
                                                       fontSize: 18)
-  
   
   private lazy var periodLabel = createLabel(title: "기간",
                                              textColor: .black,
@@ -218,7 +210,6 @@ class CreateStudyViewController: UIViewController {
                                             textColor: UIColor(hexCode: "#68737D"),
                                             fontSize: 15)
   
-  
   private lazy var description5Label = createLabel(title: "참여자의 성별 선택",
                                                    textColor: UIColor(hexCode: "#A1AAB0"),
                                                    fontSize: 12)
@@ -228,7 +219,7 @@ class CreateStudyViewController: UIViewController {
                                                           spacing: 16)
   
   
-  private lazy var description6Label = createLabel(title: "혼합일 경우, 관련 내용에 대한 계획을 소개에 적어주세요",
+  private lazy var description6Label = createLabel(title: "대면이나 혼합일 경우, 관련 내용에 대한 계획을 소개에 적어주세요",
                                                    textColor: UIColor(hexCode: "#A1AAB0"),
                                                    fontSize: 12)
   
@@ -274,7 +265,8 @@ class CreateStudyViewController: UIViewController {
     view.addGestureRecognizer(tapGesture)
     
     chatLinkDividerLine.heightAnchor.constraint(equalToConstant: 10).isActive = true
-    
+   
+    chatLinkTextField.clearButtonMode = .always
     chatLinkStackView.addArrangedSubview(chatLinkLabel)
     chatLinkStackView.addArrangedSubview(descriptionLabel)
     chatLinkStackView.addArrangedSubview(chatLinkTextField)
@@ -293,20 +285,20 @@ class CreateStudyViewController: UIViewController {
     headerContentStackView.addArrangedSubview(categoryStackView)
     headerContentStackView.addArrangedSubview(categoryStackViewDividerLine)
     headerContentStackView.addArrangedSubview(studymemberStackView)
+    headerContentStackView.addArrangedSubview(studymethodStackViewDividerLine)
     headerContentStackView.addArrangedSubview(studymethodStackView)
     headerContentStackView.addArrangedSubview(studymemberStackViewDividerLine)
-    headerContentStackView.addArrangedSubview(studymethodStackViewDividerLine)
     headerContentStackView.addArrangedSubview(periodStackView)
     
     categoryStackView.addArrangedSubview(associatedepartStackView)
-    
+    categoryStackView.addArrangedSubview(departmentButtonStackView)
+
     associatedepartStackView.addArrangedSubview(associatedepartLabel)
     associatedepartStackView.addArrangedSubview(associatedepartButton)
     
-    categoryStackView.addArrangedSubview(departmentButtonStackView)
-    
     studymemberTextField.addSubview(countLabel)
     
+    genderButtonsStackView.distribution = .fillEqually
     genderButtonsStackView.addArrangedSubview(allGenderButton)
     genderButtonsStackView.addArrangedSubview(maleOnlyButton)
     genderButtonsStackView.addArrangedSubview(femaleOnlyButton)
@@ -319,10 +311,11 @@ class CreateStudyViewController: UIViewController {
     studymemberStackView.addArrangedSubview(genderLabel)
     studymemberStackView.addArrangedSubview(description5Label)
     studymemberStackView.addArrangedSubview(genderButtonsStackView)
-    
+
+    meetButtonsStackView.distribution = .fillEqually
+    meetButtonsStackView.addArrangedSubview(mixmeetButton)
     meetButtonsStackView.addArrangedSubview(contactButton)
     meetButtonsStackView.addArrangedSubview(untactButton)
-    meetButtonsStackView.addArrangedSubview(mixmeetButton)
     
     fineButtonsStackView.addArrangedSubview(haveFineButton)
     fineButtonsStackView.addArrangedSubview(haveFineLabel)
@@ -349,8 +342,10 @@ class CreateStudyViewController: UIViewController {
     periodStackView.addArrangedSubview(completeButton)
     
     // Constraints for the "완료하기" button
-    completeButton.leadingAnchor.constraint(equalTo: periodStackView.leadingAnchor, constant: 16).isActive = true
-    completeButton.trailingAnchor.constraint(equalTo: periodStackView.trailingAnchor, constant: -16).isActive = true
+    completeButton.leadingAnchor.constraint(equalTo: periodStackView.leadingAnchor,
+                                            constant: 16).isActive = true
+    completeButton.trailingAnchor.constraint(equalTo: periodStackView.trailingAnchor,
+                                             constant: -16).isActive = true
     completeButton.heightAnchor.constraint(equalToConstant: 57).isActive = true
     
     // Create a scroll view to make the content scrollable
@@ -378,12 +373,14 @@ class CreateStudyViewController: UIViewController {
       make.leading.trailing.bottom.equalTo(scrollView)
       make.width.equalTo(scrollView)
     }
+    
     chatLinkLabel.snp.makeConstraints { make in
       make.leading.equalTo(chatLinkStackView).offset(16)
       make.trailing.equalTo(chatLinkStackView).offset(10)
     }
     
     descriptionLabel.snp.makeConstraints { make in
+      make.top.equalTo(chatLinkLabel.snp.bottom).offset(10)
       make.leading.equalTo(chatLinkStackView).offset(16)
       make.trailing.equalTo(chatLinkStackView).offset(100)
     }
@@ -392,16 +389,23 @@ class CreateStudyViewController: UIViewController {
       make.leading.equalTo(chatLinkStackView).offset(16)
       make.trailing.equalTo(chatLinkStackView)
       make.width.equalTo(chatLinkStackView).offset(-50)
+      make.height.equalTo(50)
     }
+    
     studytitleLabel.snp.makeConstraints { make in
+      make.top.equalTo(studyinfoStackView.snp.top).offset(-20)
       make.leading.equalTo(studyinfoStackView).offset(16)
       make.trailing.equalTo(studyinfoStackView).offset(5)
     }
+    
     studytitleTextField.snp.makeConstraints { make in
       make.leading.equalTo(studyinfoStackView).offset(16)
       make.trailing.equalTo(chatLinkTextField)
+      make.height.equalTo(50)
     }
+    
     studyproduceLabel.snp.makeConstraints { make in
+      make.top.equalTo(studytitleTextField.snp.bottom).offset(20)
       make.leading.equalTo(studyinfoStackView).offset(16)
       make.trailing.equalTo(studyinfoStackView).offset(10)
     }
@@ -418,12 +422,13 @@ class CreateStudyViewController: UIViewController {
     }
     
     associatedepartButton.snp.makeConstraints { make in
-      make.leading.equalTo(associatedepartStackView).offset(300)
-      make.trailing.equalTo(associatedepartStackView)
+      make.leading.equalTo(studyproduceTextField.snp.trailing).offset(-20)
+      make.trailing.equalTo(studyproduceTextField.snp.trailing)
     }
     
     // (4) 스터디멤버 뷰
     studymemberLabel.snp.makeConstraints { make in
+      make.top.equalTo(studymemberStackView).offset(-20)
       make.leading.equalTo(studymemberStackView).offset(16)
       make.trailing.equalTo(studymemberStackView).offset(5)
     }
@@ -437,7 +442,9 @@ class CreateStudyViewController: UIViewController {
       make.leading.equalTo(studymemberStackView).offset(16)
       make.trailing.equalTo(studymemberStackView).offset(5)
     }
+    
     description4Label.snp.makeConstraints { make in
+      make.top.equalTo(studymembercountLabel.snp.bottom).offset(10)
       make.leading.equalTo(studymemberStackView).offset(16)
       make.trailing.equalTo(studymemberStackView).offset(100)
     }
@@ -446,6 +453,7 @@ class CreateStudyViewController: UIViewController {
       make.leading.equalTo(studymemberStackView).offset(16)
       make.trailing.equalTo(studymemberStackView)
       make.width.equalTo(studymemberStackView).offset(-50)
+      make.height.equalTo(50)
     }
     
     countLabel.snp.makeConstraints { make in
@@ -454,33 +462,26 @@ class CreateStudyViewController: UIViewController {
       make.width.equalTo(20)
       make.height.equalTo(20)
     }
+    
     genderLabel.snp.makeConstraints { make in
       make.leading.equalTo(studymemberStackView.snp.leading).offset(16)
       make.trailing.equalTo(studymemberStackView.snp.trailing).offset(10)
     }
     
     description5Label.snp.makeConstraints { make in
+      make.top.equalTo(genderLabel.snp.bottom).offset(10)
       make.leading.equalTo(studymemberStackView.snp.leading).offset(16)
       make.trailing.equalTo(studymemberStackView.snp.trailing).offset(10)
     }
     
     genderButtonsStackView.snp.makeConstraints { make in
-      make.trailing.equalTo(studymemberStackView.snp.trailing).offset(-16)
+      make.trailing.equalTo(studymemberStackView.snp.trailing).offset(-100)
       make.top.equalTo(description5Label.snp.bottom).offset(8)
       make.height.equalTo(30)
     }
     
-    allGenderButton.snp.makeConstraints { make in
-      make.width.equalTo(100)
-    }
-    
-    maleOnlyButton.snp.makeConstraints { make in
-      make.width.equalTo(100)
-    }
-    femaleOnlyButton.snp.makeConstraints { make in
-      make.width.equalTo(100)
-    }
     studymethodLabel.snp.makeConstraints { make in
+      make.top.equalTo(studymethodStackView.snp.top).offset(-20)
       make.leading.equalTo(studymethodStackView).offset(16)
       make.trailing.equalTo(studymethodStackView).offset(5)
     }
@@ -490,25 +491,15 @@ class CreateStudyViewController: UIViewController {
     }
     
     description6Label.snp.makeConstraints { make in
+      make.top.equalTo(meetLabel.snp.bottom).offset(10)
       make.leading.equalTo(studymethodStackView).offset(16)
       make.trailing.equalTo(studymethodStackView).offset(100)
     }
     
     meetButtonsStackView.snp.makeConstraints { make in
-      make.trailing.equalTo(studymethodStackView).offset(-16)
+      make.trailing.equalTo(studymethodStackView).offset(-150)
     }
     
-    contactButton.snp.makeConstraints { make in
-      make.width.equalTo(80)
-    }
-    
-    untactButton.snp.makeConstraints { make in
-      make.width.equalTo(100)
-    }
-    
-    mixmeetButton.snp.makeConstraints { make in
-      make.width.equalTo(80)
-    }
     fineLabel.snp.makeConstraints { make in
       make.leading.equalTo(studymethodStackView).offset(16)
       make.trailing.equalTo(studymethodStackView).offset(100)
@@ -525,6 +516,7 @@ class CreateStudyViewController: UIViewController {
     }
     // 스터디기간 뷰
     periodLabel.snp.makeConstraints { make in
+      make.top.equalTo(periodStackView.snp.top).offset(-20)
       make.leading.equalTo(periodStackView).offset(16)
       make.trailing.equalTo(periodStackView).offset(5)
     }
@@ -569,33 +561,36 @@ class CreateStudyViewController: UIViewController {
   
   // 선택한 학과에 대한 버튼을 생성하고 departmentButtonStackView에 추가하는 함수
   func addDepartmentButton(_ department: String) {
-    // Department 버튼과 삭제 버튼을 수평으로 나열하는 스택 뷰 생성
-    lazy var buttonStackView: UIStackView = createStackView(axis: .horizontal, spacing: 0)
+      // Department 버튼과 삭제 버튼을 수평으로 나열하는 스택 뷰 생성
+      lazy var buttonStackView: UIStackView = createStackView(axis: .horizontal, spacing: 0)
+      buttonStackView.distribution = .fill // 뷰들이 스택 뷰의 전체 너비를 채우도록 설정
+      buttonStackView.alignment = .center // 수직 방향 가운데 정렬
+
+      departmentButtonStackView.addArrangedSubview(buttonStackView)
+
+      // Department 버튼 생성
+      let departmentButton = UIButton(type: .system)
+      departmentButton.backgroundColor = UIColor(hexCode: "F3F5F6")
+      departmentButton.setTitleColor(UIColor(hexCode: "68737D"), for: .normal)
+      departmentButton.setTitle(department, for: .normal)
+      departmentButton.layer.cornerRadius = 20
+      departmentButton.titleLabel?.font = UIFont.systemFont(ofSize: 16)
+      departmentButton.contentHorizontalAlignment = .center // 텍스트 정렬
     
-    
-    departmentButtonStackView.addArrangedSubview(buttonStackView)
-    
-    // Department 버튼 생성
-    let departmentButton = UIButton(type: .system)
-    departmentButton.backgroundColor = UIColor(hexCode: "F3F5F6")
-    departmentButton.setTitleColor(UIColor(hexCode: "68737D"), for: .normal)
-    departmentButton.setTitle(department, for: .normal)
-    departmentButton.layer.cornerRadius = 20
-    departmentButton.titleLabel?.font = UIFont.systemFont(ofSize: 16)
-    departmentButton.contentHorizontalAlignment = .center // 텍스트 정렬
-    
-    // 삭제 버튼 생성
-    let deleteButton = UIButton(type: .system)
-    deleteButton.setImage(UIImage(systemName: "xmark.circle.fill"), for: .normal)
-    deleteButton.tintColor = .lightGray
-    
-    // 문자열 길이에 따라 버튼 가로 길이 동적 조절
-    let buttonWidth = department.width(withConstrainedHeight: 30, font: departmentButton.titleLabel!.font)
-    departmentButton.widthAnchor.constraint(equalToConstant: buttonWidth + 50).isActive = true
-    
-    buttonStackView.addArrangedSubview(departmentButton)
-    buttonStackView.addArrangedSubview(deleteButton)
+
+      // 삭제 버튼 생성
+      let deleteButton = UIButton(type: .system)
+      deleteButton.setImage(UIImage(systemName: "xmark.circle.fill"), for: .normal)
+      deleteButton.tintColor = .lightGray
+
+      // 문자열 길이에 따라 버튼 가로 길이 동적 조절
+      let buttonWidth = department.width(withConstrainedHeight: 30, font: departmentButton.titleLabel!.font)
+      departmentButton.widthAnchor.constraint(equalToConstant: buttonWidth + 50).isActive = true
+
+      buttonStackView.addArrangedSubview(departmentButton)
+      buttonStackView.addArrangedSubview(deleteButton)
   }
+
   
   // 키보드 내리기 위한 탭 제스처 핸들러
   @objc func handleTap() {
@@ -615,12 +610,8 @@ class CreateStudyViewController: UIViewController {
                                       fontSize: 14)
       
       // Create a text field for chat link input
-      let fineTypesTextField = UITextField()
-      fineTypesTextField.placeholder = "지각비, 결석비"
-      fineTypesTextField.textColor = UIColor(hexCode: "#A1AAB0")
-      fineTypesTextField.font = UIFont.systemFont(ofSize: 14)
-      fineTypesTextField.borderStyle = .roundedRect  // Add rounded border
-      
+      let fineTypesTextField = createTextField(title: "지각비, 결석비 등")
+  
       // Create a text field for "얼마인가요?"
       let fineAmountLabel = createLabel(title: "얼마인가요?",
                                         textColor: UIColor(hexCode: "#49545C"),
@@ -630,12 +621,17 @@ class CreateStudyViewController: UIViewController {
                                     textColor: UIColor(hexCode: "#68737D"),
                                     fontSize: 15)
       
+      lazy var maxFineLabel = createLabel(title: "최대 99,999원",
+                                          textColor: UIColor(hexCode: "#A1AAB0"),
+                                          fontSize: 12)
+      
       fineAmountTextField.addSubview(countLabel2)
       
       finefixStackView.addArrangedSubview(fineTypeLabel)
       finefixStackView.addArrangedSubview(fineTypesTextField)
       finefixStackView.addArrangedSubview(fineAmountLabel)
       finefixStackView.addArrangedSubview(fineAmountTextField)
+      finefixStackView.addArrangedSubview(maxFineLabel)
       
       // Constraints for chatLinkTextField
       fineTypesTextField.snp.makeConstraints { make in
@@ -657,9 +653,13 @@ class CreateStudyViewController: UIViewController {
         make.height.equalTo(20)
       }
       
+      maxFineLabel.snp.makeConstraints { make in
+        make.top.equalTo(fineAmountTextField.snp.bottom).offset(10)
+      }
+      
     } else {
       // Remove the labels and text fields from the fineButtonsStackView
-      fineButtonsStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
+//      fineButtonsStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
     }
   }
   
@@ -667,36 +667,19 @@ class CreateStudyViewController: UIViewController {
   
   // MARK: - 완료버튼 누를 때 함수
   @objc func completeButtonTapped() {
-      // 입력된 정보 JSON
-      var gender = ""
-      if maleOnlyButton.isSelected {
-          gender = "MALE"
-      } else if femaleOnlyButton.isSelected {
-          gender = "FEMALE"
-      } else {
-          gender = "null"
-      }
-    
-      var studyWay = ""
-      if contactButton.isSelected {
-          studyWay = "CONTACT"
-      } else if untactButton.isSelected {
-          studyWay = "UNCONTACT"
-      } else {
-          studyWay = "CONTACT"
-      }
+ 
     // 성별, 스터디방식 버튼에 따라서 내용이 안바뀜
     let studyData = CreateStudyRequest(
       chatUrl: chatLinkTextField.text ?? "",
       close: false,
       content: studyproduceTextField.text ?? "",
-      gender: "MALE",
+      gender: genderType ?? "null",
       major: "COMPUTER_SCIENCE_ENGINEERING",
       penalty: Int(fineAmountTextField.text ?? "0") ?? 0 ,
       studyEndDate: (endDateTextField.text ?? "").dateConvert(),
       studyPerson: Int(studymemberTextField.text ?? "") ?? 0,
       studyStartDate: (startDateTextField.text ?? "").dateConvert(),
-      studyWay: studyWay,
+      studyWay: contactMethod ?? "CONTACT",
       title: studytitleTextField.text ?? "")
     
     print(studyData)
@@ -728,7 +711,7 @@ class CreateStudyViewController: UIViewController {
     navigationController.modalPresentationStyle = .fullScreen
     present(navigationController, animated: true, completion: nil)
   }
-  
+
   // MARK: - 성별 눌렸을 때 함수
   @objc func genderButtonTapped(_ sender: UIButton) {
     // Reset colors of all buttons
@@ -744,6 +727,19 @@ class CreateStudyViewController: UIViewController {
     // Set the tapped button to orange background
     sender.backgroundColor = UIColor(hexCode: "#FF5530")
     sender.setTitleColor(.white, for: .normal)
+    
+    guard let gender = sender.titleLabel?.text else { return }
+    genderType = gender
+    // MALE FEMALE null
+    if genderType == "남자만" {
+      genderType = "MALE"
+    }
+    else if genderType == "여자만" {
+      genderType = "FEMALE"
+    }
+    else {
+      genderType = "null"
+    }
   }
   
   // MARK: - 스터디 방식 눌렸을 때 함수
@@ -761,6 +757,19 @@ class CreateStudyViewController: UIViewController {
     // Set the tapped button to orange background
     sender.backgroundColor = UIColor(hexCode: "#FF5530")
     sender.setTitleColor(.white, for: .normal)
+    
+    // CONTACT UNCONTACT MIX
+    guard let contact = sender.titleLabel?.text else{ return }
+    contactMethod = contact
+    if contactMethod == "대면" {
+      contactMethod = "CONTACT"
+    }
+    else if contactMethod == "비대면" {
+      contactMethod = "UNCONTACT"
+    }
+    else {
+      contactMethod = "MIX"
+    }
   }
   
   // MARK: - date 선택

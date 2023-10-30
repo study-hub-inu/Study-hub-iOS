@@ -7,7 +7,7 @@
 
 import UIKit
 
-extension UIViewController {
+extension UIViewController: UITextFieldDelegate {
   func alertShow(title: String, message: String) {
     let alert = UIAlertController(title: title,
                                   message: message,
@@ -31,17 +31,17 @@ extension UIViewController {
     return button
   }
   
-  func createFineButton(title: String, selector: Selector) -> UIButton {
+  func createFineButton(selector: Selector) -> UIButton {
     let button = UIButton()
-    button.setImage(UIImage(named: "circle"), for: .normal)
-    button.setImage(UIImage(named: "checkmark.circle."), for: .selected)
+    button.setImage(UIImage(named: "ButtonEmpty"), for: .normal)
+    button.setImage(UIImage(named: "ButtonChecked"), for: .selected)
     button.tintColor = UIColor(hexCode: "#FF5530")
     button.addTarget(self, action: selector, for: .touchUpInside)
     return button
   }
   
   // 날짜 선택하는 버튼
-  func createDateButton(selector: Selector) -> UIButton{
+  func createDateButton(selector: Selector) -> UIButton {
     let button = UIButton()
     button.setTitle("선택하기", for: .normal)
     button.setTitleColor(UIColor(hexCode: "#A1AAB0"), for: .normal)
@@ -72,7 +72,7 @@ extension UIViewController {
     textField.layer.cornerRadius = 5
     textField.layer.borderColor = UIColor.gray.cgColor
     textField.layer.borderWidth = 1.0
-    
+    textField.delegate = self
     return textField
   }
   
@@ -115,6 +115,18 @@ extension UIViewController {
     
     dateFormatter.dateFormat = "yyyy-MM-dd"
     return dateFormatter.string(from: date)
+  }
+  
+  // UITextField가 선택될 때 호출되는 메서드
+  public func textFieldDidBeginEditing(_ textField: UITextField) {
+      textField.layer.borderColor = UIColor.black.cgColor // 테두리 색상을 검은색으로 변경
+      textField.layer.borderWidth = 1.0 // 테두리 두께 설정
+  }
+
+  // UITextField가 선택 해제될 때 호출되는 메서드
+  public func textFieldDidEndEditing(_ textField: UITextField) {
+      textField.layer.borderColor = UIColor.clear.cgColor // 테두리 색상을 초기화 (투명)
+      textField.layer.borderWidth = 0.0 // 테두리 두께 초기화
   }
 
 }
