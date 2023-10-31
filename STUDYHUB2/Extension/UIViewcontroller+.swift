@@ -91,7 +91,7 @@ extension UIViewController: UITextFieldDelegate, UITextViewDelegate {
     let stackView = UIStackView()
     stackView.axis = axis
     stackView.spacing = spacing
-    
+
     return stackView
   }
   

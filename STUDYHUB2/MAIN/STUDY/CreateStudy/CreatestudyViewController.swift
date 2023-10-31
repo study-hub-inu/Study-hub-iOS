@@ -8,7 +8,7 @@ class CreateStudyViewController: UIViewController {
   private var selectedDepartments: [String] = [] // 선택된 학과를 저장할 배열
   var genderType: String?
   var contactMethod: String?
-  
+  var postDataSender: SendPostData?
   // 선택한 학과를 저장할 프로퍼티
   var selectedDepartment: String? {
     didSet {
@@ -671,8 +671,6 @@ class CreateStudyViewController: UIViewController {
     } 
   }
   
-
-  
   // MARK: - 완료버튼 누를 때 함수
   @objc func completeButtonTapped() {
     // 성별, 스터디방식 버튼에 따라서 내용이 안바뀜
@@ -695,6 +693,7 @@ class CreateStudyViewController: UIViewController {
       guard let self = self else { return }
       switch result {
       case .success(let userData):
+        self.postDataSender?.sendData(data: userData)
         print(userData)
       case .failure(let error):
         print("Error: \(error)")
@@ -887,5 +886,8 @@ class CreateStudyViewController: UIViewController {
     self.dismiss(animated: true, completion: nil)
   }
   
-  
+}
+
+protocol SendPostData {
+  func sendData(data: CreateStudyRequest)
 }

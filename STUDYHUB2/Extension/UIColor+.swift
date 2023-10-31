@@ -8,7 +8,8 @@
 import UIKit
 
 extension UIColor {
-  
+  static let postedMajor = UIColor(red: 0.44, green: 0.17, blue: 0.11, alpha: 1.00)
+  static let deepGray = UIColor(red: 0.15, green: 0.15, blue: 0.15, alpha: 1.00)
   convenience init(hexCode: String, alpha: CGFloat = 1.0) {
     var hexFormatted: String = hexCode.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines).uppercased()
     
@@ -25,5 +26,7 @@ extension UIColor {
               green: CGFloat((rgbValue & 0x00FF00) >> 8) / 255.0,
               blue: CGFloat(rgbValue & 0x0000FF) / 255.0,
               alpha: alpha)
+    
+
   }
 }

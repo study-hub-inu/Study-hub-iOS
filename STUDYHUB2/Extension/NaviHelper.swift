@@ -1,0 +1,28 @@
+//
+//  NaviHelper.swift
+//  STUDYHUB2
+//
+//  Created by 최용헌 on 2023/10/31.
+//
+
+import UIKit
+class NaviHelper: UIViewController {
+  // MARK: - navi 설정
+  func navigationItemSetting() {
+    let homeImg = UIImage(named: "LeftArrow")?.withRenderingMode(.alwaysOriginal)
+    let leftButton = UIBarButtonItem(image: homeImg,
+                                     style: .plain,
+                                     target: self,
+                                     action: #selector(homeButtonTapped(_:)))
+    
+   
+    self.navigationItem.leftBarButtonItem = leftButton
+  }
+
+  @objc func homeButtonTapped(_ sender: UIBarButtonItem) {
+    print("H")
+  }
+  
+  
+
+}
