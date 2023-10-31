@@ -17,6 +17,8 @@ class NaviHelper: UIViewController {
     
     self.navigationController?.navigationBar.barTintColor =  .black
     self.navigationController?.navigationBar.backgroundColor = .black
+    self.navigationController?.navigationBar.isTranslucent = false
+
     self.navigationItem.leftBarButtonItem = leftButton
   }
 

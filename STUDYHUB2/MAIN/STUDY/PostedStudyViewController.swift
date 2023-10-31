@@ -19,9 +19,12 @@ final class PostedStudyViewController: NaviHelper, SendPostData {
                                                  textColor: .lightGray,
                                                  fontSize: 12)
   
-  private lazy var postedMajorLabel = createLabel(title: "세무학과",
+  private lazy var postedMajorLabel = createLabel(title: " 세무회계학과 ",
                                                   textColor: .postedMajor,
                                                   fontSize: 14)
+  
+  private lazy var postedMajorStackView = createStackView(axis: .horizontal,
+                                                          spacing: 10)
   
   private lazy var postedTitleLabel = createLabel(title: "전산세무 같이 준비해요",
                                                   textColor: .white,
@@ -72,7 +75,7 @@ final class PostedStudyViewController: NaviHelper, SendPostData {
   }()
   
   private lazy var fixedGenderLabel = createLabel(title: "여자",
-                                                  textColor: .lightGray,
+                                                  textColor: .white,
                                                   fontSize: 16)
   private lazy var genderStackView = createStackView(axis: .vertical,
                                                      spacing: 8)
@@ -127,9 +130,11 @@ final class PostedStudyViewController: NaviHelper, SendPostData {
   private lazy var majorTitleLabel = createLabel(title: "관련학과",
                                                  textColor: .black,
                                                  fontSize: 14)
-  private lazy var majorLabel = createLabel(title: "세무회계학과",
+  private lazy var majorLabel = createLabel(title: " 세무회계학과 ",
                                             textColor: .lightGray,
                                             fontSize: 14)
+  private lazy var majorStackView = createStackView(axis: .horizontal,
+                                                    spacing: 10)
   private lazy var detailInfoStackView = createStackView(axis: .vertical,
                                                          spacing: 10)
   private lazy var spaceView6 = UIView()
@@ -183,6 +188,7 @@ final class PostedStudyViewController: NaviHelper, SendPostData {
   private lazy var writerMajorLabel = createLabel(title: "세무회계학과",
                                                   textColor: .gray,
                                                   fontSize: 14)
+
   private lazy var nickNameLabel = createLabel(title: "비어있음",
                                                textColor: .black,
                                                fontSize: 16)
@@ -250,8 +256,13 @@ final class PostedStudyViewController: NaviHelper, SendPostData {
   // MARK: - setUpLayout
   func setUpLayout(){
     // 게시일, 관련학과, 제목
-  
-    let postedInfoData = [postedDateLabel, postedMajorLabel, postedTitleLabel]
+    let spaceView9 = UIView()
+    let postedMajorData = [postedMajorLabel, spaceView9]
+    for view in postedMajorData {
+      postedMajorStackView.addArrangedSubview(view)
+    }
+    
+    let postedInfoData = [postedDateLabel, postedMajorStackView, postedTitleLabel]
     for view in postedInfoData {
       postedInfoStackView.addArrangedSubview(view)
     }
@@ -316,10 +327,15 @@ final class PostedStudyViewController: NaviHelper, SendPostData {
     
     majorLabel.backgroundColor = .divideLine
 
+    let spaceView10 = UIView()
+    let majorData = [majorLabel, spaceView10]
+    for view in majorData {
+      majorStackView.addArrangedSubview(view)
+    }
     let detailInfo = [periodTitleLabel, periodStackView,
                       fineTitleLabel, fineInfoStackView,
                       meetTitleLabel, meetStackView,
-                      majorTitleLabel, majorLabel,
+                      majorTitleLabel, majorStackView,
                       grayDividerLine2]
     
     for view in detailInfo {
@@ -378,6 +394,7 @@ final class PostedStudyViewController: NaviHelper, SendPostData {
     
     // 인원수 벌금 성별여부
     coreInfoStackView.spacing = 10  // 수평 여백 설정
+    coreInfoStackView.layer.cornerRadius = 10
     coreInfoStackView.layoutMargins = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
     coreInfoStackView.isLayoutMarginsRelativeArrangement = true
 
@@ -432,6 +449,10 @@ final class PostedStudyViewController: NaviHelper, SendPostData {
 
     changeColor(label: memeberNumberCountLabel, wantToChange: "1")
     changeColor(label: fineCountLabel, wantToChange: "1000")
+    
+    //적용아?
+    majorLabel.layer.cornerRadius = 15
+    postedMajorLabel.layer.cornerRadius = 15
   }
   
   private func setupDataSource() {
