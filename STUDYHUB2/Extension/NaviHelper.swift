@@ -15,7 +15,8 @@ class NaviHelper: UIViewController {
                                      target: self,
                                      action: #selector(homeButtonTapped(_:)))
     
-   
+    self.navigationController?.navigationBar.barTintColor =  .black
+    self.navigationController?.navigationBar.backgroundColor = .black
     self.navigationItem.leftBarButtonItem = leftButton
   }
 

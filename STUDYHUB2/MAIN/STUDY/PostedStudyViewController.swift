@@ -20,7 +20,7 @@ final class PostedStudyViewController: NaviHelper, SendPostData {
                                                  fontSize: 12)
   
   private lazy var postedMajorLabel = createLabel(title: "세무학과",
-                                                  textColor: .white,
+                                                  textColor: .postedMajor,
                                                   fontSize: 14)
   
   private lazy var postedTitleLabel = createLabel(title: "전산세무 같이 준비해요",
@@ -132,7 +132,40 @@ final class PostedStudyViewController: NaviHelper, SendPostData {
                                             fontSize: 14)
   private lazy var detailInfoStackView = createStackView(axis: .vertical,
                                                          spacing: 10)
+  private lazy var spaceView6 = UIView()
+  private lazy var spaceView7 = UIView()
+  private lazy var spaceView8 = UIView()
+
+  private lazy var periodStackView = createStackView(axis: .horizontal,
+                                                     spacing: 10)
+  private lazy var fineInfoStackView = createStackView(axis: .horizontal,
+                                                     spacing: 10)
+  private lazy var meetStackView = createStackView(axis: .horizontal,
+                                                     spacing: 10)
+ 
+  private lazy var periodImageView: UIImageView = {
+    let imageView = UIImageView()
+    imageView.image = UIImage(named: "CalenderImage")
+    imageView.contentMode = .left
+    imageView.frame = CGRect(x: 0, y: 0, width: 10, height: 10)
+    return imageView
+  }()
   
+  private lazy var meetImageView: UIImageView = {
+    let imageView = UIImageView()
+    imageView.image = UIImage(named: "MixMeetImage")
+    imageView.contentMode = .left
+    imageView.frame = CGRect(x: 0, y: 0, width: 10, height: 10)
+    return imageView
+  }()
+  
+  private lazy var smallFineImageView: UIImageView = {
+    let imageView = UIImageView()
+    imageView.image = UIImage(named: "MoneyImage")
+    imageView.contentMode = .left
+    imageView.frame = CGRect(x: 0, y: 0, width: 10, height: 10)
+    return imageView
+  }()
   // 작성자 정보
   private lazy var writerLabel = createLabel(title: "작성자",
                                              textColor: .black,
@@ -155,7 +188,7 @@ final class PostedStudyViewController: NaviHelper, SendPostData {
                                                fontSize: 16)
   // 학과, 닉네임 스택
   private lazy var writerInfoStackView = createStackView(axis: .vertical,
-                                                         spacing: 5)
+                                                         spacing: 1)
   // 학과 닉네임 이미지 스택
   private lazy var writerInfoWithImageStackView = createStackView(axis: .horizontal,
                                                                   spacing: 5)
@@ -167,7 +200,7 @@ final class PostedStudyViewController: NaviHelper, SendPostData {
   // 비슷한 게시글
   private lazy var similarPostLabel = createLabel(title: "이 글과 비슷한 스터디예요",
                                                   textColor: .black,
-                                                  fontSize: 20)
+                                                  fontSize: 18)
   
   var dataSource: [String] = []
   
@@ -176,7 +209,7 @@ final class PostedStudyViewController: NaviHelper, SendPostData {
     flowLayout.scrollDirection = .horizontal
     flowLayout.minimumLineSpacing = 50 // cell사이의 간격 설정
     let view = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
-    view.backgroundColor = .brown
+    view.backgroundColor = .white
     
     return view
   }()
@@ -187,7 +220,7 @@ final class PostedStudyViewController: NaviHelper, SendPostData {
   // 회색 라인 생성
   private lazy var createGrayDividerLine: (CGFloat) -> UIView = { size in
     let dividerLine = UIView()
-    dividerLine.backgroundColor = .lightGray
+    dividerLine.backgroundColor = .divideLine
     dividerLine.heightAnchor.constraint(equalToConstant: size).isActive = true
     dividerLine.translatesAutoresizingMaskIntoConstraints = false
     return dividerLine
@@ -208,7 +241,6 @@ final class PostedStudyViewController: NaviHelper, SendPostData {
     setupDelegate()
     setupDataSource()
     registerCell()
-    configure()
     
     navigationItemSetting()
     setUpLayout()
@@ -218,6 +250,7 @@ final class PostedStudyViewController: NaviHelper, SendPostData {
   // MARK: - setUpLayout
   func setUpLayout(){
     // 게시일, 관련학과, 제목
+  
     let postedInfoData = [postedDateLabel, postedMajorLabel, postedTitleLabel]
     for view in postedInfoData {
       postedInfoStackView.addArrangedSubview(view)
@@ -265,11 +298,30 @@ final class PostedStudyViewController: NaviHelper, SendPostData {
     
     // 기간, 벌금, 대면여부, 관련학과
     let grayDividerLine2 = createGrayDividerLine(8.0)
-    let detailInfo = [periodTitleLabel, periodLabel,
-                      fineTitleLabel, fineAmountLabel,
-                      meetTitleLabel,meetLabel,
+
+    let periodData = [periodImageView, periodLabel, spaceView6]
+    for view in periodData {
+      periodStackView.addArrangedSubview(view)
+    }
+    
+    let fineInfoData = [smallFineImageView, fineAmountLabel, spaceView7]
+    for view in fineInfoData {
+      fineInfoStackView.addArrangedSubview(view)
+    }
+
+    let meetData = [meetImageView, meetLabel, spaceView8]
+    for view in meetData {
+      meetStackView.addArrangedSubview(view)
+    }
+    
+    majorLabel.backgroundColor = .divideLine
+
+    let detailInfo = [periodTitleLabel, periodStackView,
+                      fineTitleLabel, fineInfoStackView,
+                      meetTitleLabel, meetStackView,
                       majorTitleLabel, majorLabel,
                       grayDividerLine2]
+    
     for view in detailInfo {
       detailInfoStackView.addArrangedSubview(view)
     }
@@ -285,8 +337,10 @@ final class PostedStudyViewController: NaviHelper, SendPostData {
       writerInfoWithImageStackView.addArrangedSubview(view)
     }
     
+    let spaceView8 = UIView()
     let grayDividerLine3 = createGrayDividerLine(8.0)
-    let totalWriterData = [writerLabel, writerInfoWithImageStackView, grayDividerLine3]
+    let totalWriterData = [writerLabel, writerInfoWithImageStackView,
+                           spaceView8, grayDividerLine3]
     for view in totalWriterData {
       totalWriterInfoStackView.addArrangedSubview(view)
     }
@@ -306,19 +360,18 @@ final class PostedStudyViewController: NaviHelper, SendPostData {
     }
     
     scrollView.addSubview(pageStackView)
+
     view.addSubview(scrollView)
   }
   
   func makeUI(){
-    coreInfoStackView.distribution = .fillEqually
+    coreInfoStackView.distribution = .fillProportionally
     coreInfoStackView.backgroundColor = .deepGray
     
     topInfoStackView.backgroundColor = .black
     
-    postedMajorLabel.backgroundColor = .postedMajor
-    
-    aboutStudyStackView.backgroundColor = .white
-    
+    postedMajorLabel.backgroundColor = .postedMajorBackGorund
+        
     // 스터디 제목
     postedInfoStackView.layoutMargins = UIEdgeInsets(top: 50, left: 10, bottom: 0, right: 0)
     postedInfoStackView.isLayoutMarginsRelativeArrangement = true
@@ -335,17 +388,21 @@ final class PostedStudyViewController: NaviHelper, SendPostData {
     }
     
     // 스터디 소개
-    aboutStudyStackView.layoutMargins = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
+    aboutStudyStackView.backgroundColor = .white
+    aboutStudyDeatilLabel.numberOfLines = 0
+    aboutStudyStackView.layoutMargins = UIEdgeInsets(top: 20, left: 10, bottom: 20, right: 10)
     aboutStudyStackView.isLayoutMarginsRelativeArrangement = true
     
     // 기간 벌금 대면여부 관련학과
-    detailInfoStackView.layoutMargins = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
+    detailInfoStackView.backgroundColor = .white
+    detailInfoStackView.layoutMargins = UIEdgeInsets(top: 0, left: 10, bottom: 20, right: 10)
     detailInfoStackView.isLayoutMarginsRelativeArrangement = true
-    
+  
     // 작성자 정보
     writerInfoWithImageStackView.distribution = .fillProportionally
     
-    totalWriterInfoStackView.layoutMargins = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
+    totalWriterInfoStackView.backgroundColor = .white
+    totalWriterInfoStackView.layoutMargins = UIEdgeInsets(top: 0, left: 10, bottom: 20, right: 10)
     totalWriterInfoStackView.isLayoutMarginsRelativeArrangement = true
     
     spaceView1.snp.makeConstraints { make in
@@ -353,20 +410,28 @@ final class PostedStudyViewController: NaviHelper, SendPostData {
     }
     
     // 비슷한 게시글
+    similarPostStackView.backgroundColor = .white
     similarPostStackView.layoutMargins = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
     similarPostStackView.isLayoutMarginsRelativeArrangement = true
     
-    // 전체 스택뷰
+    collectionView.snp.makeConstraints { make in
+      make.height.equalTo(171)
+    }
+    
+    // pageStackView의 설정
     pageStackView.snp.makeConstraints { make in
-      make.top.equalTo(scrollView)
-      make.leading.trailing.equalTo(view)
-      make.width.equalTo(view)
-      
+      make.top.equalTo(scrollView.contentLayoutGuide)
+      make.leading.trailing.bottom.equalTo(scrollView.contentLayoutGuide)
+      make.width.equalTo(view.safeAreaLayoutGuide)
     }
 
+    // scrollView의 설정
     scrollView.snp.makeConstraints { make in
-      make.edges.equalTo(view.safeAreaLayoutGuide)
+      make.edges.equalTo(view)
     }
+
+    changeColor(label: memeberNumberCountLabel, wantToChange: "1")
+    changeColor(label: fineCountLabel, wantToChange: "1000")
   }
   
   private func setupDataSource() {
@@ -383,13 +448,17 @@ final class PostedStudyViewController: NaviHelper, SendPostData {
     collectionView.register(SimilarPostCell.self,
                             forCellWithReuseIdentifier: SimilarPostCell.id)
   }
-  private func configure() {
-//    collectionView.snp.makeConstraints { make in
-//      make.leading.equalTo(similarPostStackView.snp.leading)
-//      make.trailing.equalTo(similarPostStackView.snp.trailing)
-//
-//    }
+  
+  func changeColor(label: UILabel, wantToChange: String){
+    let attributedStr = NSMutableAttributedString(string: label.text!)
+
+    //위에서 만든 attributedStr에, addAttribute()메소드를 통해 스타일 적용.
+    attributedStr.addAttribute(.foregroundColor, value: UIColor.changeInfo, range: (label.text! as NSString).range(of:wantToChange))
+            
+    //최종적으로 내 label에 text가 아닌, attributedText를 적용
+    label.attributedText = attributedStr
   }
+
 }
 
 extension PostedStudyViewController: UICollectionViewDelegate, UICollectionViewDataSource {
@@ -408,4 +477,10 @@ extension PostedStudyViewController: UICollectionViewDelegate, UICollectionViewD
     
     return cell
   }
+}
+
+extension PostedStudyViewController: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: 220, height: collectionView.frame.height)
+    }
 }
