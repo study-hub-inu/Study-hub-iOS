@@ -226,7 +226,7 @@ final class PostedStudyViewController: NaviHelper, SendPostData {
   // 회색 라인 생성
   private lazy var createGrayDividerLine: (CGFloat) -> UIView = { size in
     let dividerLine = UIView()
-    dividerLine.backgroundColor = .divideLine
+    dividerLine.backgroundColor = .bg30
     dividerLine.heightAnchor.constraint(equalToConstant: size).isActive = true
     dividerLine.translatesAutoresizingMaskIntoConstraints = false
     return dividerLine
@@ -325,7 +325,7 @@ final class PostedStudyViewController: NaviHelper, SendPostData {
       meetStackView.addArrangedSubview(view)
     }
     
-    majorLabel.backgroundColor = .divideLine
+    majorLabel.backgroundColor = .bg30
 
     let spaceView10 = UIView()
     let majorData = [majorLabel, spaceView10]
@@ -449,10 +449,6 @@ final class PostedStudyViewController: NaviHelper, SendPostData {
 
     changeColor(label: memeberNumberCountLabel, wantToChange: "1")
     changeColor(label: fineCountLabel, wantToChange: "1000")
-    
-    //적용아?
-    majorLabel.layer.cornerRadius = 15
-    postedMajorLabel.layer.cornerRadius = 15
   }
   
   private func setupDataSource() {
@@ -474,7 +470,9 @@ final class PostedStudyViewController: NaviHelper, SendPostData {
     let attributedStr = NSMutableAttributedString(string: label.text!)
 
     //위에서 만든 attributedStr에, addAttribute()메소드를 통해 스타일 적용.
-    attributedStr.addAttribute(.foregroundColor, value: UIColor.changeInfo, range: (label.text! as NSString).range(of:wantToChange))
+    attributedStr.addAttribute(.foregroundColor,
+                               value: UIColor.changeInfo,
+                               range: (label.text! as NSString).range(of:wantToChange))
             
     //최종적으로 내 label에 text가 아닌, attributedText를 적용
     label.attributedText = attributedStr
@@ -484,7 +482,8 @@ final class PostedStudyViewController: NaviHelper, SendPostData {
 
 extension PostedStudyViewController: UICollectionViewDelegate, UICollectionViewDataSource {
   
-  func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+  func collectionView(_ collectionView: UICollectionView,
+                      numberOfItemsInSection section: Int) -> Int {
     return dataSource.count
   }
   
@@ -501,7 +500,9 @@ extension PostedStudyViewController: UICollectionViewDelegate, UICollectionViewD
 }
 
 extension PostedStudyViewController: UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: 220, height: collectionView.frame.height)
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: 250, height: collectionView.frame.height)
     }
 }

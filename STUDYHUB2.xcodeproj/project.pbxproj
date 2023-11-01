@@ -16,6 +16,9 @@
 		EE07ADBD2AEFF7BD0096890F /* ConvertMajor.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE07ADBC2AEFF7BD0096890F /* ConvertMajor.swift */; };
 		EE07ADBF2AF0BB360096890F /* NaviHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE07ADBE2AF0BB360096890F /* NaviHelper.swift */; };
 		EE07ADC12AF0D5A40096890F /* SimilarPostCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE07ADC02AF0D5A40096890F /* SimilarPostCell.swift */; };
+		EE07ADC32AF236260096890F /* BottomSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE07ADC22AF236260096890F /* BottomSheet.swift */; };
+		EE07ADC52AF2414C0096890F /* PopUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE07ADC42AF2414C0096890F /* PopUpViewController.swift */; };
+		EE07ADC72AF241A30096890F /* PopUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE07ADC62AF241A30096890F /* PopUpView.swift */; };
 		EE271F1C2AD04ACE00190E7A /* TokenManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE271F1B2AD04ACE00190E7A /* TokenManager.swift */; };
 		EE271F1E2AD04BB300190E7A /* UserToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE271F1D2AD04BB300190E7A /* UserToken.swift */; };
 		EE271F202AD0584100190E7A /* UIColor+.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE271F1F2AD0584100190E7A /* UIColor+.swift */; };
@@ -81,6 +84,9 @@
 		EE07ADBC2AEFF7BD0096890F /* ConvertMajor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConvertMajor.swift; sourceTree = "<group>"; };
 		EE07ADBE2AF0BB360096890F /* NaviHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NaviHelper.swift; sourceTree = "<group>"; };
 		EE07ADC02AF0D5A40096890F /* SimilarPostCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimilarPostCell.swift; sourceTree = "<group>"; };
+		EE07ADC22AF236260096890F /* BottomSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheet.swift; sourceTree = "<group>"; };
+		EE07ADC42AF2414C0096890F /* PopUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopUpViewController.swift; sourceTree = "<group>"; };
+		EE07ADC62AF241A30096890F /* PopUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopUpView.swift; sourceTree = "<group>"; };
 		EE271F1B2AD04ACE00190E7A /* TokenManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenManager.swift; sourceTree = "<group>"; };
 		EE271F1D2AD04BB300190E7A /* UserToken.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserToken.swift; sourceTree = "<group>"; };
 		EE271F1F2AD0584100190E7A /* UIColor+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+.swift"; sourceTree = "<group>"; };
@@ -283,6 +289,9 @@
 				F8085D432A81846C0067D4DE /* StudyViewController.swift */,
 				F88AB33A2A951AFF001D619C /* CategoryViewController.swift */,
 				EE07ADB82AEFE6730096890F /* PostedStudyViewController.swift */,
+				EE07ADC22AF236260096890F /* BottomSheet.swift */,
+				EE07ADC42AF2414C0096890F /* PopUpViewController.swift */,
+				EE07ADC62AF241A30096890F /* PopUpView.swift */,
 				EE07ADC02AF0D5A40096890F /* SimilarPostCell.swift */,
 				F88AB3472A9E71A4001D619C /* CreateStudy */,
 			);
@@ -545,6 +554,7 @@
 				F873775B2AACD41D0055B041 /* BookmarkViewController.swift in Sources */,
 				EE271F1E2AD04BB300190E7A /* UserToken.swift in Sources */,
 				F80421CA2A7D9534006C6B87 /* PasswordViewController.swift in Sources */,
+				EE07ADC52AF2414C0096890F /* PopUpViewController.swift in Sources */,
 				EE07ADBD2AEFF7BD0096890F /* ConvertMajor.swift in Sources */,
 				EE271F242AD77C0E00190E7A /* LoginManager.swift in Sources */,
 				F80421922A7D6816006C6B87 /* AppDelegate.swift in Sources */,
@@ -554,6 +564,7 @@
 				EE07ADC12AF0D5A40096890F /* SimilarPostCell.swift in Sources */,
 				EE271F2A2AD8B9FA00190E7A /* String+.swift in Sources */,
 				F88AB33F2A95236B001D619C /* CreatestudyViewController.swift in Sources */,
+				EE07ADC32AF236260096890F /* BottomSheet.swift in Sources */,
 				F89A01102A8686ED00B4C10D /* OpenNewPageViewController.swift in Sources */,
 				F80421CE2A7DA2F3006C6B87 /* DepartmentViewController.swift in Sources */,
 				EE07ADB92AEFE6730096890F /* PostedStudyViewController.swift in Sources */,
@@ -565,6 +576,7 @@
 				F87377592AA850940055B041 /* DepartmentselectViewController.swift in Sources */,
 				EE07ADB52AEFC2B90096890F /* UITextField+.swift in Sources */,
 				F88AB33B2A951AFF001D619C /* CategoryViewController.swift in Sources */,
+				EE07ADC72AF241A30096890F /* PopUpView.swift in Sources */,
 				F8085D412A815DCD0067D4DE /* HomeViewController.swift in Sources */,
 				F80421942A7D6816006C6B87 /* SceneDelegate.swift in Sources */,
 				EE271F1C2AD04ACE00190E7A /* TokenManager.swift in Sources */,
