@@ -75,11 +75,11 @@ class CreateStudyViewController: UIViewController {
     tv.text = "스터디에 대해 알려주세요\n (운영 방법, 대면 여부,벌금,공부 인증 방법 등)"
     tv.textColor = UIColor.lightGray
     tv.font = UIFont.systemFont(ofSize: 15)
-    tv.layer.borderWidth = 1.0
+    tv.layer.borderWidth = 0.5
     tv.layer.borderColor = UIColor.lightGray.cgColor
     tv.layer.cornerRadius = 5.0
     tv.delegate = self
-    tv.adjustUITextViewHeight()
+    tv.textViewDidChange(tv)
     return tv
   }()
 

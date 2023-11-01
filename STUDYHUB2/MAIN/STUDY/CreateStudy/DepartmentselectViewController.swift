@@ -1,263 +1,103 @@
+
 import UIKit
 
-class DepartmentselectViewController: UIViewController, UISearchBarDelegate {
-    
-//    weak var delegate: DepartmentSelectionDelegate?
+import SnapKit
 
+final class DepartmentselectViewController: NaviHelper {
+  private lazy var majorSet = ["공연예술과", "IBE전공", "건설환경공학", "건축공학",
+                               "경영학부", "경제학과", "국어교육과", "국어국문학과",
+                               "기계공학과","데이터과학과","도시건축학","도시공학과",
+                               "도시행정학과","독어독문학과","동북아통상전공","디자인학부",
+                               "무역학부","문헌정보학과","물리학과","미디어커뮤니케이션학과",
+                               "바이오-로봇 시스템 공학과","법학부", "불어불문학과","사회복지학과",
+                               "산업경영공학과","생명공학부(나노바이오공학전공)","생명공학부(생명공학전공)",
+                               "생명과학부(분자의생명전공)","생명과학부(생명과학전공)","서양화전공(조형예술학부)",
+                               "세무회계학과","소비자학과","수학과","수학교육과", "스마트물류공학전공", "스포츠과학부",
+                               "신소재공학과","안전공학과","에너지화학공학","역사교육과","영어교육과","영어영문학과",
+                               "운동건강학부","유아교육과","윤리교육과","일본지역문화학과","일어교육과","임베디드시스템공과",
+                               "전기공학과","전자공학과","정보통신학과","정치외교학과","중어중국학과","창의인개발학과",
+                               "체육교육과","컴퓨터공학부","테크노경영학과","패션산업학과","한국화전공(조형예술학부)",
+                               "해양학과","행정학과","화학과","환경공학" ]
+  
+  private let searchController = UISearchBar.createSearchBar()
+  
+  private lazy var describeLabel = createLabel(
+    title: "- 관련학과는 1개만 선택할 수 있어요 \n- 다양한 학과와 관련된 스터디라면, '공통'을 선택해 주세요",
+    textColor: .bg60,
+    fontSize: 12)
+  
+  override func viewDidLoad() {
+    super.viewDidLoad()
+    view.backgroundColor = .white
     
-    private let deleteButton = UIButton(type: .system)
-    private let searchResultButton = UIButton(type: .system)
+    navigationItemSetting()
+    redesignNavigationbar()
     
-    // DepartmentselectViewController 클래스 내에 프로퍼티 추가
-    var selectedDepartments: [String] = [] // 선택된 학과를 저장할 배열
-    var departmentButtons: [UIButton] = [] // 선택된 학과를 나타내는 버튼을 저장할 배열
+    setupLayout()
+    makeUI()
     
-    private let headerContentStackView = UIStackView()
-    private let searchBar = UISearchBar()
-    private let infoLabel1 = UILabel()
-    private let infoLabel2 = UILabel()
+    searchController.delegate = self
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        view.backgroundColor = .black
-        
-        // 키보드 내리기를 위한 탭 제스처 추가
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap))
-        view.addGestureRecognizer(tapGesture)
-        
-        // Create the top stack view for the header
-        let headerStackView = UIStackView()
-        headerStackView.axis = .horizontal
-        headerStackView.alignment = .center
-        headerStackView.spacing = 8
-        headerStackView.translatesAutoresizingMaskIntoConstraints = false
-        
-        // Back button
-        let backButton = UIButton(type: .system)
-        backButton.setImage(UIImage(systemName: "chevron.left"), for: .normal)
-        backButton.tintColor = .white
-        backButton.addTarget(self, action: #selector(goBack), for: .touchUpInside)
-        backButton.translatesAutoresizingMaskIntoConstraints = false
-        
-        // Add the backButton and studyLabel to the header stack view
-        headerStackView.addArrangedSubview(backButton)
-        
-        // "관련학과" label
-        let associatedepartLabel = UILabel()
-        associatedepartLabel.text = "관련학과"
-        associatedepartLabel.textColor = .white
-        associatedepartLabel.font = UIFont.boldSystemFont(ofSize: 18)
-        associatedepartLabel.translatesAutoresizingMaskIntoConstraints = false
-        
-        headerStackView.addArrangedSubview(associatedepartLabel)
-        
-        // "완료" button
-        let doneButton = UIButton(type: .system)
-        doneButton.setTitle("완료", for: .normal)
-        doneButton.setTitleColor(UIColor(hexCode: "FF5935"), for: .normal)
-        doneButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 18)
-        doneButton.addTarget(self, action: #selector(doneButtonTapped), for: .touchUpInside)
-        doneButton.translatesAutoresizingMaskIntoConstraints = false
-        
-        // Spacer view to push the bookmarkButton and bellButton to the right
-        let spacerView = UIView()
-        spacerView.translatesAutoresizingMaskIntoConstraints = false
-        spacerView.setContentHuggingPriority(.defaultLow, for: .horizontal)
-        headerStackView.addArrangedSubview(spacerView)
-        
-        // Add the bookmarkButton and bellButton to the header stack view
-        headerStackView.addArrangedSubview(doneButton)
-        
-        // Add the header stack view to the view
-        view.addSubview(headerStackView)
-        
-        headerContentStackView.axis = .vertical
-        headerContentStackView.spacing = 16
-        headerContentStackView.translatesAutoresizingMaskIntoConstraints = false
+  }
+  // MARK: - view 계층 구성
+  func setupLayout(){
+    [
+      searchController,
+      describeLabel
+    ].forEach {
+      view.addSubview($0)
+    }
+  }
+  // MARK: - UI세팅
+  func makeUI() {
+    searchController.snp.makeConstraints { make in
+      make.centerX.equalToSuperview()
+      make.top.equalToSuperview().offset(10)
+      make.width.equalToSuperview().multipliedBy(0.95)
+    }
+    
+    describeLabel.numberOfLines = 2
+    describeLabel.snp.makeConstraints { make in
+      make.top.equalTo(searchController.snp.bottom).offset(10)
+      make.leading.equalTo(searchController.snp.leading)
+    }
+  }
+  
+  // MARK: - 네비게이션바 재설정
+  func redesignNavigationbar(){
+    let rightButtonImg = UIImage(named: "DeCompletedImg.png")?.withRenderingMode(.alwaysOriginal)
+    let rightButton = UIBarButtonItem(image: rightButtonImg,
+                                      style: .plain,
+                                      target: self,
+                                      action: #selector(redesingRightButtonTapped))
+    self.navigationItem.rightBarButtonItem = rightButton
+    
+    self.navigationItem.title = "관련학과"
+    self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
+  }
+  
+  @objc func redesingRightButtonTapped(){
+    
+  }
+}
 
-        
-        // Search Bar
-        searchBar.placeholder = "관련학과를 입력해주세요"
-        searchBar.backgroundImage = UIImage() // Remove background image
-        searchBar.delegate = self // Set the delegate to self
-        searchBar.translatesAutoresizingMaskIntoConstraints = false
-        headerContentStackView.addArrangedSubview(searchBar)
-        
-        // Create labels for additional information
-        infoLabel1.text = "- 해당 스터디와 관련된 학과를 선택해주세요"
-        infoLabel1.textColor = .gray
-        infoLabel1.font = UIFont.systemFont(ofSize: 14)
-        infoLabel1.translatesAutoresizingMaskIntoConstraints = false
-        
-        infoLabel2.text = "- 관련 학과는 1개만 선택할 수 있어요"
-        infoLabel2.textColor = .gray
-        infoLabel2.font = UIFont.systemFont(ofSize: 14)
-        infoLabel2.translatesAutoresizingMaskIntoConstraints = false
-        
-        // Add the info labels to the header content stack view
-        headerContentStackView.addArrangedSubview(infoLabel1)
-        headerContentStackView.addArrangedSubview(infoLabel2)
-        
-        // Create a scroll view to make the content scrollable
-        let scrollView = UIScrollView()
-        scrollView.translatesAutoresizingMaskIntoConstraints = false
-        scrollView.addSubview(headerContentStackView)
-        view.addSubview(scrollView)
-        
-        // Set up constraints
-        NSLayoutConstraint.activate([
-            // Header stack view constraints
-            headerStackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            headerStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: -60),
-            headerStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            
-            // "스터디 만들기" label constraints
-            associatedepartLabel.centerXAnchor.constraint(equalTo: headerStackView.centerXAnchor, constant: 16),
-            
-            // Spacer view constraints
-            spacerView.widthAnchor.constraint(equalTo: headerStackView.widthAnchor, multiplier: 0.2),
-            
-            // "완료" button constraints
-            doneButton.trailingAnchor.constraint(equalTo: headerStackView.trailingAnchor),
-            
-            // Search bar constraints
-            searchBar.topAnchor.constraint(equalTo: headerStackView.bottomAnchor, constant: 20),
-            searchBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            searchBar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            
-//            searchIconButton.centerYAnchor.constraint(equalTo: searchBar.centerYAnchor),
-//            searchIconButton.trailingAnchor.constraint(equalTo: searchBar.trailingAnchor),
-//            searchIconButton.widthAnchor.constraint(equalToConstant: 20),
-//            searchIconButton.heightAnchor.constraint(equalToConstant: 20),
-//
-            // Info labels constraints
-            infoLabel1.leadingAnchor.constraint(equalTo: searchBar.leadingAnchor, constant: 50),
-            infoLabel2.leadingAnchor.constraint(equalTo: searchBar.leadingAnchor, constant: 20),
-            
-            // Header content stack view constraints
-            headerContentStackView.topAnchor.constraint(equalTo: scrollView.topAnchor),
-            headerContentStackView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
-            headerContentStackView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
-            headerContentStackView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
-            headerContentStackView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
-            
-            // Scroll view constraints
-            scrollView.topAnchor.constraint(equalTo: headerStackView.bottomAnchor, constant: 16),
-            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-        ])
-        
-        // Set the background color of the scrollView to black
-        scrollView.backgroundColor = .white
-        
-        // Set the scroll view's content size to fit the content
-        headerContentStackView.widthAnchor.constraint(equalTo: scrollView.widthAnchor).isActive = true
-    }
-    
-    // UISearchBarDelegate에서 검색 버튼을 누를 때 호출되는 메서드
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        if let searchText = searchBar.text, !searchText.isEmpty {
-            // 입력된 텍스트가 비어 있지 않으면 버튼을 만듭니다.
-            createSearchButton(withText: searchText)
-            
-            // 검색 바 초기화
-            searchBar.text = ""
-            
-            // 라벨 삭제
-            infoLabel1.removeFromSuperview()
-            infoLabel2.removeFromSuperview()
-        }
-    }
 
-    func createSearchButton(withText text: String) {
-        // 버튼 생성
-        // Stack view for the newStudyLabel and viewAllButton
-        
-        searchResultButton.backgroundColor = UIColor(hexCode: "F3F5F6")
-        searchResultButton.setTitleColor(UIColor(hexCode: "68737D"), for: .normal)
-        searchResultButton.setTitle(text, for: .normal)
-        searchResultButton.layer.cornerRadius = 20
-        searchResultButton.titleLabel?.font = UIFont.systemFont(ofSize: 16)
-        searchResultButton.contentHorizontalAlignment = .center // 텍스트를 왼쪽으로 정렬
-        
-        // 문자열 길이에 따라 버튼 가로 길이 동적 조절
-        let buttonWidth = text.width(withConstrainedHeight: 30, font: searchResultButton.titleLabel!.font)
-        searchResultButton.widthAnchor.constraint(equalToConstant: buttonWidth + 50).isActive = true
-        
-        // Back button
-        deleteButton.setImage(UIImage(systemName: "xmark.circle.fill"), for: .normal)
-        deleteButton.tintColor = .lightGray
-        deleteButton.addTarget(self, action: #selector(deleteButtonTapped), for: .touchUpInside)
-        deleteButton.translatesAutoresizingMaskIntoConstraints = false
-        
-        
-        // 생성된 버튼을 배열에 추가
-        departmentButtons.append(searchResultButton)
-        // 생성된 버튼을 배열에 추가
-        departmentButtons.append(deleteButton)
-        
-        // 버튼을 UI에 추가 (예: 스택 뷰에 추가)
-        headerContentStackView.addArrangedSubview(searchResultButton)
-        // 버튼을 UI에 추가 (예: 스택 뷰에 추가)
-        headerContentStackView.addArrangedSubview(deleteButton)
-        
-        // 적절한 제약 조건 추가 (버튼 크기 설정, 여기서는 제약 조건을 추가해야 할 수도 있음)
-        NSLayoutConstraint.activate([
-            searchResultButton.leadingAnchor.constraint(equalTo: headerContentStackView.leadingAnchor, constant: 10),
-            searchResultButton.trailingAnchor.constraint(equalTo: headerContentStackView.trailingAnchor, constant: -200),
-            searchResultButton.heightAnchor.constraint(equalToConstant: 30),
-            
-            deleteButton.topAnchor.constraint(equalTo: searchResultButton.topAnchor, constant: 2),
-//            deleteButton.leadingAnchor.constraint(equalTo: headerContentStackView.leadingAnchor, constant: -240),
-            deleteButton.trailingAnchor.constraint(equalTo: headerContentStackView.trailingAnchor, constant: -50),
-            
-        ])
+extension DepartmentselectViewController: UISearchBarDelegate {
+  // 검색(Search) 버튼을 눌렀을 때 호출되는 메서드
+  func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+    guard let keyword = searchBar.text?.trimmingCharacters(in: .whitespacesAndNewlines) else { return }
+    
+    let matchingDepartments = majorSet.filter { $0.contains(keyword) }
+    
+    if matchingDepartments.isEmpty {
+        print("검색 결과가 없음")
+        // 검색 결과가 없을 때의 처리를 할 수 있습니다.
+    } else {
+        print("검색 결과: \(matchingDepartments)")
+        // 검색 결과를 처리하거나 표시할 수 있습니다.
     }
     
-    @objc func deleteButtonTapped(sender: UIButton) {
-        headerContentStackView.removeArrangedSubview(searchResultButton)
-        headerContentStackView.removeArrangedSubview(deleteButton)
-        searchResultButton.removeFromSuperview()
-        deleteButton.removeFromSuperview()
-        
-    }
-    
-
-//    @objc func doneButtonTapped() {
-////        print("선택된 학과: \(searchResultButton.currentTitle)")
-//        if searchResultButton.currentTitle != nil {
-//                // 첫 번째 버튼의 제목을 가져와 선택된 학과로 사용합니다.
-////                print("선택된 학과: \(searchResultButton.currentTitle)")
-////                print("선택된 학과: \(searchResultButton.currentTitle)")
-//            }
-//        dismiss(animated: true, completion: nil)
-//    }
-   
-    
-    @objc func doneButtonTapped() {
-        if let selectedDepartment = searchResultButton.currentTitle {
-            // 선택한 학과를 CreateStudyViewController로 전달
-            let createVC = CreateStudyViewController()
-
-            // CreateStudyViewController의 categoryStackView에 버튼을 추가
-            createVC.addDepartmentButton(selectedDepartment)
-            
-            // CreateStudyViewController를 표시
-            present(createVC, animated: true, completion: nil)
-        }
-    }
-    
-    
-    
-    // 키보드 내리기 위한 탭 제스처 핸들러
-    @objc func handleTap() {
-        // 키보드를 내립니다.
-        view.endEditing(true)
-    }
-    
-    // Function to handle back button tap and navigate back to CreateStudyViewController
-    @objc func goBack() {
-        self.dismiss(animated: true, completion: nil)
-    }
+    // 사용자 상호 작용을 다시 활성화
+    searchBar.isUserInteractionEnabled = true
+  }
 }

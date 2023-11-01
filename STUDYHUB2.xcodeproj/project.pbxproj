@@ -19,6 +19,7 @@
 		EE07ADC32AF236260096890F /* BottomSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE07ADC22AF236260096890F /* BottomSheet.swift */; };
 		EE07ADC52AF2414C0096890F /* PopUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE07ADC42AF2414C0096890F /* PopUpViewController.swift */; };
 		EE07ADC72AF241A30096890F /* PopUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE07ADC62AF241A30096890F /* PopUpView.swift */; };
+		EE07ADCB2AF25F440096890F /* SearchBarHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE07ADCA2AF25F440096890F /* SearchBarHelper.swift */; };
 		EE271F1C2AD04ACE00190E7A /* TokenManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE271F1B2AD04ACE00190E7A /* TokenManager.swift */; };
 		EE271F1E2AD04BB300190E7A /* UserToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE271F1D2AD04BB300190E7A /* UserToken.swift */; };
 		EE271F202AD0584100190E7A /* UIColor+.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE271F1F2AD0584100190E7A /* UIColor+.swift */; };
@@ -87,6 +88,7 @@
 		EE07ADC22AF236260096890F /* BottomSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheet.swift; sourceTree = "<group>"; };
 		EE07ADC42AF2414C0096890F /* PopUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopUpViewController.swift; sourceTree = "<group>"; };
 		EE07ADC62AF241A30096890F /* PopUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopUpView.swift; sourceTree = "<group>"; };
+		EE07ADCA2AF25F440096890F /* SearchBarHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBarHelper.swift; sourceTree = "<group>"; };
 		EE271F1B2AD04ACE00190E7A /* TokenManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenManager.swift; sourceTree = "<group>"; };
 		EE271F1D2AD04BB300190E7A /* UserToken.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserToken.swift; sourceTree = "<group>"; };
 		EE271F1F2AD0584100190E7A /* UIColor+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+.swift"; sourceTree = "<group>"; };
@@ -166,6 +168,28 @@
 			path = Pods;
 			sourceTree = "<group>";
 		};
+		EE07ADC82AF2570E0096890F /* PostedStudy */ = {
+			isa = PBXGroup;
+			children = (
+				EE07ADB82AEFE6730096890F /* PostedStudyViewController.swift */,
+				EE07ADC22AF236260096890F /* BottomSheet.swift */,
+				EE07ADC42AF2414C0096890F /* PopUpViewController.swift */,
+				EE07ADC62AF241A30096890F /* PopUpView.swift */,
+				EE07ADC02AF0D5A40096890F /* SimilarPostCell.swift */,
+			);
+			path = PostedStudy;
+			sourceTree = "<group>";
+		};
+		EE07ADC92AF25F1E0096890F /* Helper */ = {
+			isa = PBXGroup;
+			children = (
+				EE07ADBE2AF0BB360096890F /* NaviHelper.swift */,
+				EE07ADCA2AF25F440096890F /* SearchBarHelper.swift */,
+				EE271F272AD7852900190E7A /* TapBar.swift */,
+			);
+			path = Helper;
+			sourceTree = "<group>";
+		};
 		EE271F212AD0584900190E7A /* Extension */ = {
 			isa = PBXGroup;
 			children = (
@@ -174,7 +198,6 @@
 				EE271F292AD8B9FA00190E7A /* String+.swift */,
 				EE07ADB42AEFC2B90096890F /* UITextField+.swift */,
 				EE271F252AD77CD100190E7A /* UIViewcontroller+.swift */,
-				EE07ADBE2AF0BB360096890F /* NaviHelper.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -223,7 +246,7 @@
 			children = (
 				F80421912A7D6816006C6B87 /* AppDelegate.swift */,
 				F80421932A7D6816006C6B87 /* SceneDelegate.swift */,
-				EE271F272AD7852900190E7A /* TapBar.swift */,
+				EE07ADC92AF25F1E0096890F /* Helper */,
 				EE271F212AD0584900190E7A /* Extension */,
 				F8085D3F2A815DB00067D4DE /* MAIN */,
 				F873775A2AACD41D0055B041 /* BookmarkViewController.swift */,
@@ -288,11 +311,7 @@
 			children = (
 				F8085D432A81846C0067D4DE /* StudyViewController.swift */,
 				F88AB33A2A951AFF001D619C /* CategoryViewController.swift */,
-				EE07ADB82AEFE6730096890F /* PostedStudyViewController.swift */,
-				EE07ADC22AF236260096890F /* BottomSheet.swift */,
-				EE07ADC42AF2414C0096890F /* PopUpViewController.swift */,
-				EE07ADC62AF241A30096890F /* PopUpView.swift */,
-				EE07ADC02AF0D5A40096890F /* SimilarPostCell.swift */,
+				EE07ADC82AF2570E0096890F /* PostedStudy */,
 				F88AB3472A9E71A4001D619C /* CreateStudy */,
 			);
 			path = STUDY;
@@ -560,6 +579,7 @@
 				F80421922A7D6816006C6B87 /* AppDelegate.swift in Sources */,
 				EE07ADBF2AF0BB360096890F /* NaviHelper.swift in Sources */,
 				F86E03212A8BFC8000164976 /* DetailsViewController.swift in Sources */,
+				EE07ADCB2AF25F440096890F /* SearchBarHelper.swift in Sources */,
 				F80421C82A7D800E006C6B87 /* SignUpViewController.swift in Sources */,
 				EE07ADC12AF0D5A40096890F /* SimilarPostCell.swift in Sources */,
 				EE271F2A2AD8B9FA00190E7A /* String+.swift in Sources */,

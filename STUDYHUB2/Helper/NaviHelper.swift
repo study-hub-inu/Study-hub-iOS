@@ -13,7 +13,7 @@ class NaviHelper: UIViewController {
     let leftButton = UIBarButtonItem(image: homeImg,
                                      style: .plain,
                                      target: self,
-                                     action: #selector(homeButtonTapped(_:)))
+                                     action: #selector(leftButtonTapped(_:)))
     
     let rightButtonImg = UIImage(named: "RightButtonImg")?.withRenderingMode(.alwaysOriginal)
     let rightButton = UIBarButtonItem(image: rightButtonImg,
@@ -31,8 +31,8 @@ class NaviHelper: UIViewController {
     
   }
   
-  @objc func homeButtonTapped(_ sender: UIBarButtonItem) {
-    print("H")
+  @objc func leftButtonTapped(_ sender: UIBarButtonItem) {
+    dismiss(animated: true, completion: nil)
   }
   
   @objc func rightButtonTapped() {

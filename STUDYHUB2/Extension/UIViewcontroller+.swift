@@ -61,7 +61,7 @@ extension UIViewController: UITextFieldDelegate, UITextViewDelegate {
   func createTextField(title: String) -> UITextField {
     let textField = UITextField()
     let placeholderTextAttributes: [NSAttributedString.Key: Any] = [
-      .foregroundColor: UIColor.gray,
+      .foregroundColor: UIColor.bg50,
       .font: UIFont.systemFont(ofSize: 14)
     ]
     
@@ -74,7 +74,7 @@ extension UIViewController: UITextFieldDelegate, UITextViewDelegate {
     textField.borderStyle = .roundedRect
     textField.layer.cornerRadius = 5
     textField.layer.borderColor = UIColor.lightGray.cgColor
-    textField.layer.borderWidth = 1.0
+    textField.layer.borderWidth = 0.5
     textField.delegate = self
     return textField
   }
