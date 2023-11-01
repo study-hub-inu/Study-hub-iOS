@@ -3,6 +3,7 @@ import UIKit
 
 import SnapKit
 
+// 테이블뷰 구현해서 검색 밑에 나오게 수정해야함
 final class DepartmentselectViewController: NaviHelper {
   private lazy var majorSet = ["공연예술과", "IBE전공", "건설환경공학", "건축공학",
                                "경영학부", "경제학과", "국어교육과", "국어국문학과",
@@ -19,13 +20,39 @@ final class DepartmentselectViewController: NaviHelper {
                                "체육교육과","컴퓨터공학부","테크노경영학과","패션산업학과","한국화전공(조형예술학부)",
                                "해양학과","행정학과","화학과","환경공학" ]
   
+  var resultDepartments: [String] = []
+  
   private let searchController = UISearchBar.createSearchBar()
+  
+  private lazy var resultTableView: UITableView = {
+    let tableView = UITableView()
+    tableView.register(CustomCell.self,
+                       forCellReuseIdentifier: CustomCell.cellId)
+    tableView.backgroundColor = .white
+    tableView.separatorInset.left = 0
+    tableView.layer.cornerRadius = 10
+    return tableView
+  }()
   
   private lazy var describeLabel = createLabel(
     title: "- 관련학과는 1개만 선택할 수 있어요 \n- 다양한 학과와 관련된 스터디라면, '공통'을 선택해 주세요",
     textColor: .bg60,
     fontSize: 12)
   
+  private lazy var selectMajorLabel = createLabel(title: "",
+                                                  textColor: .bg80,
+                                                  fontSize: 14)
+  private lazy var cancleButton: UIButton = {
+    let button = UIButton()
+    let img = UIImage(named: "DeleteImg")
+    button.setImage(img, for: .normal)
+    return button
+  }()
+  private lazy var spaceView = UIView()
+  private lazy var selectMajorStackView = createStackView(axis: .horizontal,
+                                                         spacing: 0)
+  
+  // MARK: - viewDidLoad
   override func viewDidLoad() {
     super.viewDidLoad()
     view.backgroundColor = .white
@@ -35,11 +62,8 @@ final class DepartmentselectViewController: NaviHelper {
     
     setupLayout()
     makeUI()
-    
-    searchController.delegate = self
-    
   }
-  // MARK: - view 계층 구성
+  // MARK: - setupLayout
   func setupLayout(){
     [
       searchController,
@@ -48,8 +72,13 @@ final class DepartmentselectViewController: NaviHelper {
       view.addSubview($0)
     }
   }
-  // MARK: - UI세팅
+  // MARK: - makeUI
   func makeUI() {
+    searchController.delegate = self
+    
+    resultTableView.delegate = self
+    resultTableView.dataSource = self
+    
     searchController.snp.makeConstraints { make in
       make.centerX.equalToSuperview()
       make.top.equalToSuperview().offset(10)
@@ -77,7 +106,7 @@ final class DepartmentselectViewController: NaviHelper {
   }
   
   @objc func redesingRightButtonTapped(){
-    
+    // 학과를 선택하면 활성화 아니면 비활성화
   }
 }
 
@@ -90,14 +119,86 @@ extension DepartmentselectViewController: UISearchBarDelegate {
     let matchingDepartments = majorSet.filter { $0.contains(keyword) }
     
     if matchingDepartments.isEmpty {
-        print("검색 결과가 없음")
-        // 검색 결과가 없을 때의 처리를 할 수 있습니다.
+      print("검색 결과가 없음")
+      // 검색 결과가 없을 때의 처리를 할 수 있습니다.
     } else {
-        print("검색 결과: \(matchingDepartments)")
-        // 검색 결과를 처리하거나 표시할 수 있습니다.
+      print("검색 결과: \(matchingDepartments)")
+      describeLabel.isHidden = true
+      
+      view.setNeedsLayout()
+      view.layoutIfNeeded()
+      
+      view.addSubview(resultTableView)
+      resultTableView.snp.makeConstraints { make in
+        make.top.equalTo(describeLabel.snp.bottom).offset(-30)
+        make.leading.trailing.equalTo(searchController)
+        make.bottom.equalTo(view).offset(-10)
+      }
+      resultDepartments = matchingDepartments
     }
     
-    // 사용자 상호 작용을 다시 활성화
+    reloadTalbeView()
+    
     searchBar.isUserInteractionEnabled = true
+  }
+}
+
+
+// MARK: - cell 함수
+extension DepartmentselectViewController: UITableViewDelegate, UITableViewDataSource {
+  // UITableViewDataSource 함수
+  func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    return resultDepartments.count
+  }
+  
+  func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    let cell = resultTableView.dequeueReusableCell(withIdentifier: CustomCell.cellId,
+                                                   for: indexPath) as! CustomCell
+    
+    cell.backgroundColor = .bg20
+    
+    
+    if indexPath.row < resultDepartments.count {
+      let department = resultDepartments[indexPath.row]
+      cell.name.text = department
+    }
+    
+    return cell
+  }
+  
+  // UITableViewDelegate 함수 (선택)
+  func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    // resultDepartments가 nil이 아닌 경우에만 실행
+    
+    if indexPath.row < resultDepartments.count {
+      let selectedMajor = resultDepartments[indexPath.row]
+      
+      selectMajorLabel.text = selectedMajor
+      selectMajorLabel.layer.cornerRadius = 20
+      selectMajorLabel.backgroundColor = .bg30
+      
+      resultTableView.isHidden = true
+      
+      selectMajorStackView.addArrangedSubview(selectMajorLabel)
+      selectMajorStackView.addArrangedSubview(cancleButton)
+      selectMajorStackView.addArrangedSubview(spaceView)
+
+      selectMajorStackView.distribution = .fillEqually
+      selectMajorStackView.alignment = .center
+      view.addSubview(selectMajorStackView)
+      
+      selectMajorStackView.snp.makeConstraints { make in
+        make.top.equalTo(describeLabel.snp.bottom).offset(-30)
+        make.leading.trailing.equalTo(searchController)
+      }
+    }
+  }
+  
+  func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+    return 70
+  }
+  
+  func reloadTalbeView(){
+    resultTableView.reloadData()
   }
 }
