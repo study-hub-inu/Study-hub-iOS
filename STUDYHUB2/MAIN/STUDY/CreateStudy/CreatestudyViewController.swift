@@ -5,16 +5,19 @@ import SnapKit
 class CreateStudyViewController: UIViewController {
   
   let tokenManager = TokenManager.shared
-  private var selectedDepartments: [String] = [] // 선택된 학과를 저장할 배열
   var genderType: String?
   var contactMethod: String?
+  var selectedMajor: String?
   var postDataSender: SendPostData?
+
   // 선택한 학과를 저장할 프로퍼티
+
   var selectedDepartment: String? {
     didSet {
       // selectedDepartment가 설정되면 버튼을 생성
       if let department = selectedDepartment {
         addDepartmentButton(department)
+        
       }
     }
   }
@@ -69,7 +72,7 @@ class CreateStudyViewController: UIViewController {
   private lazy var endDateButton = createDateButton(selector: #selector(endDateButtonTapped))
   
   private lazy var chatLinkTextField = createTextField(title: "채팅방 링크를 첨부해 주세요")
-
+  
   private lazy var studyproduceTextView: UITextView = {
     let tv = UITextView()
     tv.text = "스터디에 대해 알려주세요\n (운영 방법, 대면 여부,벌금,공부 인증 방법 등)"
@@ -82,7 +85,7 @@ class CreateStudyViewController: UIViewController {
     tv.textViewDidChange(tv)
     return tv
   }()
-
+  
   private lazy var fineAmountTextField = createTextField(title: "금액을 알려주세요")
   
   private lazy var studymemberTextField = createTextField(title: "스터디 인원을 알려주세요")
@@ -260,7 +263,7 @@ class CreateStudyViewController: UIViewController {
     setUpLayout()
     makeUI()
   }
-
+  
   // MARK: - setUpLayout
   func setUpLayout(){
     headerStackView.addArrangedSubview(backButton)
@@ -277,7 +280,7 @@ class CreateStudyViewController: UIViewController {
     view.addGestureRecognizer(tapGesture)
     
     chatLinkDividerLine.heightAnchor.constraint(equalToConstant: 10).isActive = true
-   
+    
     chatLinkTextField.clearButtonMode = .always
     chatLinkStackView.addArrangedSubview(chatLinkLabel)
     chatLinkStackView.addArrangedSubview(descriptionLabel)
@@ -303,7 +306,7 @@ class CreateStudyViewController: UIViewController {
     
     categoryStackView.addArrangedSubview(associatedepartStackView)
     categoryStackView.addArrangedSubview(departmentButtonStackView)
-
+    
     associatedepartStackView.addArrangedSubview(associatedepartLabel)
     associatedepartStackView.addArrangedSubview(associatedepartButton)
     
@@ -322,7 +325,7 @@ class CreateStudyViewController: UIViewController {
     studymemberStackView.addArrangedSubview(genderLabel)
     studymemberStackView.addArrangedSubview(description5Label)
     studymemberStackView.addArrangedSubview(genderButtonsStackView)
-
+    
     meetButtonsStackView.distribution = .fillEqually
     meetButtonsStackView.addArrangedSubview(mixmeetButton)
     meetButtonsStackView.addArrangedSubview(contactButton)
@@ -570,38 +573,38 @@ class CreateStudyViewController: UIViewController {
     }
   }
   
-  // 선택한 학과에 대한 버튼을 생성하고 departmentButtonStackView에 추가하는 함수
+  // MARK: -  선택한 학과에 대한 버튼을 생성하고 departmentButtonStackView에 추가하는 함수
   func addDepartmentButton(_ department: String) {
-      // Department 버튼과 삭제 버튼을 수평으로 나열하는 스택 뷰 생성
-      lazy var buttonStackView: UIStackView = createStackView(axis: .horizontal, spacing: 0)
-      buttonStackView.distribution = .fill // 뷰들이 스택 뷰의 전체 너비를 채우도록 설정
-      buttonStackView.alignment = .center // 수직 방향 가운데 정렬
-
-      departmentButtonStackView.addArrangedSubview(buttonStackView)
-
-      // Department 버튼 생성
-      let departmentButton = UIButton(type: .system)
-      departmentButton.backgroundColor = UIColor(hexCode: "F3F5F6")
-      departmentButton.setTitleColor(UIColor(hexCode: "68737D"), for: .normal)
-      departmentButton.setTitle(department, for: .normal)
-      departmentButton.layer.cornerRadius = 20
-      departmentButton.titleLabel?.font = UIFont.systemFont(ofSize: 16)
-      departmentButton.contentHorizontalAlignment = .center // 텍스트 정렬
+    // Department 버튼과 삭제 버튼을 수평으로 나열하는 스택 뷰 생성
+    lazy var buttonStackView: UIStackView = createStackView(axis: .horizontal, spacing: 0)
+    buttonStackView.distribution = .fill // 뷰들이 스택 뷰의 전체 너비를 채우도록 설정
+    buttonStackView.alignment = .center // 수직 방향 가운데 정렬
     
-
-      // 삭제 버튼 생성
-      let deleteButton = UIButton(type: .system)
-      deleteButton.setImage(UIImage(systemName: "xmark.circle.fill"), for: .normal)
-      deleteButton.tintColor = .lightGray
-
-      // 문자열 길이에 따라 버튼 가로 길이 동적 조절
-      let buttonWidth = department.width(withConstrainedHeight: 30, font: departmentButton.titleLabel!.font)
-      departmentButton.widthAnchor.constraint(equalToConstant: buttonWidth + 50).isActive = true
-
-      buttonStackView.addArrangedSubview(departmentButton)
-      buttonStackView.addArrangedSubview(deleteButton)
+    departmentButtonStackView.addArrangedSubview(buttonStackView)
+    selectedMajor = department
+    // Department 버튼 생성
+    let departmentButton = UIButton(type: .system)
+    departmentButton.backgroundColor = UIColor(hexCode: "F3F5F6")
+    departmentButton.setTitleColor(UIColor(hexCode: "68737D"), for: .normal)
+    departmentButton.setTitle(department, for: .normal)
+    departmentButton.layer.cornerRadius = 20
+    departmentButton.titleLabel?.font = UIFont.systemFont(ofSize: 16)
+    departmentButton.contentHorizontalAlignment = .center // 텍스트 정렬
+    
+    
+    // 삭제 버튼 생성
+    let deleteButton = UIButton(type: .system)
+    deleteButton.setImage(UIImage(systemName: "xmark.circle.fill"), for: .normal)
+    deleteButton.tintColor = .lightGray
+    
+    // 문자열 길이에 따라 버튼 가로 길이 동적 조절
+    let buttonWidth = department.width(withConstrainedHeight: 30, font: departmentButton.titleLabel!.font)
+    departmentButton.widthAnchor.constraint(equalToConstant: buttonWidth + 50).isActive = true
+    
+    buttonStackView.addArrangedSubview(departmentButton)
+    buttonStackView.addArrangedSubview(deleteButton)
   }
-
+  
   
   // 키보드 내리기 위한 탭 제스처 핸들러
   @objc func handleTap() {
@@ -622,7 +625,7 @@ class CreateStudyViewController: UIViewController {
       
       // Create a text field for chat link input
       let fineTypesTextField = createTextField(title: "지각비, 결석비 등")
-  
+      
       // Create a text field for "얼마인가요?"
       let fineAmountLabel = createLabel(title: "얼마인가요?",
                                         textColor: UIColor(hexCode: "#49545C"),
@@ -668,7 +671,7 @@ class CreateStudyViewController: UIViewController {
         make.top.equalTo(fineAmountTextField.snp.bottom).offset(10)
       }
       
-    } 
+    }
   }
   
   // MARK: - 완료버튼 누를 때 함수
@@ -679,7 +682,7 @@ class CreateStudyViewController: UIViewController {
       close: false,
       content: studyproduceTextView.text ?? "",
       gender: genderType ?? "null",
-      major: "COMPUTER_SCIENCE_ENGINEERING",
+      major: selectedMajor ?? "",
       penalty: Int(fineAmountTextField.text ?? "0") ?? 0 ,
       studyEndDate: (endDateTextField.text ?? "").dateConvert(),
       studyPerson: Int(studymemberTextField.text ?? "") ?? 0,
@@ -700,8 +703,8 @@ class CreateStudyViewController: UIViewController {
       }
     }
   }
-
-
+  
+  
   // MARK: - 벌금 없을 때 함수
   @objc func noFineButtonTapped(_ sender: UIButton) {
     sender.isSelected = !sender.isSelected
@@ -712,22 +715,23 @@ class CreateStudyViewController: UIViewController {
   }
   
   @objc func departmentArrowButtonTapped() {
-    let departmentselectViewController = DepartmentselectViewController()
-    let navigationController = UINavigationController(rootViewController: departmentselectViewController)
+    let departmentselectVC = DepartmentselectViewController()
+    departmentselectVC.previousVC = self
+    let navigationController = UINavigationController(rootViewController: departmentselectVC)
     navigationController.modalPresentationStyle = .fullScreen
     present(navigationController, animated: true, completion: nil)
   }
-
+  
   // MARK: - 성별 눌렸을 때 함수
   @objc func genderButtonTapped(_ sender: UIButton) {
     // Reset colors of all buttons
-    allGenderButton.backgroundColor = .white
+    allGenderButton.layer.borderColor = UIColor.bg50.cgColor
     allGenderButton.setTitleColor(.gray, for: .normal)
     
-    maleOnlyButton.backgroundColor = .white
+    maleOnlyButton.layer.borderColor = UIColor.bg50.cgColor
     maleOnlyButton.setTitleColor(.gray, for: .normal)
     
-    femaleOnlyButton.backgroundColor = .white
+    femaleOnlyButton.layer.borderColor = UIColor.bg50.cgColor
     femaleOnlyButton.setTitleColor(.gray, for: .normal)
     
     // Set the tapped button to orange background
@@ -751,13 +755,13 @@ class CreateStudyViewController: UIViewController {
   // MARK: - 스터디 방식 눌렸을 때 함수
   @objc func meetButtonTapped(_ sender: UIButton) {
     // Reset colors of all buttons
-    contactButton.backgroundColor = .white
+    contactButton.layer.borderColor = UIColor.bg50.cgColor
     contactButton.setTitleColor(.gray, for: .normal)
     
-    untactButton.backgroundColor = .white
+    untactButton.layer.borderColor = UIColor.bg50.cgColor
     untactButton.setTitleColor(.gray, for: .normal)
     
-    mixmeetButton.backgroundColor = .white
+    mixmeetButton.layer.borderColor = UIColor.bg50.cgColor
     mixmeetButton.setTitleColor(.gray, for: .normal)
     
     // Set the tapped button to orange background

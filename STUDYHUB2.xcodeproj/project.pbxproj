@@ -21,6 +21,7 @@
 		EE07ADC72AF241A30096890F /* PopUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE07ADC62AF241A30096890F /* PopUpView.swift */; };
 		EE07ADCB2AF25F440096890F /* SearchBarHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE07ADCA2AF25F440096890F /* SearchBarHelper.swift */; };
 		EE07ADCD2AF26D360096890F /* DepartMentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE07ADCC2AF26D360096890F /* DepartMentCell.swift */; };
+		EE07ADCF2AF325F80096890F /* UILabelPadding.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE07ADCE2AF325F80096890F /* UILabelPadding.swift */; };
 		EE271F1C2AD04ACE00190E7A /* TokenManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE271F1B2AD04ACE00190E7A /* TokenManager.swift */; };
 		EE271F1E2AD04BB300190E7A /* UserToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE271F1D2AD04BB300190E7A /* UserToken.swift */; };
 		EE271F202AD0584100190E7A /* UIColor+.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE271F1F2AD0584100190E7A /* UIColor+.swift */; };
@@ -91,6 +92,7 @@
 		EE07ADC62AF241A30096890F /* PopUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopUpView.swift; sourceTree = "<group>"; };
 		EE07ADCA2AF25F440096890F /* SearchBarHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBarHelper.swift; sourceTree = "<group>"; };
 		EE07ADCC2AF26D360096890F /* DepartMentCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DepartMentCell.swift; sourceTree = "<group>"; };
+		EE07ADCE2AF325F80096890F /* UILabelPadding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UILabelPadding.swift; sourceTree = "<group>"; };
 		EE271F1B2AD04ACE00190E7A /* TokenManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenManager.swift; sourceTree = "<group>"; };
 		EE271F1D2AD04BB300190E7A /* UserToken.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserToken.swift; sourceTree = "<group>"; };
 		EE271F1F2AD0584100190E7A /* UIColor+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+.swift"; sourceTree = "<group>"; };
@@ -188,6 +190,7 @@
 				EE07ADBE2AF0BB360096890F /* NaviHelper.swift */,
 				EE07ADCA2AF25F440096890F /* SearchBarHelper.swift */,
 				EE271F272AD7852900190E7A /* TapBar.swift */,
+				EE07ADCE2AF325F80096890F /* UILabelPadding.swift */,
 			);
 			path = Helper;
 			sourceTree = "<group>";
@@ -605,6 +608,7 @@
 				F80421942A7D6816006C6B87 /* SceneDelegate.swift in Sources */,
 				EE271F1C2AD04ACE00190E7A /* TokenManager.swift in Sources */,
 				EE271F202AD0584100190E7A /* UIColor+.swift in Sources */,
+				EE07ADCF2AF325F80096890F /* UILabelPadding.swift in Sources */,
 				EE271F282AD7852900190E7A /* TapBar.swift in Sources */,
 				F8085D462A8184800067D4DE /* MyPageViewController.swift in Sources */,
 				F8085D3E2A7E9E270067D4DE /* CompleteViewController.swift in Sources */,

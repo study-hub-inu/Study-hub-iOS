@@ -5,6 +5,8 @@ import SnapKit
 
 // 테이블뷰 구현해서 검색 밑에 나오게 수정해야함
 final class DepartmentselectViewController: NaviHelper {
+  var previousVC: CreateStudyViewController?
+  
   private lazy var majorSet = ["공연예술과", "IBE전공", "건설환경공학", "건축공학",
                                "경영학부", "경제학과", "국어교육과", "국어국문학과",
                                "기계공학과","데이터과학과","도시건축학","도시공학과",
@@ -21,6 +23,7 @@ final class DepartmentselectViewController: NaviHelper {
                                "해양학과","행정학과","화학과","환경공학" ]
   
   var resultDepartments: [String] = []
+  var selectedMajor: String?
   
   private let searchController = UISearchBar.createSearchBar()
   
@@ -39,18 +42,20 @@ final class DepartmentselectViewController: NaviHelper {
     textColor: .bg60,
     fontSize: 12)
   
-  private lazy var selectMajorLabel = createLabel(title: "",
-                                                  textColor: .bg80,
-                                                  fontSize: 14)
-  private lazy var cancleButton: UIButton = {
+  private lazy var selectMajorLabel: BasePaddingLabel = {
+    let label = BasePaddingLabel(padding: UIEdgeInsets(top: 8, left: 16, bottom: 8, right: 16))
+    label.textColor = .bg80
+    label.font = UIFont.systemFont(ofSize: 14)
+    return label
+  }()
+  private lazy var cancelButton: UIButton = {
     let button = UIButton()
     let img = UIImage(named: "DeleteImg")
     button.setImage(img, for: .normal)
+    button.addTarget(self, action: #selector(cancelButtonTapped), for: .touchUpInside)
     return button
   }()
-  private lazy var spaceView = UIView()
-  private lazy var selectMajorStackView = createStackView(axis: .horizontal,
-                                                         spacing: 0)
+  
   
   // MARK: - viewDidLoad
   override func viewDidLoad() {
@@ -107,6 +112,21 @@ final class DepartmentselectViewController: NaviHelper {
   
   @objc func redesingRightButtonTapped(){
     // 학과를 선택하면 활성화 아니면 비활성화
+    
+    guard let major = selectedMajor else { return }
+
+    previousVC?.addDepartmentButton(major)
+    dismiss(animated: true, completion: nil)
+    
+  }
+  
+  @objc func cancelButtonTapped(){
+    describeLabel.isHidden = false
+    selectMajorLabel.isHidden = true
+    cancelButton.isHidden = true
+    resultTableView.isHidden = true
+    
+    selectedMajor = nil
   }
 }
 
@@ -123,23 +143,28 @@ extension DepartmentselectViewController: UISearchBarDelegate {
       // 검색 결과가 없을 때의 처리를 할 수 있습니다.
     } else {
       print("검색 결과: \(matchingDepartments)")
-      describeLabel.isHidden = true
-      
-      view.setNeedsLayout()
-      view.layoutIfNeeded()
-      
-      view.addSubview(resultTableView)
-      resultTableView.snp.makeConstraints { make in
-        make.top.equalTo(describeLabel.snp.bottom).offset(-30)
-        make.leading.trailing.equalTo(searchController)
-        make.bottom.equalTo(view).offset(-10)
-      }
-      resultDepartments = matchingDepartments
+      searchTapped(department: matchingDepartments)
     }
     
     reloadTalbeView()
+  }
+  
+  func searchTapped(department: [String]){
+    describeLabel.isHidden = true
+    selectMajorLabel.isHidden = true
+    cancelButton.isHidden = true
+    resultTableView.isHidden = false
     
-    searchBar.isUserInteractionEnabled = true
+    view.setNeedsLayout()
+    view.layoutIfNeeded()
+    
+    view.addSubview(resultTableView)
+    resultTableView.snp.makeConstraints { make in
+      make.top.equalTo(describeLabel.snp.bottom).offset(-30)
+      make.leading.trailing.equalTo(searchController)
+      make.bottom.equalTo(view).offset(-10)
+    }
+    resultDepartments = department
   }
 }
 
@@ -157,7 +182,6 @@ extension DepartmentselectViewController: UITableViewDelegate, UITableViewDataSo
     
     cell.backgroundColor = .bg20
     
-    
     if indexPath.row < resultDepartments.count {
       let department = resultDepartments[indexPath.row]
       cell.name.text = department
@@ -172,25 +196,7 @@ extension DepartmentselectViewController: UITableViewDelegate, UITableViewDataSo
     
     if indexPath.row < resultDepartments.count {
       let selectedMajor = resultDepartments[indexPath.row]
-      
-      selectMajorLabel.text = selectedMajor
-      selectMajorLabel.layer.cornerRadius = 20
-      selectMajorLabel.backgroundColor = .bg30
-      
-      resultTableView.isHidden = true
-      
-      selectMajorStackView.addArrangedSubview(selectMajorLabel)
-      selectMajorStackView.addArrangedSubview(cancleButton)
-      selectMajorStackView.addArrangedSubview(spaceView)
-
-      selectMajorStackView.distribution = .fillEqually
-      selectMajorStackView.alignment = .center
-      view.addSubview(selectMajorStackView)
-      
-      selectMajorStackView.snp.makeConstraints { make in
-        make.top.equalTo(describeLabel.snp.bottom).offset(-30)
-        make.leading.trailing.equalTo(searchController)
-      }
+      cellTapped(selectedCell: selectedMajor)
     }
   }
   
@@ -200,5 +206,40 @@ extension DepartmentselectViewController: UITableViewDelegate, UITableViewDataSo
   
   func reloadTalbeView(){
     resultTableView.reloadData()
+  }
+  
+  // cell이 선택되었을 때 ui변경
+  func cellTapped(selectedCell: String){
+    let labelText = selectedCell
+    let labelSize = (labelText as NSString).size(withAttributes: [NSAttributedString.Key.font: selectMajorLabel.font!])
+    
+    selectMajorLabel.text = selectedCell
+    selectMajorLabel.clipsToBounds = true
+    selectMajorLabel.layer.cornerRadius = 15
+    selectMajorLabel.backgroundColor = .bg30
+    selectMajorLabel.textAlignment = .left
+    
+    selectedMajor = selectMajorLabel.text
+    
+    resultTableView.isHidden = true
+    
+    selectMajorLabel.isHidden = false
+    cancelButton.isHidden = false
+    
+    view.addSubview(selectMajorLabel)
+    view.addSubview(cancelButton)
+    
+    selectMajorLabel.snp.makeConstraints { make in
+      make.top.equalTo(describeLabel.snp.bottom).offset(-30)
+      make.leading.equalTo(searchController).offset(10)
+      make.width.equalTo(labelSize.width + 40)
+      make.height.equalTo(30)
+    }
+    
+    cancelButton.snp.makeConstraints { make in
+      make.centerY.equalTo(selectMajorLabel.snp.centerY)
+      make.leading.equalTo(selectMajorLabel.snp.trailing).offset(-25)
+    }
+    view.layoutIfNeeded()
   }
 }
