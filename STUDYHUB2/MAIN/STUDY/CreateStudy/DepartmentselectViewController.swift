@@ -3,7 +3,7 @@ import UIKit
 
 import SnapKit
 
-// 테이블뷰 구현해서 검색 밑에 나오게 수정해야함
+// 토스트팝업 추가하기
 final class DepartmentselectViewController: NaviHelper {
   var previousVC: CreateStudyViewController?
   
@@ -48,6 +48,7 @@ final class DepartmentselectViewController: NaviHelper {
     label.font = UIFont.systemFont(ofSize: 14)
     return label
   }()
+  
   private lazy var cancelButton: UIButton = {
     let button = UIButton()
     let img = UIImage(named: "DeleteImg")
@@ -111,8 +112,6 @@ final class DepartmentselectViewController: NaviHelper {
   }
   
   @objc func redesingRightButtonTapped(){
-    // 학과를 선택하면 활성화 아니면 비활성화
-    
     guard let major = selectedMajor else { return }
 
     previousVC?.addDepartmentButton(major)
