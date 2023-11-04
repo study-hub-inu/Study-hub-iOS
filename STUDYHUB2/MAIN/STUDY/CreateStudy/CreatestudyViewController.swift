@@ -922,10 +922,11 @@ protocol SendPostData {
   func sendData(data: CreateStudyRequest)
 }
 
+// MARK: - textField 0 입력 시
 extension CreateStudyViewController {
   override func textFieldDidEndEditing(_ textField: UITextField) {
     if textField == studymemberTextField, let text = textField.text, text == "0" {
-      
+      countAlert.isHidden = false
       studymemberTextField.layer.borderColor = UIColor.r50.cgColor
       
       scrollView.addSubview(countAlert)
@@ -934,6 +935,7 @@ extension CreateStudyViewController {
         make.top.equalTo(studymemberTextField.snp.bottom)
         make.leading.equalTo(studymemberTextField)
       }
+      studymemberTextField.text = ""
     }
     else {
       studymemberTextField.layer.borderColor = UIColor.bg50.cgColor

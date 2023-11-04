@@ -18,6 +18,8 @@ extension UIColor {
   static let bg60 = UIColor(red: 0.76, green: 0.78, blue: 0.80, alpha: 1.00)
   static let bg80 = UIColor(red: 0.41, green: 0.45, blue: 0.49, alpha: 1.00)
   static let r50 = UIColor(red: 1.00, green: 0.11, blue: 0.21, alpha: 1.00)
+  static let g100 = UIColor(red: 0.21, green: 0.21, blue: 0.21, alpha: 1.00)
+  static let g10 = UIColor(red: 0.91, green: 0.91, blue: 0.91, alpha: 1.00)
   static let changeInfo = UIColor(red: 1.00, green: 0.33, blue: 0.19, alpha: 1.00)
   static let o50 = UIColor(red: 1.00, green: 0.33, blue: 0.19, alpha: 1.00)
   static let o10 = UIColor(red: 1.00, green: 0.95, blue: 0.93, alpha: 1.00)

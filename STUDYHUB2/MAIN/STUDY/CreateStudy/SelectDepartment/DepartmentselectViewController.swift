@@ -212,6 +212,10 @@ extension DepartmentselectViewController: UITableViewDelegate, UITableViewDataSo
     let labelText = selectedCell
     let labelSize = (labelText as NSString).size(withAttributes: [NSAttributedString.Key.font: selectMajorLabel.font!])
     
+    if selectMajorLabel.text != nil {
+      showToast(message: "관련학과는 1개만 선택이 가능해요")
+    }
+    
     selectMajorLabel.text = selectedCell
     selectMajorLabel.clipsToBounds = true
     selectMajorLabel.layer.cornerRadius = 15

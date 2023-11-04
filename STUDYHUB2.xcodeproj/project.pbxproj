@@ -22,6 +22,7 @@
 		EE07ADCB2AF25F440096890F /* SearchBarHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE07ADCA2AF25F440096890F /* SearchBarHelper.swift */; };
 		EE07ADCD2AF26D360096890F /* DepartMentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE07ADCC2AF26D360096890F /* DepartMentCell.swift */; };
 		EE07ADCF2AF325F80096890F /* UILabelPadding.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE07ADCE2AF325F80096890F /* UILabelPadding.swift */; };
+		EE07ADD12AF632B80096890F /* Calendar.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE07ADD02AF632B80096890F /* Calendar.swift */; };
 		EE271F1C2AD04ACE00190E7A /* TokenManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE271F1B2AD04ACE00190E7A /* TokenManager.swift */; };
 		EE271F1E2AD04BB300190E7A /* UserToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE271F1D2AD04BB300190E7A /* UserToken.swift */; };
 		EE271F202AD0584100190E7A /* UIColor+.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE271F1F2AD0584100190E7A /* UIColor+.swift */; };
@@ -93,6 +94,7 @@
 		EE07ADCA2AF25F440096890F /* SearchBarHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBarHelper.swift; sourceTree = "<group>"; };
 		EE07ADCC2AF26D360096890F /* DepartMentCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DepartMentCell.swift; sourceTree = "<group>"; };
 		EE07ADCE2AF325F80096890F /* UILabelPadding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UILabelPadding.swift; sourceTree = "<group>"; };
+		EE07ADD02AF632B80096890F /* Calendar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Calendar.swift; sourceTree = "<group>"; };
 		EE271F1B2AD04ACE00190E7A /* TokenManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenManager.swift; sourceTree = "<group>"; };
 		EE271F1D2AD04BB300190E7A /* UserToken.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserToken.swift; sourceTree = "<group>"; };
 		EE271F1F2AD0584100190E7A /* UIColor+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+.swift"; sourceTree = "<group>"; };
@@ -195,6 +197,15 @@
 			path = Helper;
 			sourceTree = "<group>";
 		};
+		EE07ADD22AF632C40096890F /* SelectDepartment */ = {
+			isa = PBXGroup;
+			children = (
+				F87377582AA850940055B041 /* DepartmentselectViewController.swift */,
+				EE07ADCC2AF26D360096890F /* DepartMentCell.swift */,
+			);
+			path = SelectDepartment;
+			sourceTree = "<group>";
+		};
 		EE271F212AD0584900190E7A /* Extension */ = {
 			isa = PBXGroup;
 			children = (
@@ -295,8 +306,8 @@
 			children = (
 				EE07AD8F2AE106460096890F /* CreatePostManager.swift */,
 				F88AB33E2A95236B001D619C /* CreatestudyViewController.swift */,
-				F87377582AA850940055B041 /* DepartmentselectViewController.swift */,
-				EE07ADCC2AF26D360096890F /* DepartMentCell.swift */,
+				EE07ADD02AF632B80096890F /* Calendar.swift */,
+				EE07ADD22AF632C40096890F /* SelectDepartment */,
 			);
 			path = CreateStudy;
 			sourceTree = "<group>";
@@ -317,8 +328,8 @@
 			children = (
 				F8085D432A81846C0067D4DE /* StudyViewController.swift */,
 				F88AB33A2A951AFF001D619C /* CategoryViewController.swift */,
-				EE07ADC82AF2570E0096890F /* PostedStudy */,
 				F88AB3472A9E71A4001D619C /* CreateStudy */,
+				EE07ADC82AF2570E0096890F /* PostedStudy */,
 			);
 			path = STUDY;
 			sourceTree = "<group>";
@@ -572,6 +583,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EE07ADD12AF632B80096890F /* Calendar.swift in Sources */,
 				F8085D442A81846C0067D4DE /* StudyViewController.swift in Sources */,
 				F80421962A7D6816006C6B87 /* LoginViewController.swift in Sources */,
 				F8D5BC662AB71DDA00B2B154 /* Singleton.swift in Sources */,
