@@ -4,11 +4,12 @@ import FSCalendar
 import SnapKit
 
 class CalendarViewController: UIViewController {
+  private var previousVC: CreateStudyViewController?
   private var calendar: FSCalendar?
   var selectDate: String?
   let dateFormatter: DateFormatter = {
     let formatter = DateFormatter()
-    formatter.dateFormat = "yyyy년-MM월" // 원하는 날짜 형식으로 설정
+    formatter.dateFormat = "yyyy년 MM월" // 원하는 날짜 형식으로 설정
     return formatter
   }()
   
@@ -21,7 +22,7 @@ class CalendarViewController: UIViewController {
     button.setImage(UIImage(systemName: "chevron.left")?.withRenderingMode(.alwaysTemplate),
                     for: .normal)
     button.tintColor = .black
-    button.addTarget(self, action: #selector(prevCurrentPage), for: .touchUpInside)
+    button.addTarget(self, action: #selector(self.prevCurrentPage), for: .touchUpInside)
     return button
   }()
   
@@ -31,7 +32,7 @@ class CalendarViewController: UIViewController {
     button.setImage(UIImage(systemName: "chevron.right")?.withRenderingMode(.alwaysTemplate),
                     for: .normal)
     button.tintColor = .black
-    button.addTarget(self, action: #selector(nextCurrentPage), for: .touchUpInside)
+    button.addTarget(self, action: #selector(self.nextCurrentPage), for: .touchUpInside)
     return button
   }()
   
@@ -39,7 +40,7 @@ class CalendarViewController: UIViewController {
     let button = UIButton()
     button.setTitle("완료", for: .normal)
     button.setTitleColor(.o50, for: .normal)  // 텍스트 색상을 변경합니다.
-    button.addTarget(self, action: #selector(completeButtonTapped), for: .touchUpInside)
+    button.addTarget(self, action: #selector(self.completeButtonTapped), for: .touchUpInside)
     return button
   }()
   
@@ -66,26 +67,26 @@ class CalendarViewController: UIViewController {
       }
     }
     
-    calendar?.addSubview(titleLabel)
+    view.addSubview(titleLabel)
     // titleLabel 제약 설정
     titleLabel.snp.makeConstraints { make in
       make.leading.equalTo(calendar!).offset(50)
-      make.top.equalTo(calendar!).offset(-10)
+      make.top.equalTo(calendar!).offset(-60)
     }
-    calendar?.addSubview(previousButton)
+    view.addSubview(previousButton)
     // previousButton 제약 설정
     previousButton.snp.makeConstraints { make in
       make.centerY.equalTo(titleLabel)
       make.trailing.equalTo(titleLabel.snp.leading).offset(-20)
     }
-    calendar?.addSubview(nextButton)
+    view.addSubview(nextButton)
     // nextButton 제약 설정
     nextButton.snp.makeConstraints { make in
       make.centerY.equalTo(titleLabel)
       make.leading.equalTo(titleLabel.snp.trailing).offset(20)
     }
     
-    calendar?.addSubview(completeButton)
+    view.addSubview(completeButton)
     completeButton.snp.makeConstraints { make in
       make.centerY.equalTo(titleLabel)
       make.trailing.equalTo(view.safeAreaLayoutGuide).offset(-20)
@@ -114,8 +115,10 @@ class CalendarViewController: UIViewController {
     calendar?.appearance.titleTodayColor = .o50 //Today에 표시되는 특정 글자색
     calendar?.appearance.todayColor = .o10 //Today에 표시되는 선택 전 동그라미 색
     calendar?.appearance.todaySelectionColor = .white  //Today에 표시되는 선택 후 동그라미 색
+    // 숫자들 글자 폰트 및 사이즈 지정
+    calendar?.appearance.titleFont = UIFont.systemFont(ofSize: 18)
     
-    self.calendar?.appearance.weekdayTextColor = UIColor.black
+    self.calendar?.appearance.weekdayTextColor = UIColor.bg80
     
     // 양옆 년도, 월 지우기
     calendar?.appearance.headerMinimumDissolvedAlpha = 0.0
@@ -156,6 +159,12 @@ class CalendarViewController: UIViewController {
   @objc private func completeButtonTapped(_ sender: UIButton) {
     print("완료")
     print("선택한 날짜:", selectDate)
+    if selectedDate == nil {
+      selectedDate = self.today
+    }
+    previousVC?.selectDate = selectDate
+    dismiss(animated: true, completion: nil)
+
   }
   
   

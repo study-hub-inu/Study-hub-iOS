@@ -379,7 +379,7 @@ final class PostedStudyViewController: NaviHelper, SendPostData {
 
     view.addSubview(scrollView)
   }
-  
+  // MARK: - makeUI
   func makeUI(){
     coreInfoStackView.distribution = .fillProportionally
     coreInfoStackView.backgroundColor = .deepGray
@@ -479,7 +479,7 @@ final class PostedStudyViewController: NaviHelper, SendPostData {
   }
 
 }
-
+// MARK: - collectionView
 extension PostedStudyViewController: UICollectionViewDelegate, UICollectionViewDataSource {
   
   func collectionView(_ collectionView: UICollectionView,
