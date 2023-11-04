@@ -24,6 +24,11 @@ class TabBarController: UITabBarController {
     myPageViewController.tabBarItem = UITabBarItem(title: "마이페이지",
                                                    image: UIImage(systemName:"person"), tag: 2)
     
+    self.tabBar.tintColor = .o50
+    
+    self.tabBar.layer.borderColor = UIColor.lightGray.cgColor
+    self.tabBar.layer.borderWidth = 0.5
+  
   }
 }
 

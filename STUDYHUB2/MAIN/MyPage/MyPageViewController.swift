@@ -48,7 +48,7 @@ class MyPageViewController: UIViewController {
     return imageView
   }()
   
-  private lazy var majorLabel = createLabel(title: myPageUserData?.major ?? "비어있음",
+  private lazy var majorLabel = createLabel(title: convertMajor(major: myPageUserData?.major! ?? "") ,
                                             textColor: .gray,
                                             fontSize: 18)
   private lazy var nickNameLabel = createLabel(title: myPageUserData?.nickname ?? "비어있음",
@@ -67,7 +67,7 @@ class MyPageViewController: UIViewController {
                                                 fontSize: 18)
   // 사용자 프로필, 로그인 화면으로 가는 버튼을 담은 스택뷰
   private lazy var gotologinStackView = createStackView(axis: .horizontal,
-                                                        spacing: 8)
+                                                        spacing: 10)
   
   // 북마크, 글 횟수 등의 버튼을 담은 스택뷰
   private lazy var buttonboxesStackView = createStackView(axis: .horizontal,
@@ -105,6 +105,8 @@ class MyPageViewController: UIViewController {
     chevronButton.addTarget(self,
                             action: #selector(chevronButtonTapped),
                             for: .touchUpInside)
+    chevronButton.contentHorizontalAlignment = .trailing
+
     return chevronButton
   }()
   
@@ -188,13 +190,15 @@ class MyPageViewController: UIViewController {
       //로그인 관련
       print(loginStatus)
       print("로그인성공")
+      
       loginSuccessStackView.addArrangedSubview(majorLabel)
       loginSuccessStackView.addArrangedSubview(nickNameLabel)
       
       gotologinStackView.addArrangedSubview(profileImageView)
       gotologinStackView.addArrangedSubview(loginSuccessStackView)
     }
-        
+    
+    gotologinStackView.distribution = .fill
     gotologinStackView.addArrangedSubview(chevronButton)
     
     headerContentStackView.addArrangedSubview(gotologinStackView)
@@ -256,12 +260,11 @@ class MyPageViewController: UIViewController {
       print(loginStatus)
       print("로그인성공")
     }
-    
+  
     chevronButton.snp.makeConstraints { make in
       make.top.equalTo(gotologinStackView.snp.top)
       make.trailing.equalTo(gotologinStackView.snp.trailing)
     }
-    
     
     buttonboxesStackView.snp.makeConstraints { make in
       make.leading.equalTo(headerContentStackView.snp.leading).offset(10)
@@ -325,7 +328,7 @@ class MyPageViewController: UIViewController {
         // 사용자 정보를 사용하여 원하는 작업을 수행합니다.
         print("Email: \(userData.email)")
         print("Gender: \(userData.gender)")
-        
+   
         if userData.email != nil {
           self.myPageUserData = userData
           self.loginStatus = true
@@ -343,11 +346,6 @@ class MyPageViewController: UIViewController {
     }
   }
   
-  // 학과 조회api연동해야함
-  func setUserData(data: UserData) {
-    myPageUserData?.major = data.major
-    myPageUserData?.nickname = data.nickname
-  }
   
   @objc func bookmarkpageButtonTapped() {
     let bookmarkViewController = BookmarkViewController()

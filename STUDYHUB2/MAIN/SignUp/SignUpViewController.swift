@@ -2,10 +2,10 @@ import UIKit
 
 import SnapKit
 
-final class SignUpViewController: UIViewController, UITextFieldDelegate {
+final class SignUpViewController: UIViewController {
 
   // MARK: - 화면구성
-  lazy var emailTextField: UITextField = {
+  private lazy var emailTextField: UITextField = {
     let emailTF = UITextField()
     emailTF.placeholder = "이메일을 입력하세요"
     emailTF.attributedPlaceholder = NSAttributedString(string: "@inu.ac.kr",
@@ -22,13 +22,13 @@ final class SignUpViewController: UIViewController, UITextFieldDelegate {
     return emailTF
   }()
   
-  private let emailTextFielddividerLine: UIView = {
+  private lazy var emailTextFielddividerLine: UIView = {
     let emailTFLine = UIView()
     emailTFLine.backgroundColor = .gray
     return emailTFLine
   }()
   
-  private let codesendLabel: UILabel = {
+  private lazy var codesendLabel: UILabel = {
     let sendLabel = UILabel()
     sendLabel.text = "인증 코드를 메일로 보내드렸어요"
     sendLabel.font = UIFont.systemFont(ofSize: 14)
@@ -38,7 +38,7 @@ final class SignUpViewController: UIViewController, UITextFieldDelegate {
     return sendLabel
   }()
   
-  private let verificationLabel : UILabel = {
+  private lazy var verificationLabel : UILabel = {
     let label = UILabel()
     label.text = "인증코드"
     label.textColor = .white
@@ -46,7 +46,7 @@ final class SignUpViewController: UIViewController, UITextFieldDelegate {
     return label
   }()
   
-  private let verificationCodeTextField: UITextField = {
+  private lazy var verificationCodeTextField: UITextField = {
     let textField = UITextField()
     textField.placeholder = "인증코드를 입력하세요"
     textField.attributedPlaceholder = NSAttributedString(string: "인증코드를 입력해주세요",
@@ -58,14 +58,14 @@ final class SignUpViewController: UIViewController, UITextFieldDelegate {
     return textField
   }()
   
-  private let verificationCodedividerLine: UIView = {
+  private lazy var verificationCodedividerLine: UIView = {
     let line = UIView()
     line.backgroundColor = .gray
     line.isHidden = true
     return line
   }()
   
-  lazy var validButton: UIButton = {
+  private lazy var validButton: UIButton = {
     let validBtn = UIButton()
     validBtn.setTitle("인증", for: .normal)
     validBtn.setTitleColor(.white, for: .normal)
@@ -78,40 +78,22 @@ final class SignUpViewController: UIViewController, UITextFieldDelegate {
     return validBtn
   }()
   
-  private let titleLabel: UILabel = {
-    let titleLabel = UILabel()
-    titleLabel.text = "회원가입"
-    titleLabel.textColor = .white
-    titleLabel.font = UIFont.boldSystemFont(ofSize: 22)
-    return titleLabel
-  }()
+  private lazy var titleLabel = createLabel(title: "회원가입",
+                                               textColor: .white,
+                                               fontSize: 22)
   
-  private let progressLabel: UILabel = {
-    let progressLabel = UILabel()
-    progressLabel.text = "1/4"
-    progressLabel.textColor = .gray
-    progressLabel.font = UIFont.boldSystemFont(ofSize: 20)
-    progressLabel.translatesAutoresizingMaskIntoConstraints = false
-    return progressLabel
-  }()
+  private lazy var progressLabel = createLabel(title: "1/4",
+                                               textColor: .gray,
+                                               fontSize: 20)
   
-  private let emailPromptLabel: UILabel = {
-    // '이메일을 입력해주세요' 텍스트
-    let emailPromptLabel = UILabel()
-    emailPromptLabel.text = "이메일을 입력해주세요"
-    emailPromptLabel.textColor = .white
-    emailPromptLabel.font = UIFont.boldSystemFont(ofSize: 22)
-    emailPromptLabel.translatesAutoresizingMaskIntoConstraints = false
-    return emailPromptLabel
-  }()
-  
-  private let emailLabel: UILabel = {
-    let emailLabel = UILabel()
-    emailLabel.text = "이메일"
-    emailLabel.textColor = .white
-    return emailLabel
-  }()
-  
+  private lazy var emailPromptLabel = createLabel(title: "이메일을 입력해주세요",
+                                               textColor: .white,
+                                               fontSize: 22)
+
+  private lazy var emailLabel = createLabel(title: "이메일",
+                                               textColor: .white,
+                                               fontSize: 18)
+
   lazy var nextButton: UIButton = {
     let nextButton = UIButton(type: .system)
     nextButton.setTitle("다음", for: .normal)
@@ -230,9 +212,7 @@ final class SignUpViewController: UIViewController, UITextFieldDelegate {
   // MARK: - 유효성 검사 함수
   @objc func validButtonTapped() {
     if let email = emailTextField.text {
-      guard let duplicationURL = URL(string: "https://study-hub.site:443/api/email/duplication") else {
-        return
-      }
+      guard let duplicationURL = URL(string: "https://study-hub.site:443/api/email/duplication") else { return }
       
       let duplicationJSONData: [String: Any] = ["email": email]
       guard let duplicationData = try? JSONSerialization.data(withJSONObject: duplicationJSONData) else {
@@ -301,11 +281,7 @@ final class SignUpViewController: UIViewController, UITextFieldDelegate {
             // Duplication check failed, show an alert
             // 중복되지 않아도 중복이라고 표시
             DispatchQueue.main.async {
-              let alert = UIAlertController(title: "경고",
-                                            message: "중복된 이메일입니다. 다시 입력해주세요.",
-                                            preferredStyle: .alert)
-              alert.addAction(UIAlertAction(title: "확인", style: .default, handler: nil))
-              self?.present(alert, animated: true, completion: nil)
+              self?.alertShow(title: "경고", message: "중복된 이메일입니다. 다시 입력해주세요.")
             }
           }
         }
@@ -332,26 +308,16 @@ final class SignUpViewController: UIViewController, UITextFieldDelegate {
     guard let email = emailTextField.text, !email.isEmpty else {
       // Change the color of emailTextFielddividerLine to red
       emailTextFielddividerLine.backgroundColor = .red
-      
-      let alert = UIAlertController(title: "경고",
-                                    message: "이메일을 입력해주세요.",
-                                    preferredStyle: .alert)
-      alert.addAction(UIAlertAction(title: "확인", style: .default, handler: nil))
-      present(alert, animated: true, completion: nil)
-      
+  
+      alertShow(title: "경고", message: "이메일을 입력해주세요.")
       return
     }
     
     guard let authCode = verificationCodeTextField.text, !authCode.isEmpty else {
       // Change the color of verificationCodedividerLine to red
       verificationCodedividerLine.backgroundColor = .red
-      
-      let alert = UIAlertController(title: "경고",
-                                    message: "인증번호를 입력해주세요.",
-                                    preferredStyle: .alert)
-      alert.addAction(UIAlertAction(title: "확인", style: .default, handler: nil))
-      present(alert, animated: true, completion: nil)
-      
+
+      alertShow(title: "경고", message: "인증번호를 입력해주세요.")
       return
     }
     
@@ -397,18 +363,13 @@ final class SignUpViewController: UIViewController, UITextFieldDelegate {
               // Change the color of verificationCodedividerLine to red
               self.verificationCodedividerLine.backgroundColor = .red
               
-              let alert = UIAlertController(title: "경고",
-                                            message: "인증번호가 맞지 않습니다.",
-                                            preferredStyle: .alert)
-              alert.addAction(UIAlertAction(title: "확인", style: .default, handler: nil))
-              self.present(alert, animated: true, completion: nil)
+              self.alertShow(title: "경고", message: "인증번호가 맞지 않습니다.")
             }
           }
         }
       }
     }
     
-    // Start the verification data task
     verificationTask.resume()
   }
 }

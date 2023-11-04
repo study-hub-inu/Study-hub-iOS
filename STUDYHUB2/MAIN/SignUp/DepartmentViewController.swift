@@ -2,7 +2,7 @@ import UIKit
 
 import SnapKit
 
-final class DepartmentViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate {
+final class DepartmentViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
   
   var email: String?
   var password: String?

@@ -23,7 +23,9 @@ final class LoginViewController: UIViewController {
     emailTF.addTarget(self,
                       action: #selector(emailTextFieldDidChange),
                       for: .editingChanged)
-    // 키보드 생성
+    
+    emailTF.autocorrectionType = .no
+    emailTF.autocapitalizationType = .none
     emailTF.becomeFirstResponder()
     return emailTF
   }()
@@ -47,6 +49,8 @@ final class LoginViewController: UIViewController {
     passwordTF.isSecureTextEntry = true
     return passwordTF
   }()
+  
+  var eyeButton = UIButton(type: .custom)
   
   private let passwordTextFielddividerLine: UIView = {
     let passwordLine = UIView()
@@ -133,8 +137,29 @@ final class LoginViewController: UIViewController {
         
     setUpLayout()
     makeUI()
+    
+    if #available(iOS 15.0, *) {
+      setPasswordShowButtonImage()
+    }
   }
   
+  @available(iOS 15.0, *)
+  func setPasswordShowButtonImage(){
+    eyeButton = UIButton.init(primaryAction: UIAction(handler: { [self] _ in
+      passwordTextField.isSecureTextEntry.toggle()
+      self.eyeButton.isSelected.toggle()
+    }))
+    
+    var buttonConfiguration = UIButton.Configuration.plain()
+    buttonConfiguration.imagePadding = 10
+    buttonConfiguration.baseBackgroundColor = .clear
+    
+    eyeButton.setImage(UIImage(named: "eye_open"), for: .normal)
+    self.eyeButton.configuration = buttonConfiguration
+    
+    self.passwordTextField.rightView = eyeButton
+    self.passwordTextField.rightViewMode = .always
+  }
   // MARK: - setUpLayout
   func setUpLayout(){
     [
@@ -144,6 +169,7 @@ final class LoginViewController: UIViewController {
       emailTextFielddividerLine,
       passwordLabel,
       passwordTextField,
+      eyeButton,
       passwordTextFielddividerLine,
       loginButton,
       forgotPasswordButton,
@@ -193,6 +219,10 @@ final class LoginViewController: UIViewController {
       make.height.equalTo(30)
     }
     
+    eyeButton.snp.makeConstraints { make in
+      make.trailing.equalTo(passwordTextFielddividerLine.snp.trailing)
+    }
+
     passwordTextFielddividerLine.snp.makeConstraints { make in
       make.leading.trailing.equalTo(view)
       make.top.equalTo(passwordTextField.snp.bottom).offset(5)
