@@ -140,14 +140,14 @@ final class PostedStudyViewController: NaviHelper, SendPostData {
   private lazy var spaceView6 = UIView()
   private lazy var spaceView7 = UIView()
   private lazy var spaceView8 = UIView()
-
+  
   private lazy var periodStackView = createStackView(axis: .horizontal,
                                                      spacing: 10)
   private lazy var fineInfoStackView = createStackView(axis: .horizontal,
-                                                     spacing: 10)
+                                                       spacing: 10)
   private lazy var meetStackView = createStackView(axis: .horizontal,
-                                                     spacing: 10)
- 
+                                                   spacing: 10)
+  
   private lazy var periodImageView: UIImageView = {
     let imageView = UIImageView()
     imageView.image = UIImage(named: "CalenderImage")
@@ -188,7 +188,7 @@ final class PostedStudyViewController: NaviHelper, SendPostData {
   private lazy var writerMajorLabel = createLabel(title: "세무회계학과",
                                                   textColor: .gray,
                                                   fontSize: 14)
-
+  
   private lazy var nickNameLabel = createLabel(title: "비어있음",
                                                textColor: .black,
                                                fontSize: 16)
@@ -309,7 +309,7 @@ final class PostedStudyViewController: NaviHelper, SendPostData {
     
     // 기간, 벌금, 대면여부, 관련학과
     let grayDividerLine2 = createGrayDividerLine(8.0)
-
+    
     let periodData = [periodImageView, periodLabel, spaceView6]
     for view in periodData {
       periodStackView.addArrangedSubview(view)
@@ -319,14 +319,14 @@ final class PostedStudyViewController: NaviHelper, SendPostData {
     for view in fineInfoData {
       fineInfoStackView.addArrangedSubview(view)
     }
-
+    
     let meetData = [meetImageView, meetLabel, spaceView8]
     for view in meetData {
       meetStackView.addArrangedSubview(view)
     }
     
     majorLabel.backgroundColor = .bg30
-
+    
     let spaceView10 = UIView()
     let majorData = [majorLabel, spaceView10]
     for view in majorData {
@@ -376,7 +376,7 @@ final class PostedStudyViewController: NaviHelper, SendPostData {
     }
     
     scrollView.addSubview(pageStackView)
-
+    
     view.addSubview(scrollView)
   }
   // MARK: - makeUI
@@ -387,7 +387,7 @@ final class PostedStudyViewController: NaviHelper, SendPostData {
     topInfoStackView.backgroundColor = .black
     
     postedMajorLabel.backgroundColor = .postedMajorBackGorund
-        
+    
     // 스터디 제목
     postedInfoStackView.layoutMargins = UIEdgeInsets(top: 50, left: 10, bottom: 0, right: 0)
     postedInfoStackView.isLayoutMarginsRelativeArrangement = true
@@ -397,9 +397,9 @@ final class PostedStudyViewController: NaviHelper, SendPostData {
     coreInfoStackView.layer.cornerRadius = 10
     coreInfoStackView.layoutMargins = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
     coreInfoStackView.isLayoutMarginsRelativeArrangement = true
-
+    
     redesignCoreInfoStackView.distribution = .fillProportionally
-
+    
     spaceView.snp.makeConstraints { make in
       make.height.equalTo(20)
     }
@@ -414,7 +414,7 @@ final class PostedStudyViewController: NaviHelper, SendPostData {
     detailInfoStackView.backgroundColor = .white
     detailInfoStackView.layoutMargins = UIEdgeInsets(top: 0, left: 10, bottom: 20, right: 10)
     detailInfoStackView.isLayoutMarginsRelativeArrangement = true
-  
+    
     // 작성자 정보
     writerInfoWithImageStackView.distribution = .fillProportionally
     
@@ -441,12 +441,12 @@ final class PostedStudyViewController: NaviHelper, SendPostData {
       make.leading.trailing.bottom.equalTo(scrollView.contentLayoutGuide)
       make.width.equalTo(view.safeAreaLayoutGuide)
     }
-
+    
     // scrollView의 설정
     scrollView.snp.makeConstraints { make in
       make.edges.equalTo(view)
     }
-
+    
     changeColor(label: memeberNumberCountLabel, wantToChange: "1")
     changeColor(label: fineCountLabel, wantToChange: "1000")
   }
@@ -468,16 +468,16 @@ final class PostedStudyViewController: NaviHelper, SendPostData {
   
   func changeColor(label: UILabel, wantToChange: String){
     let attributedStr = NSMutableAttributedString(string: label.text!)
-
+    
     //위에서 만든 attributedStr에, addAttribute()메소드를 통해 스타일 적용.
     attributedStr.addAttribute(.foregroundColor,
                                value: UIColor.changeInfo,
                                range: (label.text! as NSString).range(of:wantToChange))
-            
+    
     //최종적으로 내 label에 text가 아닌, attributedText를 적용
     label.attributedText = attributedStr
   }
-
+  
 }
 // MARK: - collectionView
 extension PostedStudyViewController: UICollectionViewDelegate, UICollectionViewDataSource {
@@ -500,9 +500,9 @@ extension PostedStudyViewController: UICollectionViewDelegate, UICollectionViewD
 }
 
 extension PostedStudyViewController: UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView,
-                        layout collectionViewLayout: UICollectionViewLayout,
-                        sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: 250, height: collectionView.frame.height)
-    }
+  func collectionView(_ collectionView: UICollectionView,
+                      layout collectionViewLayout: UICollectionViewLayout,
+                      sizeForItemAt indexPath: IndexPath) -> CGSize {
+    return CGSize(width: 250, height: collectionView.frame.height)
+  }
 }

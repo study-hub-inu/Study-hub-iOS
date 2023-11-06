@@ -42,21 +42,30 @@ extension UIViewController: UITextFieldDelegate, UITextViewDelegate {
   
   // 날짜 선택하는 버튼
   func createDateButton(selector: Selector) -> UIButton {
-    let button = UIButton()
-    button.setTitle("선택하기", for: .normal)
-    button.contentHorizontalAlignment = .left
-    button.titleEdgeInsets = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 0)
-    button.setTitleColor(UIColor(hexCode: "#A1AAB0"), for: .normal)
-    button.titleLabel?.font = UIFont.systemFont(ofSize: 16)
-    button.backgroundColor = .white
-    button.layer.borderWidth = 1
-    button.layer.borderColor = UIColor(hexCode: "#D8DCDE").cgColor
-    button.layer.cornerRadius = 2
-    button.addTarget(self, action: selector, for: .touchUpInside)
-    
-    return button
+      // 버튼 초기화
+      let button = UIButton()
+      
+      // 버튼에 이미지 설정
+      let image = UIImage(named: "RightArrow")
+      button.setImage(image, for: .normal)
+      
+      // 버튼의 이미지 위치 조절
+      button.imageEdgeInsets = UIEdgeInsets(top: 0, left: 320, bottom: 0, right: 10)
+      
+      // 버튼의 나머지 속성 설정
+      button.setTitle("선택하기", for: .normal)
+      button.contentHorizontalAlignment = .left
+      button.setTitleColor(UIColor(hexCode: "#A1AAB0"), for: .normal)
+      button.titleLabel?.font = UIFont.systemFont(ofSize: 16)
+      button.backgroundColor = .white
+      button.layer.borderWidth = 1
+      button.layer.borderColor = UIColor(hexCode: "#D8DCDE").cgColor
+      button.layer.cornerRadius = 5
+      button.addTarget(self, action: selector, for: .touchUpInside)
+      
+      return button
   }
-  
+
   // info
   func createTextField(title: String) -> UITextField {
     let textField = UITextField()
@@ -186,3 +195,5 @@ extension UIViewController: UITextFieldDelegate, UITextViewDelegate {
     })
   }
 }
+
+

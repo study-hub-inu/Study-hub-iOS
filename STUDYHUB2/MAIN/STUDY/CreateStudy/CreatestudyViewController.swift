@@ -22,7 +22,7 @@ final class CreateStudyViewController: UIViewController, ChangeDateProtocol {
     }
   }
   
-  var selectDate: String? = "2023-11-6"
+  var selectDate: String? = ""
 
   // MARK: - UI설정
   private lazy var completeButton: UIButton = {
@@ -620,7 +620,7 @@ final class CreateStudyViewController: UIViewController, ChangeDateProtocol {
     selectMajorLabel.snp.makeConstraints { make in
       make.top.equalTo(associatedepartLabel.snp.bottom).offset(10)
       make.leading.equalTo(associatedepartLabel)
-      make.width.equalTo((labelSize?.width ?? 30) + 30)
+      make.width.equalTo((labelSize?.width ?? 30) + 35)
       make.height.equalTo(30)
     }
     
@@ -708,17 +708,18 @@ final class CreateStudyViewController: UIViewController, ChangeDateProtocol {
   
   // MARK: - 완료버튼 누를 때 함수
   @objc func completeButtonTapped() {
-    // 성별, 스터디방식 버튼에 따라서 내용이 안바뀜
+    // 과를 영어로 변경해야함
     let studyData = CreateStudyRequest(
       chatUrl: chatLinkTextField.text ?? "",
       close: false,
       content: studyproduceTextView.text ?? "",
+      // 무관일때 안됨 null이 아닌가
       gender: genderType ?? "null",
-      major: selectedMajor ?? "",
+      major: convertMajor(selectedMajor ?? "", toEnglish: true) ,
       penalty: Int(fineAmountTextField.text ?? "0") ?? 0 ,
-      studyEndDate: (endDateTextField.text ?? "").dateConvert(),
+      studyEndDate: endDateButton.currentTitle ?? "",
       studyPerson: Int(studymemberTextField.text ?? "") ?? 0,
-      studyStartDate: (startDateTextField.text ?? "").dateConvert(),
+      studyStartDate: startDateButton.currentTitle ?? "",
       studyWay: contactMethod ?? "CONTACT",
       title: studytitleTextField.text ?? "")
     
@@ -730,6 +731,10 @@ final class CreateStudyViewController: UIViewController, ChangeDateProtocol {
       case .success(let userData):
         self.postDataSender?.sendData(data: userData)
         print(userData)
+        
+        let postVC = PostedStudyViewController()
+        self.navigationController?.pushViewController(postVC, animated: true)
+        
       case .failure(let error):
         print("Error: \(error)")
       }
