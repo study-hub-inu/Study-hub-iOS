@@ -3,7 +3,8 @@ import UIKit
 import SnapKit
 
 // 캘린더 커스텀하기, 캘린더 선택 버튼 수정
-final class CreateStudyViewController: UIViewController {
+final class CreateStudyViewController: UIViewController, ChangeDateProtocol {
+
   
   let tokenManager = TokenManager.shared
   var genderType: String?
@@ -21,7 +22,7 @@ final class CreateStudyViewController: UIViewController {
     }
   }
   
-  var selectDate: String?
+  var selectDate: String? = "2023-11-6"
 
   // MARK: - UI설정
   private lazy var completeButton: UIButton = {
@@ -69,8 +70,8 @@ final class CreateStudyViewController: UIViewController {
   private lazy var periodStackView = createStackView(axis: .vertical,
                                                      spacing: 16)
   
-  private lazy var startDateButton = createDateButton(selector: #selector(seletStartDate))
-  private lazy var endDateButton = createDateButton(selector: #selector(selectEndDate))
+  private lazy var startDateButton = createDateButton(selector: #selector(calendarButtonTapped))
+  private lazy var endDateButton = createDateButton(selector: #selector(calendarButtonTapped))
   
   private lazy var chatLinkTextField = createTextField(title: "채팅방 링크를 첨부해 주세요")
   
@@ -146,10 +147,12 @@ final class CreateStudyViewController: UIViewController {
                                                         spacing: 16)
   
   private lazy var studytitleLabel = createLabel(title: "스터디 제목",
-                                                 textColor: .black, fontSize: 18)
+                                                 textColor: .black,
+                                                 fontSize: 18)
   
   private lazy var studyproduceLabel = createLabel(title: "내용",
-                                                   textColor: .black, fontSize: 18)
+                                                   textColor: .black,
+                                                   fontSize: 18)
   
   private let studyinfoStackViewDividerLine: UIView = {
     let studyinfoStackViewDividerLine = UIView()
@@ -366,6 +369,8 @@ final class CreateStudyViewController: UIViewController {
     studymethodStackView.addArrangedSubview(finefixStackView)
     
     // Add UI elements to the headerContentStackView
+    startDateButton.tag = 1
+    endDateButton.tag = 2
     periodStackView.addArrangedSubview(periodLabel)
     periodStackView.addArrangedSubview(grayDividerLine3)
     periodStackView.addArrangedSubview(startLabel)
@@ -814,9 +819,16 @@ final class CreateStudyViewController: UIViewController {
     self.dismiss(animated: true, completion: nil)
   }
   
-  // MARK: - calenderTapped함수, 캘린더 띄우고 바로 제목설정이 되고 확인을 눌러서 제목이 다시 설정되지 않음
-  @objc func calendarButtonTapped() {
+  // MARK: - calenderTapped함수
+  @objc func calendarButtonTapped(_ sender: Any) {
     let viewControllerToPresent = CalendarViewController()
+    viewControllerToPresent.delegate = self
+    
+    if (sender as AnyObject).tag == 1 {
+      viewControllerToPresent.buttonSelect = true
+    } else {
+      viewControllerToPresent.buttonSelect = false
+    }
     if #available(iOS 15.0, *) {
       if let sheet = viewControllerToPresent.sheetPresentationController {
         if #available(iOS 16.0, *) {
@@ -835,24 +847,17 @@ final class CreateStudyViewController: UIViewController {
     } else {
       // Fallback on earlier versions
     }
-    present(viewControllerToPresent, animated: true, completion: nil)
+    self.present(viewControllerToPresent, animated: true, completion: nil)
   }
   
-  @objc func seletStartDate(){
-    calendarButtonTapped()
-    startDateButton.setTitle(selectDate, for: .normal)
-    print(selectDate)
+  // 캘린더에서 선택한 날짜로 바꿈
+  func dataSend(data: String, buttonTag: Int) {
+    if buttonTag == 1 {
+      startDateButton.setTitle(data, for: .normal)
+    } else if buttonTag == 2 {
+      endDateButton.setTitle(data, for: .normal)
+    }
   }
-  
-  @objc func selectEndDate(){
-    calendarButtonTapped()
-    endDateButton.setTitle(selectDate, for: .normal)
-    
-  }
-}
-
-protocol SendPostData {
-  func sendData(data: CreateStudyRequest)
 }
 
 // MARK: - textField 0 입력 시
@@ -876,5 +881,13 @@ extension CreateStudyViewController {
       countAlert.isHidden = true
     }
   }
-  
 }
+
+// 다음 페이지로 데이터 전달할 delegate
+protocol SendPostData {
+  func sendData(data: CreateStudyRequest)
+}
+
+
+
+

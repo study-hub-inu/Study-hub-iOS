@@ -4,7 +4,8 @@ import FSCalendar
 import SnapKit
 
 class CalendarViewController: UIViewController {
-  private var previousVC: CreateStudyViewController?
+  // delegate로 전달해보자
+  private var previousVC = CreateStudyViewController()
   private var calendar: FSCalendar?
   var selectDate: String?
   let dateFormatter: DateFormatter = {
@@ -13,6 +14,8 @@ class CalendarViewController: UIViewController {
     return formatter
   }()
   
+  var delegate: ChangeDateProtocol?
+  var buttonSelect: Bool?
   private lazy var titleLabel = createLabel(title: dateFormatter.string(from: calendar!.currentPage),
                                             textColor: .black,
                                             fontSize: 18)
@@ -157,14 +160,19 @@ class CalendarViewController: UIViewController {
   }
   
   @objc private func completeButtonTapped(_ sender: UIButton) {
-    print("완료")
-    print("선택한 날짜:", selectDate)
     if selectedDate == nil {
       selectedDate = self.today
     }
-    previousVC?.selectDate = selectDate
-    dismiss(animated: true, completion: nil)
+    guard let data = selectDate else { return }
+    if buttonSelect == true {
+      delegate?.dataSend(data: data, buttonTag: 1)
 
+    } else {
+      delegate?.dataSend(data: data, buttonTag: 2)
+    }
+    
+    self.dismiss(animated: true, completion: nil)
+    
   }
   
   
@@ -179,8 +187,10 @@ extension CalendarViewController: FSCalendarDelegate, FSCalendarDataSource, FSCa
   func calendarCurrentPageDidChange(_ calendar: FSCalendar) {
     self.titleLabel.text = self.dateFormatter.string(from: calendar.currentPage)
   }
-  
 }
 
+protocol ChangeDateProtocol {
+  func dataSend(data: String, buttonTag: Int)
+}
 
 
