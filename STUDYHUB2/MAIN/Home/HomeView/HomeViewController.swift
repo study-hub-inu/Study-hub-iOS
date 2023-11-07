@@ -345,6 +345,12 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
       return 0
     }
   }
+  func collectionView(_ collectionView: UICollectionView,
+                      didSelectItemAt indexPath: IndexPath) {
+    let postedVC = PostedStudyViewController()
+    let postedVCwithNavi = UINavigationController(rootViewController: postedVC)
+    present(postedVCwithNavi, animated: true, completion: nil)
+  }
   
   func collectionView(_ collectionView: UICollectionView,
                       cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {

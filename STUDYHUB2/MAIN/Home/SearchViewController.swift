@@ -4,7 +4,7 @@ import SnapKit
 
 final class SearchViewController: NaviHelper {
   
-  // MARK: - 화면구성
+  // MARK: - 화면구성, 검색 후 셀클릭 시 ui가 안뜸
   
   // MARK: - 서치바
   private let searchBar = UISearchBar.createSearchBar()
@@ -19,6 +19,35 @@ final class SearchViewController: NaviHelper {
     return tableView
   }()
   
+  // MARK: - 서치바에서 검색할 때
+  private lazy var recentButton: UIButton = {
+    let button = UIButton()
+    button.setTitle("최신순", for: .normal)
+    button.tintColor = .black
+    return button
+  }()
+  
+  private lazy var popularButton: UIButton = {
+    let button = UIButton()
+    button.setTitle("인기순", for: .normal)
+    button.tintColor = .black
+    return button
+  }()
+  
+  private lazy var countLabel = createLabel(title: "4개",
+                                            textColor: .bg80,
+                                            fontSize: 14)
+  
+  private lazy var resultCollectionView: UICollectionView = {
+    let flowLayout = UICollectionViewFlowLayout()
+    flowLayout.scrollDirection = .vertical
+    flowLayout.minimumLineSpacing = 10// cell사이의 간격 설정
+    let view = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
+    view.backgroundColor = .white
+    view.clipsToBounds = false
+
+    return view
+  }()
   
   private let scrollView: UIScrollView = {
     let scrollView = UIScrollView()
@@ -46,6 +75,9 @@ final class SearchViewController: NaviHelper {
     
     resultTableView.delegate = self
     resultTableView.dataSource = self
+    
+    resultCollectionView.register(SearchResultCell.self,
+                                    forCellWithReuseIdentifier: SearchResultCell.id)
     
     searchBar.snp.makeConstraints { make in
       make.top.equalToSuperview().offset(10)
@@ -149,8 +181,34 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
   
   // UITableViewDelegate 함수 (선택)
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-    // resultDepartments가 nil이 아닌 경우에만 실행
+    resultTableView.isHidden = true
     
+    navigationController?.navigationBar.topItem?.title = "검색결과"
+    navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
+    
+    view.addSubview(recentButton)
+    view.addSubview(popularButton)
+    view.addSubview(countLabel)
+    view.addSubview(resultCollectionView)
+    
+    recentButton.snp.makeConstraints { make in
+      make.top.equalTo(searchBar.snp.bottom).offset(10)
+      make.leading.equalToSuperview().offset(10)
+    }
+    
+    popularButton.snp.makeConstraints { make in
+      make.top.equalTo(recentButton)
+      make.leading.equalTo(recentButton.snp.trailing)
+    }
+    
+    countLabel.snp.makeConstraints { make in
+      make.top.equalTo(recentButton)
+      make.trailing.equalToSuperview().offset(-10)
+    }
+    
+    resultCollectionView.snp.makeConstraints { make in
+      make.height.equalTo(500)
+    }
   }
   
   func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -161,3 +219,38 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
     resultTableView.reloadData()
   }
 }
+
+// MARK: - collectionView
+extension SearchViewController: UICollectionViewDelegate, UICollectionViewDataSource {
+  
+  func collectionView(_ collectionView: UICollectionView,
+                      numberOfItemsInSection section: Int) -> Int {
+    return 4
+  }
+  func collectionView(_ collectionView: UICollectionView,
+                      didSelectItemAt indexPath: IndexPath) {
+    let postedVC = PostedStudyViewController()
+    let postedVCwithNavi = UINavigationController(rootViewController: postedVC)
+    present(postedVCwithNavi, animated: true, completion: nil)
+  }
+  
+  func collectionView(_ collectionView: UICollectionView,
+                      cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    
+    let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SearchResultCell.id,
+                                                  for: indexPath)
+    return cell
+  }
+}
+
+// 셀의 각각의 크기
+extension SearchViewController: UICollectionViewDelegateFlowLayout {
+  func collectionView(_ collectionView: UICollectionView,
+                      layout collectionViewLayout: UICollectionViewLayout,
+                      sizeForItemAt indexPath: IndexPath) -> CGSize {
+ 
+      return CGSize(width: 335, height: collectionView.frame.height)
+
+  }
+}
+
