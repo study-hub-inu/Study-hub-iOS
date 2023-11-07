@@ -3,22 +3,10 @@ import UIKit
 
 import SnapKit
 
-final class DeadLineCell: UITableViewCell {
-  static let cellId = "DeadLineCell"
-  
+final class DeadLineCell: UICollectionViewCell {
+  static var id: String { NSStringFromClass(Self.self).components(separatedBy: ".").last ?? "" }
+
   var buttonAction: (() -> Void) = {}
-  
-  override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-    super.init(style: style, reuseIdentifier: reuseIdentifier)
-    
-    setupLayout()
-    makeUI()
-  }
-  
-  required init?(coder: NSCoder) {
-    fatalError("init(coder:) has not been implemented")
-  }
-  
   
   private lazy var profileImageView: UIImageView = {
     let imageView = UIImageView()
@@ -59,8 +47,19 @@ final class DeadLineCell: UITableViewCell {
     return label
   }()
 
+  override init(frame: CGRect) {
+    super.init(frame: frame)
+    
+    setViewShadow(backView: self)
+    setupLayout()
+    makeUI()
+  }
   
-  
+  @available(*, unavailable)
+  required init?(coder: NSCoder) {
+    fatalError()
+  }
+
   func setupLayout() {
     [
       profileImageView,
@@ -70,7 +69,7 @@ final class DeadLineCell: UITableViewCell {
       countLabel,
       remainLabel
     ].forEach {
-      self.contentView.addSubview($0)
+      addSubview($0)
     }
   }
   
@@ -81,17 +80,17 @@ final class DeadLineCell: UITableViewCell {
     }
     
     titleLabel.snp.makeConstraints { make in
-      make.top.equalToSuperview().offset(10)
+      make.top.equalToSuperview().offset(20)
       make.leading.equalTo(profileImageView.snp.trailing).offset(10)
     }
     
     countImageView.snp.makeConstraints { make in
-      make.top.equalTo(titleLabel.snp.bottom)
-      make.leading.equalTo(profileImageView.snp.trailing)
+      make.top.equalTo(titleLabel.snp.bottom).offset(20)
+      make.leading.equalTo(profileImageView.snp.trailing).offset(10)
     }
     
     countLabel.snp.makeConstraints { make in
-      make.top.equalTo(countImageView)
+      make.centerY.equalTo(countImageView)
       make.leading.equalTo(countImageView.snp.trailing)
     }
     
@@ -101,9 +100,15 @@ final class DeadLineCell: UITableViewCell {
     }
     
     remainLabel.snp.makeConstraints { make in
-      make.top.equalTo(bookMarkButton.snp.bottom)
-      make.trailing.equalToSuperview().offset(-50)
+      make.top.equalTo(bookMarkButton.snp.bottom).offset(20)
+      make.trailing.equalToSuperview().offset(-40)
     }
+    
+    backgroundColor = .white
+    
+    self.layer.borderWidth = 0.1
+    self.layer.borderColor = UIColor.cellShadow.cgColor
+    self.layer.cornerRadius = 10
   }
 
 }

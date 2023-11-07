@@ -15,6 +15,7 @@ class TabBarController: UITabBarController {
     let homeVCwithNavi = UINavigationController(rootViewController: homeViewController) 
 
     let studyViewController = StudyViewController()
+    
     let myPageViewController = MyPageViewController()
     
     self.viewControllers = [homeVCwithNavi, studyViewController, myPageViewController]

@@ -130,15 +130,12 @@ final class RecruitPostCell: UICollectionViewCell {
       make.leading.equalTo(fineImageView.snp.trailing)
       make.centerY.equalTo(fineImageView)
     }
+    
     remainMemeber.snp.makeConstraints { make in
-      make.top.equalTo(profileImageView.snp.bottom).offset(10)
+      make.top.equalTo(profileImageView.snp.bottom).offset(20)
       make.leading.equalTo(majorLabel.snp.leading)
     }
     
-    remainMemeber.snp.makeConstraints { make in
-      make.leading.equalTo(majorLabel)
-      make.bottom.equalToSuperview().offset(-20)
-    }
     
     backgroundColor = .white
     

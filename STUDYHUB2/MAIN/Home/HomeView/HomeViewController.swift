@@ -3,6 +3,7 @@ import UIKit
 
 import SnapKit
 final class HomeViewController: NaviHelper {
+
   
   // MARK: - 화면구성
   private lazy var mainStackView = createStackView(axis: .vertical,
@@ -32,7 +33,7 @@ final class HomeViewController: NaviHelper {
   private let newStudyLabel: UILabel = {
     let newStudyLabel = UILabel()
     newStudyLabel.text = "NEW! 모집 중인 스터디예요"
-    newStudyLabel.font = UIFont.boldSystemFont(ofSize: 18)
+    newStudyLabel.font = UIFont.boldSystemFont(ofSize: 20)
     newStudyLabel.textColor = .black
     
     let attributedText = NSMutableAttributedString(string: "NEW! 모집 중인 스터디예요")
@@ -73,14 +74,14 @@ final class HomeViewController: NaviHelper {
   // MARK: - collectionview
   var dataSource: [String] = []
   
-  private lazy var collectionView: UICollectionView = {
+  private lazy var recrutingCollectionView: UICollectionView = {
     let flowLayout = UICollectionViewFlowLayout()
     flowLayout.scrollDirection = .horizontal
     flowLayout.minimumLineSpacing = 50 // cell사이의 간격 설정
-    flowLayout.sectionInset = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 0)
+//    flowLayout.sectionInset = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 0)
     let view = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
     view.backgroundColor = .white
-    
+    view.clipsToBounds = false
     return view
   }()
   
@@ -100,7 +101,7 @@ final class HomeViewController: NaviHelper {
   private let deadLineLabel: UILabel = {
     let textLabel = UILabel()
     textLabel.text = "마감이 임박한 스터디예요"
-    textLabel.font = UIFont.boldSystemFont(ofSize: 18)
+    textLabel.font = UIFont.boldSystemFont(ofSize: 20)
     textLabel.textColor = .black
     
     // Apply attributed text to change color of "HUB"
@@ -112,14 +113,15 @@ final class HomeViewController: NaviHelper {
     return textLabel
   }()
   
-  private lazy var resultTableView: UITableView = {
-    let tableView = UITableView()
-    tableView.register(DeadLineCell.self,
-                       forCellReuseIdentifier: DeadLineCell.cellId)
-    tableView.backgroundColor = .white
-    tableView.separatorInset.left = 0
-    tableView.layer.cornerRadius = 10
-    return tableView
+  private lazy var deadLineCollectionView: UICollectionView = {
+    let flowLayout = UICollectionViewFlowLayout()
+    flowLayout.scrollDirection = .vertical
+    flowLayout.minimumLineSpacing = 10// cell사이의 간격 설정
+//    flowLayout.sectionInset = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 0)
+    let view = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
+    view.backgroundColor = .white
+    view.clipsToBounds = false
+    return view
   }()
   
   private lazy var deadLineStackView = createStackView(axis: .horizontal,
@@ -159,7 +161,7 @@ final class HomeViewController: NaviHelper {
       newStudyTopStackView.addArrangedSubview(view)
     }
     
-    let newStudyTotalDataView = [newStudyTopStackView, collectionView]
+    let newStudyTotalDataView = [newStudyTopStackView, recrutingCollectionView]
     for view in newStudyTotalDataView {
       newStudyTotalStackView.addArrangedSubview(view)
     }
@@ -172,7 +174,7 @@ final class HomeViewController: NaviHelper {
     
     let totalViewData = [mainStackView, searchBar,
                          newStudyTotalStackView, deadLineStackView,
-                         resultTableView]
+                         deadLineCollectionView]
     for view in totalViewData {
       totalStackView.addArrangedSubview(view)
     }
@@ -200,17 +202,16 @@ final class HomeViewController: NaviHelper {
     newStudyTotalStackView.layoutMargins = UIEdgeInsets(top: 10, left: 20, bottom: 0, right: 20)
     newStudyTotalStackView.isLayoutMarginsRelativeArrangement = true
     
-    collectionView.snp.makeConstraints { make in
+    recrutingCollectionView.snp.makeConstraints { make in
       make.height.equalTo(171)
     }
     
     deadLineStackView.layoutMargins = UIEdgeInsets(top: 30, left: 20, bottom: 10, right: 20)
     deadLineStackView.isLayoutMarginsRelativeArrangement = true
     
-    resultTableView.snp.makeConstraints { make in
-      make.top.equalTo(deadLineStackView.snp.bottom).offset(10)
-      make.leading.trailing.equalTo(scrollView)
-      make.bottom.equalTo(view).offset(-10)
+    // 셀 전체의 크기
+    deadLineCollectionView.snp.makeConstraints { make in
+      make.height.equalTo(500)
     }
     
     totalStackView.snp.makeConstraints { make in
@@ -240,7 +241,7 @@ final class HomeViewController: NaviHelper {
       image: bookMarkImg,
       style: .plain,
       target: self,
-      action: nil)
+      action: #selector(bookmarkpageButtonTapped))
     bookMark.imageInsets = UIEdgeInsets(top: 0, left: 30, bottom: 0, right: 0)
     
     let alertBellImg = UIImage(named: "BellImg")?.withRenderingMode(.alwaysOriginal)
@@ -272,8 +273,6 @@ final class HomeViewController: NaviHelper {
     present(navigationController, animated: true, completion: nil)
   }
   
-  
-  
   // 서치바 재설정
   func redesignSearchBar(){
     searchBar.placeholder = "관심있는 스터디를 검색해 보세요"
@@ -290,21 +289,24 @@ final class HomeViewController: NaviHelper {
     }
   }
   private func setupDelegate() {
-    collectionView.delegate = self
-    collectionView.dataSource = self
+    recrutingCollectionView.tag = 1
+    deadLineCollectionView.tag = 2
+    
+    recrutingCollectionView.delegate = self
+    recrutingCollectionView.dataSource = self
     
     searchBar.delegate = self
     
-    resultTableView.delegate = self
-    resultTableView.dataSource = self
+    deadLineCollectionView.delegate = self
+    deadLineCollectionView.dataSource = self
   }
   
   private func registerCell() {
-    collectionView.register(RecruitPostCell.self,
+    recrutingCollectionView.register(RecruitPostCell.self,
                             forCellWithReuseIdentifier: RecruitPostCell.id)
     
-    resultTableView.register(DeadLineCell.self,
-                             forCellReuseIdentifier: DeadLineCell.cellId)
+    deadLineCollectionView.register(DeadLineCell.self,
+                                    forCellWithReuseIdentifier: DeadLineCell.id)
   }
   
 }
@@ -334,54 +336,46 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
   
   func collectionView(_ collectionView: UICollectionView,
                       numberOfItemsInSection section: Int) -> Int {
-    return dataSource.count
+    if collectionView.tag == 1 {
+      return dataSource.count
+    } else if collectionView.tag == 2 {
+      return 4
+    }
+    else  {
+      return 0
+    }
   }
   
   func collectionView(_ collectionView: UICollectionView,
                       cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-    let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RecruitPostCell.id,
-                                                  for: indexPath)
-    if let cell = cell as? RecruitPostCell {
-      cell.model = dataSource[indexPath.item]
+    if collectionView.tag == 1 {
+      let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RecruitPostCell.id,
+                                                    for: indexPath)
+      if let cell = cell as? RecruitPostCell {
+        cell.model = dataSource[indexPath.item]
+      }
+      return cell
+      
+    } else {
+      let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DeadLineCell.id,
+                                                    for: indexPath)
+      return cell
     }
-    
-    return cell
   }
 }
 
+// 셀의 각각의 크기
 extension HomeViewController: UICollectionViewDelegateFlowLayout {
   func collectionView(_ collectionView: UICollectionView,
                       layout collectionViewLayout: UICollectionViewLayout,
                       sizeForItemAt indexPath: IndexPath) -> CGSize {
-    return CGSize(width: 250, height: collectionView.frame.height)
+    if collectionView.tag == 1 {
+      return CGSize(width: 250, height: collectionView.frame.height)
+    } else if collectionView.tag == 2 {
+      return CGSize(width: 335, height: 100)
+    } else {
+      return CGSize(width: 335, height: collectionView.frame.height)
+    }
   }
 }
 
-// MARK: - cell 함수
-extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
-  // UITableViewDataSource 함수
-  func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    return 4
-  }
-  
-  func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-    let cell = resultTableView.dequeueReusableCell(withIdentifier: DeadLineCell.cellId,
-                                                   for: indexPath) as! DeadLineCell
-    
-    cell.backgroundColor = .bg20
-    
-    
-    return cell
-  }
-  
-  // UITableViewDelegate 함수 (선택)
-  func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-    // resultDepartments가 nil이 아닌 경우에만 실행
-    
-    
-  }
-  
-  func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-    return 84
-  }
-}

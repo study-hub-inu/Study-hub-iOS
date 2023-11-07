@@ -2,125 +2,23 @@ import UIKit
 
 import SnapKit
 
-final class SearchViewController: UIViewController {
+final class SearchViewController: NaviHelper {
   
   // MARK: - 화면구성
-  private let headerStackView: UIStackView = {
-    let headerStackView = UIStackView()
-    headerStackView.axis = .horizontal
-    headerStackView.alignment = .center
-    headerStackView.spacing = 8
-    return headerStackView
+  
+  // MARK: - 서치바
+  private let searchBar = UISearchBar.createSearchBar()
+  
+  private lazy var resultTableView: UITableView = {
+    let tableView = UITableView()
+    tableView.register(CustomCell.self,
+                       forCellReuseIdentifier: CustomCell.cellId)
+    tableView.backgroundColor = .white
+    tableView.separatorInset.left = 0
+    tableView.layer.cornerRadius = 10
+    return tableView
   }()
   
-  lazy var backButton: UIButton = {
-    // Back button
-    let backButton = UIButton(type: .system)
-    backButton.setImage(UIImage(systemName: "chevron.left"), for: .normal)
-    backButton.tintColor = .white
-    backButton.addTarget(self, action: #selector(goBack), for: .touchUpInside)
-    return backButton
-  }()
-  
-  private let spacerView: UIView = {
-    let spacerView = UIView()
-    spacerView.setContentHuggingPriority(.defaultLow, for: .horizontal)
-    return spacerView
-  }()
-  
-  lazy var bookmarkButton: UIButton = {
-    // Bookmark button
-    let bookmarkButton = UIButton(type: .system)
-    bookmarkButton.setImage(UIImage(systemName: "bookmark"), for: .normal)
-    bookmarkButton.tintColor = .white
-    bookmarkButton.addTarget(self, action: #selector(bookmarkpageButtonTapped), for: .touchUpInside)
-    return bookmarkButton
-  }()
-  
-  lazy var bellButton: UIButton = {
-    let bellButton = UIButton(type: .system)
-    bellButton.setImage(UIImage(systemName: "bell"), for: .normal)
-    bellButton.tintColor = .white
-    return bellButton
-  }()
-  
-  private let headerContentStackView: UIStackView = {
-    // Header content stack view
-    let headerContentStackView = UIStackView()
-    headerContentStackView.axis = .vertical
-    headerContentStackView.spacing = 16
-    return headerContentStackView
-  }()
-  
-  private let searchBar: UISearchBar = {
-    let searchBar = UISearchBar()
-    searchBar.placeholder = "관심있는 스터디를 검색해 보세요"
-    searchBar.backgroundImage = UIImage()
-    return searchBar
-  }()
-  
-  private let recentallStackView: UIStackView = {
-    // Recent all stack view
-    let recentallStackView = UIStackView()
-    recentallStackView.axis = .vertical
-    return recentallStackView
-  }()
-  
-  private let recentaskStackView: UIStackView = {
-    let recentaskStackView = UIStackView()
-    recentaskStackView.axis = .horizontal
-    recentaskStackView.spacing = 16
-    return recentaskStackView
-  }()
-  
-  private let recentaskLabel: UILabel = {
-    // Recent ask label
-    let recentaskLabel = UILabel()
-    recentaskLabel.text = "최근 검색어"
-    recentaskLabel.textColor = .black
-    recentaskLabel.font = UIFont.systemFont(ofSize: 15)
-    return recentaskLabel
-  }()
-  
-  lazy var deleteButton: UIButton = {
-    // Delete button
-    let deleteButton = UIButton(type: .system)
-    deleteButton.setTitle("삭제", for: .normal)
-    deleteButton.setTitleColor(UIColor(hexCode: "#636363"), for: .normal)
-    deleteButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 15)
-    return deleteButton
-  }()
-  
-  
-  private let norecentaskLabel: UILabel = {
-    let norecentaskLabel = UILabel()
-    norecentaskLabel.text = "최근 검색어가 없습니다"
-    norecentaskLabel.textColor = UIColor(hexCode: "#C2C8CC")
-    norecentaskLabel.font = UIFont.systemFont(ofSize: 15)
-    return norecentaskLabel
-  }()
-  
-  private let recentallStackViewDividerLine: UIView = {
-    let recentallStackViewDividerLine = UIView()
-    recentallStackViewDividerLine.backgroundColor = UIColor(hexCode: "#F3F5F6")
-    return recentallStackViewDividerLine
-  }()
-  
-  private let recommendStackView: UIStackView = {
-    let recommendStackView = UIStackView()
-    recommendStackView.axis = .horizontal
-    recommendStackView.spacing = 16
-    return recommendStackView
-  }()
-  
-  private let recommendLabel: UILabel = {
-    // Recommend label
-    let recommendLabel = UILabel()
-    recommendLabel.text = "추천 검색어"
-    recommendLabel.textColor = .black
-    recommendLabel.font = UIFont.systemFont(ofSize: 15)
-    return recommendLabel
-  }()
   
   private let scrollView: UIScrollView = {
     let scrollView = UIScrollView()
@@ -131,74 +29,135 @@ final class SearchViewController: UIViewController {
   // MARK: - viewDidLoad
   override func viewDidLoad() {
     super.viewDidLoad()
-    view.backgroundColor = .black
+    view.backgroundColor = .white
+    
+    navigationItemSetting()
+    redesignNavigationbar()
+    
+    redesignSearchBar()
     
     setUpLayout()
     makeUI()
     
   }
   
-  func makeUI(){
-    headerStackView.snp.makeConstraints { make in
-      make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(10)
-      make.leading.equalToSuperview().offset(16)
-      make.trailing.equalToSuperview().offset(-16)
-    }
+  func makeUI() {
+    searchBar.delegate = self
     
-    headerContentStackView.snp.makeConstraints { make in
-      make.top.equalTo(headerStackView.snp.bottom).offset(16)
-      make.leading.trailing.equalToSuperview()
-    }
-
-    recentallStackViewDividerLine.snp.makeConstraints { make in
-      make.height.equalTo(10)
-    }
+    resultTableView.delegate = self
+    resultTableView.dataSource = self
     
-    scrollView.snp.makeConstraints { make in
-      make.top.equalTo(headerStackView.snp.bottom).offset(16)
-      make.leading.trailing.bottom.equalToSuperview()
-    }
-    
-    headerContentStackView.snp.makeConstraints { make in
-      make.edges.equalTo(scrollView)
-      make.width.equalTo(scrollView)
+    searchBar.snp.makeConstraints { make in
+      make.top.equalToSuperview().offset(10)
+      make.leading.equalToSuperview().offset(10)
+      make.trailing.equalToSuperview().offset(-10)
     }
   }
   
   func setUpLayout() {
-    view.addSubview(headerStackView)
-    view.addSubview(headerContentStackView)
-    view.addSubview(scrollView)
+    view.addSubview(searchBar)
+  }
+  
+  // MARK: - 서치바 재설정
+  func redesignSearchBar(){
+    searchBar.placeholder = "관심있는 스터디를 검색해 보세요"
+    
+    if let searchBarTextField = searchBar.value(forKey: "searchField") as? UITextField {
+      searchBarTextField.backgroundColor = .bg30
+      searchBarTextField.layer.borderColor = UIColor.clear.cgColor
+    }
+  }
+  // MARK: -  네비게이션바 재설정
+  func redesignNavigationbar(){
+    let bookMarkImg = UIImage(named: "BookMarkImg")?.withRenderingMode(.alwaysOriginal)
+    lazy var bookMark = UIBarButtonItem(
+      image: bookMarkImg,
+      style: .plain,
+      target: self,
+      action: #selector(bookmarkpageButtonTapped))
+    bookMark.imageInsets = UIEdgeInsets(top: 0, left: 30, bottom: 0, right: 0)
+    
+    let alertBellImg = UIImage(named: "BellImgWithWhite")?.withRenderingMode(.alwaysOriginal)
+    lazy var alertBell = UIBarButtonItem(
+      image: alertBellImg,
+      style: .plain,
+      target: self,
+      action: nil)
+    alertBell.imageInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+    
+    navigationItem.rightBarButtonItems = [alertBell, bookMark]
+  }
 
-    headerStackView.addArrangedSubview(backButton)
-    headerStackView.addArrangedSubview(spacerView)
-    headerStackView.addArrangedSubview(bookmarkButton)
-    headerStackView.addArrangedSubview(bellButton)
-  
-    headerContentStackView.addArrangedSubview(searchBar)
-    headerContentStackView.addArrangedSubview(recentallStackView)
-    headerContentStackView.addArrangedSubview(recentallStackViewDividerLine)
-    headerContentStackView.addArrangedSubview(recommendStackView)
-    
-    recentallStackView.addArrangedSubview(recentaskStackView)
-    recentallStackView.addArrangedSubview(norecentaskLabel)
-    
-    recentaskStackView.addArrangedSubview(recentaskLabel)
-    recentaskStackView.addArrangedSubview(deleteButton)
-    
-    recommendStackView.addArrangedSubview(recommendLabel)
-    
-    scrollView.addSubview(headerContentStackView)
-  }
-  
-  @objc func goBack() {
-    self.dismiss(animated: true, completion: nil)
-  }
-  
   @objc func bookmarkpageButtonTapped() {
     let bookmarkViewController = BookmarkViewController()
     let navigationController = UINavigationController(rootViewController: bookmarkViewController)
     navigationController.modalPresentationStyle = .fullScreen
     present(navigationController, animated: true, completion: nil)
+  }
+}
+
+extension SearchViewController: UISearchBarDelegate {
+  // 검색(Search) 버튼을 눌렀을 때 호출되는 메서드
+  func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+    guard let keyword = searchBar.text?.trimmingCharacters(in: .whitespacesAndNewlines) else { return }
+    
+    print(keyword)
+    searchTapped(keyword: keyword)
+  }
+  
+  func searchTapped(keyword: String){
+    
+    view.setNeedsLayout()
+    view.layoutIfNeeded()
+    
+    view.addSubview(resultTableView)
+    resultTableView.snp.makeConstraints { make in
+      make.top.equalTo(searchBar.snp.bottom).offset(10)
+      make.leading.trailing.equalTo(searchBar)
+      make.bottom.equalTo(view).offset(-10)
+    }
+    
+  }
+}
+
+// MARK: - cell 함수
+extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
+  // UITableViewDataSource 함수
+  func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    return 4
+  }
+  
+  func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    let cell = resultTableView.dequeueReusableCell(withIdentifier: CustomCell.cellId,
+                                                   for: indexPath) as! CustomCell
+    
+    let imageView = UIImageView()
+    imageView.image = UIImage(named: "ScearchImgGray")
+    cell.contentView.addSubview(imageView)
+    
+    imageView.snp.makeConstraints { make in
+      make.leading.equalToSuperview()
+      make.centerY.equalTo(cell.contentView)
+    }
+    
+  
+    cell.backgroundColor = .white
+    
+    
+    return cell
+  }
+  
+  // UITableViewDelegate 함수 (선택)
+  func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    // resultDepartments가 nil이 아닌 경우에만 실행
+    
+  }
+  
+  func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+    return 70
+  }
+  
+  func reloadTalbeView(){
+    resultTableView.reloadData()
   }
 }

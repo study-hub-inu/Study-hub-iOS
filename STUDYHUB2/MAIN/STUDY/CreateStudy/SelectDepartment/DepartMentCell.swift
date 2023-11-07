@@ -38,7 +38,7 @@ final class CustomCell: UITableViewCell {
   func makeUI() {
     name.snp.makeConstraints { make in
       make.top.equalToSuperview().offset(10)
-      make.leading.equalToSuperview().offset(20)
+      make.leading.equalToSuperview().offset(30)
       make.centerY.equalTo(self.snp.centerY)
     }
   }
