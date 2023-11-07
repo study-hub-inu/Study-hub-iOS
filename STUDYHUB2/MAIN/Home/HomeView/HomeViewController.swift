@@ -24,10 +24,10 @@ final class HomeViewController: NaviHelper {
     detailsButton.addTarget(self, action: #selector(detailsButtonTapped), for: .touchUpInside)
     return detailsButton
   }()
-
+  
   // MARK: - 서치바
   private let searchBar = UISearchBar.createSearchBar()
-
+  
   // MARK: - 모집 중인 스터디
   private let newStudyLabel: UILabel = {
     let newStudyLabel = UILabel()
@@ -42,22 +42,53 @@ final class HomeViewController: NaviHelper {
     newStudyLabel.attributedText = attributedText
     return newStudyLabel
   }()
-
+  
   private lazy var allButton: UIButton = {
     let button = UIButton()
-    button.setTitle("전체", for: .normal)
-    button.setTitleColor(UIColor.g60, for: .normal)
     
+    let title = "전체"
     let image = UIImage(named: "RightArrow")
+    
+    // 버튼 내부의 요소들을 가로로 배치
+    button.semanticContentAttribute = .forceLeftToRight
+    button.contentHorizontalAlignment = .left
+    
+    button.setTitle(title, for: .normal)
+    button.setTitleColor(UIColor.g60, for: .normal)
+    button.titleLabel?.font = UIFont.systemFont(ofSize: 12)
     button.setImage(image, for: .normal)
-    button.imageEdgeInsets = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
-
+    
+    // 이미지와 타이틀 사이의 간격을 설정 (예: 8포인트)
+    let spacing: CGFloat = 8
+    
+    // 이미지와 타이틀을 조절하여 타이틀이 먼저 오고 이미지가 그 뒤에 옵니다.
+    button.imageEdgeInsets = UIEdgeInsets(top: 0, left: 30, bottom: 0, right: 0)
+    button.titleEdgeInsets = UIEdgeInsets(top: 0, left: -spacing, bottom: 0, right: 0)
+    
     return button
   }()
   
-  private lazy var newStudyStackView = createStackView(axis: .horizontal,
-                                                       spacing: 10)
-
+  
+  
+  // MARK: - collectionview
+  var dataSource: [String] = []
+  
+  private lazy var collectionView: UICollectionView = {
+    let flowLayout = UICollectionViewFlowLayout()
+    flowLayout.scrollDirection = .horizontal
+    flowLayout.minimumLineSpacing = 50 // cell사이의 간격 설정
+    flowLayout.sectionInset = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 0)
+    let view = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
+    view.backgroundColor = .white
+    
+    return view
+  }()
+  
+  private lazy var newStudyTopStackView = createStackView(axis: .horizontal,
+                                                          spacing: 10)
+  private lazy var newStudyTotalStackView = createStackView(axis: .vertical,
+                                                            spacing: 10)
+  
   // MARK: - 마감이 입박한 스터디
   private let deadLineImg: UIImageView = {
     let smallImageView = UIImageView(image: UIImage(named: "FireImg"))
@@ -81,9 +112,19 @@ final class HomeViewController: NaviHelper {
     return textLabel
   }()
   
+  private lazy var resultTableView: UITableView = {
+    let tableView = UITableView()
+    tableView.register(DeadLineCell.self,
+                       forCellReuseIdentifier: DeadLineCell.cellId)
+    tableView.backgroundColor = .white
+    tableView.separatorInset.left = 0
+    tableView.layer.cornerRadius = 10
+    return tableView
+  }()
+  
   private lazy var deadLineStackView = createStackView(axis: .horizontal,
                                                        spacing: 10)
-
+  
   
   private lazy var totalStackView = createStackView(axis: .vertical,
                                                     spacing: 10)
@@ -96,34 +137,42 @@ final class HomeViewController: NaviHelper {
     
     navigationItemSetting()
     redesignNavigationbar()
+    
     redesignSearchBar()
+    
+    setupDelegate()
+    registerCell()
+    setupDataSource()
+    
     setUpLayout()
     makeUI()
   }
   
   // MARK: - setuplayout
   func setUpLayout(){
- 
+    
     scrollView.addSubview(mainImageView)
     scrollView.addSubview(detailsButton)
     
     let newStudyDataView = [newStudyLabel, allButton]
     for view in newStudyDataView {
-      newStudyStackView.addArrangedSubview(view)
+      newStudyTopStackView.addArrangedSubview(view)
     }
-    newStudyStackView.layoutMargins = UIEdgeInsets(top: 10, left: 30, bottom: 10, right: 10)
+    
+    let newStudyTotalDataView = [newStudyTopStackView, collectionView]
+    for view in newStudyTotalDataView {
+      newStudyTotalStackView.addArrangedSubview(view)
+    }
     
     let spaceView1 = UIView()
     let deadLineViewData = [deadLineImg, deadLineLabel, spaceView1]
     for view in deadLineViewData {
       deadLineStackView.addArrangedSubview(view)
     }
-    deadLineStackView.layoutMargins = UIEdgeInsets(top: 10, left: 30, bottom: 10, right: 10)
-
-    searchBar.layoutMargins = UIEdgeInsets(top: 10, left: 20, bottom: 10, right: 20)
-
+    
     let totalViewData = [mainStackView, searchBar,
-                         newStudyStackView, deadLineStackView]
+                         newStudyTotalStackView, deadLineStackView,
+                         resultTableView]
     for view in totalViewData {
       totalStackView.addArrangedSubview(view)
     }
@@ -144,6 +193,24 @@ final class HomeViewController: NaviHelper {
       make.bottom.equalTo(mainImageView.snp.bottom).offset(-30)
       make.width.equalTo(110)
       make.height.equalTo(39)
+    }
+    
+    searchBar.layoutMargins = UIEdgeInsets(top: 10, left: 20, bottom: 10, right: 20)
+    
+    newStudyTotalStackView.layoutMargins = UIEdgeInsets(top: 10, left: 20, bottom: 0, right: 20)
+    newStudyTotalStackView.isLayoutMarginsRelativeArrangement = true
+    
+    collectionView.snp.makeConstraints { make in
+      make.height.equalTo(171)
+    }
+    
+    deadLineStackView.layoutMargins = UIEdgeInsets(top: 30, left: 20, bottom: 10, right: 20)
+    deadLineStackView.isLayoutMarginsRelativeArrangement = true
+    
+    resultTableView.snp.makeConstraints { make in
+      make.top.equalTo(deadLineStackView.snp.bottom).offset(10)
+      make.leading.trailing.equalTo(scrollView)
+      make.bottom.equalTo(view).offset(-10)
     }
     
     totalStackView.snp.makeConstraints { make in
@@ -167,7 +234,7 @@ final class HomeViewController: NaviHelper {
     let mainTitleImg = UIImage(named: "MainTitle")?.withRenderingMode(.alwaysOriginal)
     let mainTitle = UIBarButtonItem(image: mainTitleImg, style: .done, target: nil, action: nil)
     mainTitle.imageInsets = UIEdgeInsets(top: 0, left: -40, bottom: 0, right: 0)
-
+    
     let bookMarkImg = UIImage(named: "BookMarkImg")?.withRenderingMode(.alwaysOriginal)
     lazy var bookMark = UIBarButtonItem(
       image: bookMarkImg,
@@ -175,7 +242,7 @@ final class HomeViewController: NaviHelper {
       target: self,
       action: nil)
     bookMark.imageInsets = UIEdgeInsets(top: 0, left: 30, bottom: 0, right: 0)
-
+    
     let alertBellImg = UIImage(named: "BellImg")?.withRenderingMode(.alwaysOriginal)
     lazy var alertBell = UIBarButtonItem(
       image: alertBellImg,
@@ -183,7 +250,7 @@ final class HomeViewController: NaviHelper {
       target: self,
       action: nil)
     alertBell.imageInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-
+    
     navigationItem.leftBarButtonItems = [logo, mainTitle]
     navigationItem.rightBarButtonItems = [alertBell, bookMark]
   }
@@ -195,7 +262,7 @@ final class HomeViewController: NaviHelper {
     navigationController.modalPresentationStyle = .fullScreen
     present(navigationController, animated: true, completion: nil)
   }
-
+  
   // 북마크 페이지로 이동
   @objc func bookmarkpageButtonTapped() {
     let bookmarkViewController = BookmarkViewController()
@@ -205,7 +272,7 @@ final class HomeViewController: NaviHelper {
     present(navigationController, animated: true, completion: nil)
   }
   
-
+  
   
   // 서치바 재설정
   func redesignSearchBar(){
@@ -213,8 +280,33 @@ final class HomeViewController: NaviHelper {
     
     if let searchBarTextField = searchBar.value(forKey: "searchField") as? UITextField {
       searchBarTextField.backgroundColor = .bg30
+      searchBarTextField.layer.borderColor = UIColor.clear.cgColor
     }
   }
+  
+  private func setupDataSource() {
+    for i in 0...10 {
+      dataSource += ["\(i)"]
+    }
+  }
+  private func setupDelegate() {
+    collectionView.delegate = self
+    collectionView.dataSource = self
+    
+    searchBar.delegate = self
+    
+    resultTableView.delegate = self
+    resultTableView.dataSource = self
+  }
+  
+  private func registerCell() {
+    collectionView.register(RecruitPostCell.self,
+                            forCellWithReuseIdentifier: RecruitPostCell.id)
+    
+    resultTableView.register(DeadLineCell.self,
+                             forCellReuseIdentifier: DeadLineCell.cellId)
+  }
+  
 }
 
 // MARK: - 서치바 관련
@@ -234,5 +326,62 @@ extension HomeViewController: UISearchBarDelegate {
       present(navigationController, animated: true, completion: nil)
     }
     
+  }
+}
+
+// MARK: - collectionView
+extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSource {
+  
+  func collectionView(_ collectionView: UICollectionView,
+                      numberOfItemsInSection section: Int) -> Int {
+    return dataSource.count
+  }
+  
+  func collectionView(_ collectionView: UICollectionView,
+                      cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RecruitPostCell.id,
+                                                  for: indexPath)
+    if let cell = cell as? RecruitPostCell {
+      cell.model = dataSource[indexPath.item]
+    }
+    
+    return cell
+  }
+}
+
+extension HomeViewController: UICollectionViewDelegateFlowLayout {
+  func collectionView(_ collectionView: UICollectionView,
+                      layout collectionViewLayout: UICollectionViewLayout,
+                      sizeForItemAt indexPath: IndexPath) -> CGSize {
+    return CGSize(width: 250, height: collectionView.frame.height)
+  }
+}
+
+// MARK: - cell 함수
+extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
+  // UITableViewDataSource 함수
+  func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    return 4
+  }
+  
+  func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    let cell = resultTableView.dequeueReusableCell(withIdentifier: DeadLineCell.cellId,
+                                                   for: indexPath) as! DeadLineCell
+    
+    cell.backgroundColor = .bg20
+    
+    
+    return cell
+  }
+  
+  // UITableViewDelegate 함수 (선택)
+  func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    // resultDepartments가 nil이 아닌 경우에만 실행
+    
+    
+  }
+  
+  func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+    return 84
   }
 }

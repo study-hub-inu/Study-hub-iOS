@@ -25,6 +25,7 @@
 		EE07ADD12AF632B80096890F /* Calendar.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE07ADD02AF632B80096890F /* Calendar.swift */; };
 		EE0A8B5A2AF932FE001C3F41 /* RecruitCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE0A8B592AF932FE001C3F41 /* RecruitCell.swift */; };
 		EE0A8B5C2AF9330F001C3F41 /* DeadLineCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE0A8B5B2AF9330F001C3F41 /* DeadLineCell.swift */; };
+		EE0A8B5E2AF9B01C001C3F41 /* UILabel+.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE0A8B5D2AF9B01C001C3F41 /* UILabel+.swift */; };
 		EE271F1C2AD04ACE00190E7A /* TokenManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE271F1B2AD04ACE00190E7A /* TokenManager.swift */; };
 		EE271F1E2AD04BB300190E7A /* UserToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE271F1D2AD04BB300190E7A /* UserToken.swift */; };
 		EE271F202AD0584100190E7A /* UIColor+.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE271F1F2AD0584100190E7A /* UIColor+.swift */; };
@@ -99,6 +100,7 @@
 		EE07ADD02AF632B80096890F /* Calendar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Calendar.swift; sourceTree = "<group>"; };
 		EE0A8B592AF932FE001C3F41 /* RecruitCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitCell.swift; sourceTree = "<group>"; };
 		EE0A8B5B2AF9330F001C3F41 /* DeadLineCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeadLineCell.swift; sourceTree = "<group>"; };
+		EE0A8B5D2AF9B01C001C3F41 /* UILabel+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+.swift"; sourceTree = "<group>"; };
 		EE271F1B2AD04ACE00190E7A /* TokenManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenManager.swift; sourceTree = "<group>"; };
 		EE271F1D2AD04BB300190E7A /* UserToken.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserToken.swift; sourceTree = "<group>"; };
 		EE271F1F2AD0584100190E7A /* UIColor+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+.swift"; sourceTree = "<group>"; };
@@ -228,6 +230,7 @@
 				EE271F2B2AD9250F00190E7A /* UIView+.swift */,
 				EE271F292AD8B9FA00190E7A /* String+.swift */,
 				EE07ADB42AEFC2B90096890F /* UITextField+.swift */,
+				EE0A8B5D2AF9B01C001C3F41 /* UILabel+.swift */,
 				EE271F252AD77CD100190E7A /* UIViewcontroller+.swift */,
 			);
 			path = Extension;
@@ -627,6 +630,7 @@
 				F80421CC2A7D9BC3006C6B87 /* NicknameViewController.swift in Sources */,
 				EE07AD902AE106460096890F /* CreatePostManager.swift in Sources */,
 				F86E031F2A8BBAE600164976 /* SearchViewController.swift in Sources */,
+				EE0A8B5E2AF9B01C001C3F41 /* UILabel+.swift in Sources */,
 				F87377592AA850940055B041 /* DepartmentselectViewController.swift in Sources */,
 				EE07ADB52AEFC2B90096890F /* UITextField+.swift in Sources */,
 				F88AB33B2A951AFF001D619C /* CategoryViewController.swift in Sources */,

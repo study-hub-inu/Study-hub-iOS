@@ -447,8 +447,8 @@ final class PostedStudyViewController: NaviHelper, SendPostData {
       make.edges.equalTo(view)
     }
     
-    changeColor(label: memeberNumberCountLabel, wantToChange: "1")
-    changeColor(label: fineCountLabel, wantToChange: "1000")
+    memeberNumberCountLabel.changeColor(label: memeberNumberCountLabel, wantToChange: "1")
+    fineCountLabel.changeColor(label: fineCountLabel, wantToChange: "1000")
   }
   
   private func setupDataSource() {
@@ -466,17 +466,6 @@ final class PostedStudyViewController: NaviHelper, SendPostData {
                             forCellWithReuseIdentifier: SimilarPostCell.id)
   }
   
-  func changeColor(label: UILabel, wantToChange: String){
-    let attributedStr = NSMutableAttributedString(string: label.text!)
-    
-    //위에서 만든 attributedStr에, addAttribute()메소드를 통해 스타일 적용.
-    attributedStr.addAttribute(.foregroundColor,
-                               value: UIColor.changeInfo,
-                               range: (label.text! as NSString).range(of:wantToChange))
-    
-    //최종적으로 내 label에 text가 아닌, attributedText를 적용
-    label.attributedText = attributedStr
-  }
   
 }
 // MARK: - collectionView
