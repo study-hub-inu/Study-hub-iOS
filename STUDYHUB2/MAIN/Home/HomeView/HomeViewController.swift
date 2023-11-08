@@ -228,13 +228,16 @@ final class HomeViewController: NaviHelper {
   // MARK: - 네비게이션바 재설정
   func redesignNavigationbar(){
     // 네비게이션 왼쪽아이템
+    
     let logoImg = UIImage(named: "LogoImage")?.withRenderingMode(.alwaysOriginal)
     let logo = UIBarButtonItem(image: logoImg, style: .done, target: nil, action: nil)
     logo.imageInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+    logo.isEnabled = false
     
     let mainTitleImg = UIImage(named: "MainTitle")?.withRenderingMode(.alwaysOriginal)
     let mainTitle = UIBarButtonItem(image: mainTitleImg, style: .done, target: nil, action: nil)
     mainTitle.imageInsets = UIEdgeInsets(top: 0, left: -40, bottom: 0, right: 0)
+    mainTitle.isEnabled = false
     
     let bookMarkImg = UIImage(named: "BookMarkImg")?.withRenderingMode(.alwaysOriginal)
     lazy var bookMark = UIBarButtonItem(

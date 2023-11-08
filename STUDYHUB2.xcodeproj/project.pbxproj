@@ -54,9 +54,7 @@
 		F86E03212A8BFC8000164976 /* DetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F86E03202A8BFC8000164976 /* DetailsViewController.swift */; };
 		F87377592AA850940055B041 /* DepartmentselectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F87377582AA850940055B041 /* DepartmentselectViewController.swift */; };
 		F873775B2AACD41D0055B041 /* BookmarkViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F873775A2AACD41D0055B041 /* BookmarkViewController.swift */; };
-		F88AB33B2A951AFF001D619C /* CategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F88AB33A2A951AFF001D619C /* CategoryViewController.swift */; };
 		F88AB33F2A95236B001D619C /* CreatestudyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F88AB33E2A95236B001D619C /* CreatestudyViewController.swift */; };
-		F89A01102A8686ED00B4C10D /* OpenNewPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F89A010F2A8686ED00B4C10D /* OpenNewPageViewController.swift */; };
 		F8D5BC662AB71DDA00B2B154 /* Singleton.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8D5BC652AB71DDA00B2B154 /* Singleton.swift */; };
 /* End PBXBuildFile section */
 
@@ -134,9 +132,7 @@
 		F86E03202A8BFC8000164976 /* DetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailsViewController.swift; sourceTree = "<group>"; };
 		F87377582AA850940055B041 /* DepartmentselectViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DepartmentselectViewController.swift; sourceTree = "<group>"; };
 		F873775A2AACD41D0055B041 /* BookmarkViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarkViewController.swift; sourceTree = "<group>"; };
-		F88AB33A2A951AFF001D619C /* CategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryViewController.swift; sourceTree = "<group>"; };
 		F88AB33E2A95236B001D619C /* CreatestudyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatestudyViewController.swift; sourceTree = "<group>"; };
-		F89A010F2A8686ED00B4C10D /* OpenNewPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenNewPageViewController.swift; sourceTree = "<group>"; };
 		F8D5BC652AB71DDA00B2B154 /* Singleton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Singleton.swift; sourceTree = "<group>"; };
 		FBF19D90E98D2A473BB1FACD /* Pods_STUDYHUB2Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_STUDYHUB2Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -338,7 +334,6 @@
 				EE0A8B582AF93255001C3F41 /* HomeView */,
 				F86E031E2A8BBAE600164976 /* SearchViewController.swift */,
 				EE0A8B5F2AFA7FD2001C3F41 /* SearchResultCell.swift */,
-				F89A010F2A8686ED00B4C10D /* OpenNewPageViewController.swift */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -347,7 +342,6 @@
 			isa = PBXGroup;
 			children = (
 				F8085D432A81846C0067D4DE /* StudyViewController.swift */,
-				F88AB33A2A951AFF001D619C /* CategoryViewController.swift */,
 				F88AB3472A9E71A4001D619C /* CreateStudy */,
 				EE07ADC82AF2570E0096890F /* PostedStudy */,
 			);
@@ -623,7 +617,6 @@
 				EE271F2A2AD8B9FA00190E7A /* String+.swift in Sources */,
 				F88AB33F2A95236B001D619C /* CreatestudyViewController.swift in Sources */,
 				EE07ADC32AF236260096890F /* BottomSheet.swift in Sources */,
-				F89A01102A8686ED00B4C10D /* OpenNewPageViewController.swift in Sources */,
 				F80421CE2A7DA2F3006C6B87 /* DepartmentViewController.swift in Sources */,
 				EE07ADCD2AF26D360096890F /* DepartMentCell.swift in Sources */,
 				EE07ADB92AEFE6730096890F /* PostedStudyViewController.swift in Sources */,
@@ -636,7 +629,6 @@
 				EE0A8B5E2AF9B01C001C3F41 /* UILabel+.swift in Sources */,
 				F87377592AA850940055B041 /* DepartmentselectViewController.swift in Sources */,
 				EE07ADB52AEFC2B90096890F /* UITextField+.swift in Sources */,
-				F88AB33B2A951AFF001D619C /* CategoryViewController.swift in Sources */,
 				EE0A8B602AFA7FD2001C3F41 /* SearchResultCell.swift in Sources */,
 				EE07ADC72AF241A30096890F /* PopUpView.swift in Sources */,
 				F8085D412A815DCD0067D4DE /* HomeViewController.swift in Sources */,

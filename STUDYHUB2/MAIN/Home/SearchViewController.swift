@@ -4,7 +4,7 @@ import SnapKit
 
 final class SearchViewController: NaviHelper {
   
-  // MARK: - 화면구성, 검색 후 셀클릭 시 ui가 안뜸
+  // MARK: - 화면구성, tapbar도 같이 나오게 수정해야함
   
   // MARK: - 서치바
   private let searchBar = UISearchBar.createSearchBar()
@@ -30,6 +30,8 @@ final class SearchViewController: NaviHelper {
     
     return button
   }()
+  
+  let separateLine = UIView()
   
   private lazy var popularButton: UIButton = {
     let button = UIButton()
@@ -212,6 +214,7 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
     navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
     
     view.addSubview(recentButton)
+    view.addSubview(separateLine)
     view.addSubview(popularButton)
     view.addSubview(countLabel)
     view.addSubview(divideLine)
@@ -224,9 +227,17 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
       make.leading.equalTo(searchBar.snp.leading).offset(10)
     }
     
+    separateLine.backgroundColor = .bg50
+    separateLine.snp.makeConstraints { make in
+      make.top.equalTo(recentButton).offset(10)
+      make.bottom.equalTo(recentButton.snp.bottom).offset(-10)
+      make.leading.equalTo(recentButton.snp.trailing).offset(10)
+      make.width.equalTo(1)
+    }
+    
     popularButton.snp.makeConstraints { make in
       make.top.equalTo(recentButton)
-      make.leading.equalTo(recentButton.snp.trailing).offset(20)
+      make.leading.equalTo(separateLine.snp.trailing).offset(10)
     }
     
     countLabel.snp.makeConstraints { make in

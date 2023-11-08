@@ -115,7 +115,7 @@ final class SearchResultCell: UICollectionViewCell {
   private lazy var profileImageView: UIImageView = {
     let imageView = UIImageView()
     imageView.layer.cornerRadius = 15
-    imageView.image = UIImage(named: "ProfileAvatar")
+    imageView.image = UIImage(named: "ProfileAvatar_small")
     imageView.contentMode = .left
     return imageView
   }()
@@ -243,18 +243,18 @@ final class SearchResultCell: UICollectionViewCell {
     }
     
     profileImageView.snp.makeConstraints { make in
-      make.top.equalTo(infoStackView.snp.bottom).offset(10)
+      make.top.equalTo(infoStackView.snp.bottom).offset(20)
       make.leading.equalTo(majorLabel)
     }
     
     nickNameLabel.snp.makeConstraints { make in
       make.leading.equalTo(profileImageView.snp.trailing).offset(10)
-      make.top.equalTo(profileImageView.snp.top).offset(10)
+      make.top.equalTo(profileImageView.snp.top)
     }
     
     postedDate.snp.makeConstraints { make in
       make.leading.equalTo(profileImageView.snp.trailing).offset(10)
-      make.top.equalTo(profileImageView.snp.bottom).offset(-25)
+      make.top.equalTo(nickNameLabel.snp.bottom)
     }
     
     backgroundColor = .white
@@ -262,7 +262,6 @@ final class SearchResultCell: UICollectionViewCell {
     self.layer.borderWidth = 0.1
     self.layer.borderColor = UIColor.cellShadow.cgColor
     self.layer.cornerRadius = 10
-    
   }
   
   private func bind() {

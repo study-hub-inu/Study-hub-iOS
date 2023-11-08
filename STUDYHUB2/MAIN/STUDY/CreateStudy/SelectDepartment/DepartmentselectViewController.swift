@@ -41,7 +41,7 @@ final class DepartmentselectViewController: NaviHelper {
     title: "- 관련학과는 1개만 선택할 수 있어요 \n- 다양한 학과와 관련된 스터디라면, '공통'을 선택해 주세요",
     textColor: .bg60,
     fontSize: 12)
-  
+
   private lazy var selectMajorLabel: BasePaddingLabel = {
     let label = BasePaddingLabel(padding: UIEdgeInsets(top: 8, left: 16, bottom: 8, right: 16))
     label.textColor = .bg80
