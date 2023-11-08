@@ -3,7 +3,8 @@ import UIKit
 import SnapKit
 
 // 캘린더 커스텀하기, 캘린더 선택 버튼 수정
-final class CreateStudyViewController: UIViewController {
+final class CreateStudyViewController: UIViewController, ChangeDateProtocol {
+
   
   let tokenManager = TokenManager.shared
   var genderType: String?
@@ -12,17 +13,17 @@ final class CreateStudyViewController: UIViewController {
   var postDataSender: SendPostData?
 
   // 선택한 학과를 저장할 프로퍼티
-
   var selectedDepartment: String? {
     didSet {
       // selectedDepartment가 설정되면 버튼을 생성
       if let department = selectedDepartment {
         addDepartmentButton(department)
-        
       }
     }
   }
   
+  var selectDate: String? = ""
+
   // MARK: - UI설정
   private lazy var completeButton: UIButton = {
     let completeButton = UIButton()
@@ -69,10 +70,11 @@ final class CreateStudyViewController: UIViewController {
   private lazy var periodStackView = createStackView(axis: .vertical,
                                                      spacing: 16)
   
-  private lazy var startDateButton = createDateButton(selector: #selector(startDateButtonTapped))
-  private lazy var endDateButton = createDateButton(selector: #selector(endDateButtonTapped))
+  private lazy var startDateButton = createDateButton(selector: #selector(calendarButtonTapped))
+  private lazy var endDateButton = createDateButton(selector: #selector(calendarButtonTapped))
   
   private lazy var chatLinkTextField = createTextField(title: "채팅방 링크를 첨부해 주세요")
+  
   
   private lazy var studyproduceTextView: UITextView = {
     let tv = UITextView()
@@ -145,10 +147,12 @@ final class CreateStudyViewController: UIViewController {
                                                         spacing: 16)
   
   private lazy var studytitleLabel = createLabel(title: "스터디 제목",
-                                                 textColor: .black, fontSize: 18)
+                                                 textColor: .black,
+                                                 fontSize: 18)
   
   private lazy var studyproduceLabel = createLabel(title: "내용",
-                                                   textColor: .black, fontSize: 18)
+                                                   textColor: .black,
+                                                   fontSize: 18)
   
   private let studyinfoStackViewDividerLine: UIView = {
     let studyinfoStackViewDividerLine = UIView()
@@ -365,6 +369,8 @@ final class CreateStudyViewController: UIViewController {
     studymethodStackView.addArrangedSubview(finefixStackView)
     
     // Add UI elements to the headerContentStackView
+    startDateButton.tag = 1
+    endDateButton.tag = 2
     periodStackView.addArrangedSubview(periodLabel)
     periodStackView.addArrangedSubview(grayDividerLine3)
     periodStackView.addArrangedSubview(startLabel)
@@ -614,7 +620,7 @@ final class CreateStudyViewController: UIViewController {
     selectMajorLabel.snp.makeConstraints { make in
       make.top.equalTo(associatedepartLabel.snp.bottom).offset(10)
       make.leading.equalTo(associatedepartLabel)
-      make.width.equalTo((labelSize?.width ?? 30) + 30)
+      make.width.equalTo((labelSize?.width ?? 30) + 35)
       make.height.equalTo(30)
     }
     
@@ -702,17 +708,18 @@ final class CreateStudyViewController: UIViewController {
   
   // MARK: - 완료버튼 누를 때 함수
   @objc func completeButtonTapped() {
-    // 성별, 스터디방식 버튼에 따라서 내용이 안바뀜
+    // 과를 영어로 변경해야함
     let studyData = CreateStudyRequest(
       chatUrl: chatLinkTextField.text ?? "",
       close: false,
       content: studyproduceTextView.text ?? "",
+      // 무관일때 안됨 null이 아닌가
       gender: genderType ?? "null",
-      major: selectedMajor ?? "",
+      major: convertMajor(selectedMajor ?? "", toEnglish: true) ,
       penalty: Int(fineAmountTextField.text ?? "0") ?? 0 ,
-      studyEndDate: (endDateTextField.text ?? "").dateConvert(),
+      studyEndDate: endDateButton.currentTitle ?? "",
       studyPerson: Int(studymemberTextField.text ?? "") ?? 0,
-      studyStartDate: (startDateTextField.text ?? "").dateConvert(),
+      studyStartDate: startDateButton.currentTitle ?? "",
       studyWay: contactMethod ?? "CONTACT",
       title: studytitleTextField.text ?? "")
     
@@ -724,6 +731,10 @@ final class CreateStudyViewController: UIViewController {
       case .success(let userData):
         self.postDataSender?.sendData(data: userData)
         print(userData)
+        
+        let postVC = PostedStudyViewController()
+        self.navigationController?.pushViewController(postVC, animated: true)
+        
       case .failure(let error):
         print("Error: \(error)")
       }
@@ -807,125 +818,58 @@ final class CreateStudyViewController: UIViewController {
     }
   }
   
-  // MARK: - date 선택
-  @objc func startDateButtonTapped() {
-    // Create a date picker
-    startDatePicker.datePickerMode = .date
-    startDatePicker.preferredDatePickerStyle = .inline // You can choose the style you prefer
-    startDatePicker.addTarget(self, action: #selector(datePickerValueChanged), for: .valueChanged)
-    
-    // Create an input view for the date picker
-    startDateTextField.inputView = startDatePicker
-    
-    let toolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 44))
-    let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(dismissDatePicker))
-    let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-    toolbar.setItems([flexibleSpace, doneButton], animated: false)
-    startDateTextField.inputAccessoryView = toolbar
-    
-    // Add the text field to the view
-    view.addSubview(startDateTextField)
-    
-    // Set up constraints for the text field (adjust as needed)
-    startDateTextField.translatesAutoresizingMaskIntoConstraints = false
-    startDateTextField.topAnchor.constraint(equalTo: startDateButton.bottomAnchor, constant: -35).isActive = true
-    startDateTextField.leadingAnchor.constraint(equalTo: periodStackView.leadingAnchor, constant: 40).isActive = true
-    startDateTextField.trailingAnchor.constraint(equalTo: periodStackView.trailingAnchor, constant: -16).isActive = true
-    
-    // Show the date picker
-    startDateTextField.becomeFirstResponder()
-  }
-  
-  @objc func datePickerValueChanged() {
-    // Update the selectedStartDate when the date picker's value changes
-    selectedStartDate = startDatePicker.date
-    updateStartDateTextField() // Update the text field to display the selected date
-  }
-  
-  @objc func dismissDatePicker() {
-    // Dismiss the date picker when the Done button is tapped
-    startDateTextField.resignFirstResponder()
-  }
-  
-  func updateStartDateTextField() {
-    // Update the text field with the selected date
-    let dateFormatter = DateFormatter()
-    dateFormatter.dateFormat = "yyyy년 MM월 dd일" // You can choose the date format you prefer
-    startDateTextField.textColor = .black
-    startDateTextField.text = dateFormatter.string(from: selectedStartDate ?? Date())
-    
-    // Hide the "선택하기" title of startDateButton
-    startDateButton.setTitle("", for: .normal)
-  }
-  
-  @objc func endDateButtonTapped() {
-    // Create a date picker
-    endDatePicker.datePickerMode = .date
-    endDatePicker.preferredDatePickerStyle = .inline // You can choose the style you prefer
-    endDatePicker.addTarget(self, action: #selector(endDatePickerValueChanged), for: .valueChanged)
-    
-    endDateTextField.textColor = .black
-    endDateTextField.inputView = endDatePicker
-    
-    // Set titleTextField's inputAccessoryView to a toolbar with a done button
-    let toolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 44))
-    let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(dismissEndDatePicker))
-    let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-    toolbar.setItems([flexibleSpace, doneButton], animated: false)
-    endDateTextField.inputAccessoryView = toolbar
-    
-    // Assign the toolbar as the input accessory view for the date picker
-    endDateTextField.inputAccessoryView = toolbar
-    
-    // Add the text field to the view
-    view.addSubview(endDateTextField)
-    
-    // Set up constraints for the text field (adjust as needed)
-    endDateTextField.translatesAutoresizingMaskIntoConstraints = false
-    endDateTextField.topAnchor.constraint(equalTo: endDateButton.bottomAnchor, constant: -35).isActive = true
-    endDateTextField.leadingAnchor.constraint(equalTo: periodStackView.leadingAnchor, constant: 40).isActive = true
-    endDateTextField.trailingAnchor.constraint(equalTo: periodStackView.trailingAnchor, constant: -16).isActive = true
-    
-    // Show the date picker
-    endDateTextField.becomeFirstResponder()
-  }
-  
-  @objc func endDatePickerValueChanged() {
-    // Update the selectedEndDate when the date picker's value changes
-    selectedEndDate = endDatePicker.date
-    updateEndDateTextField() // Update the text field to display the selected date
-  }
-  
-  @objc func dismissEndDatePicker() {
-    // Dismiss the date picker when the Done button is tapped
-    endDateTextField.resignFirstResponder()
-  }
-  
-  func updateEndDateTextField() {
-    // Update the text field with the selected date
-    let dateFormatter = DateFormatter()
-    dateFormatter.dateFormat = "yyyy년 MM월 dd일" // You can choose the date format you prefer
-    endDateTextField.text = dateFormatter.string(from: selectedEndDate ?? Date())
-    // Hide the "선택하기" title of endDateButton
-    endDateButton.setTitle("", for: .normal)
-  }
-  
-  // Function to handle back button tap and navigate back to HomeViewController
+  // MARK: - 뒤로 가는 함수
   @objc func goBack() {
     
     self.dismiss(animated: true, completion: nil)
   }
   
+  // MARK: - calenderTapped함수
+  @objc func calendarButtonTapped(_ sender: Any) {
+    let viewControllerToPresent = CalendarViewController()
+    viewControllerToPresent.delegate = self
+    
+    if (sender as AnyObject).tag == 1 {
+      viewControllerToPresent.buttonSelect = true
+    } else {
+      viewControllerToPresent.buttonSelect = false
+    }
+    if #available(iOS 15.0, *) {
+      if let sheet = viewControllerToPresent.sheetPresentationController {
+        if #available(iOS 16.0, *) {
+          sheet.detents = [.custom(resolver: { context in
+            return 400.0
+          })]
+        } else {
+          // Fallback on earlier versions
+        }
+        sheet.largestUndimmedDetentIdentifier = nil
+        sheet.prefersScrollingExpandsWhenScrolledToEdge = false
+        sheet.prefersEdgeAttachedInCompactHeight = true
+        sheet.widthFollowsPreferredContentSizeWhenEdgeAttached = true
+        sheet.preferredCornerRadius = 20
+      }
+    } else {
+      // Fallback on earlier versions
+    }
+    self.present(viewControllerToPresent, animated: true, completion: nil)
+  }
+  
+  // 캘린더에서 선택한 날짜로 바꿈
+  func dataSend(data: String, buttonTag: Int) {
+    if buttonTag == 1 {
+      startDateButton.setTitle(data, for: .normal)
+    } else if buttonTag == 2 {
+      endDateButton.setTitle(data, for: .normal)
+    }
+  }
 }
 
-protocol SendPostData {
-  func sendData(data: CreateStudyRequest)
-}
-
+// MARK: - textField 0 입력 시
 extension CreateStudyViewController {
   override func textFieldDidEndEditing(_ textField: UITextField) {
     if textField == studymemberTextField, let text = textField.text, text == "0" {
-      
+      countAlert.isHidden = false
       studymemberTextField.layer.borderColor = UIColor.r50.cgColor
       
       scrollView.addSubview(countAlert)
@@ -934,6 +878,7 @@ extension CreateStudyViewController {
         make.top.equalTo(studymemberTextField.snp.bottom)
         make.leading.equalTo(studymemberTextField)
       }
+      studymemberTextField.text = ""
     }
     else {
       studymemberTextField.layer.borderColor = UIColor.bg50.cgColor
@@ -941,5 +886,13 @@ extension CreateStudyViewController {
       countAlert.isHidden = true
     }
   }
-  
 }
+
+// 다음 페이지로 데이터 전달할 delegate
+protocol SendPostData {
+  func sendData(data: CreateStudyRequest)
+}
+
+
+
+

@@ -48,7 +48,8 @@ class MyPageViewController: UIViewController {
     return imageView
   }()
   
-  private lazy var majorLabel = createLabel(title: convertMajor(major: myPageUserData?.major! ?? "") ,
+  private lazy var majorLabel = createLabel(title: convertMajor(myPageUserData?.major! ?? "",
+                                                                toEnglish: false) ,
                                             textColor: .gray,
                                             fontSize: 18)
   private lazy var nickNameLabel = createLabel(title: myPageUserData?.nickname ?? "비어있음",

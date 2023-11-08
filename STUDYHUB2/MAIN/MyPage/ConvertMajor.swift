@@ -5,19 +5,21 @@
 //  Created by 최용헌 on 2023/10/30.
 //
 
-import Foundation
+import UIKit
 
-extension MyPageViewController {
-  func convertMajor(major: String) -> String {
-    switch major {
-    case "INFORMATION_TELECOMMUNICATION_ENGINEERING":
+extension UIViewController {
+  func convertMajor(_ major: String, toEnglish: Bool) -> String {
+    switch (major, toEnglish) {
+    case ("정보통신학과", true):
+      return "INFORMATION_TELECOMMUNICATION_ENGINEERING"
+    case ("INFORMATION_TELECOMMUNICATION_ENGINEERING", false):
       return "정보통신공학"
     default:
-        return "비어있으"
+      return "Unknown"
     }
-    
   }
 }
+
 
 /*
  공연예술과(Performing Arts)

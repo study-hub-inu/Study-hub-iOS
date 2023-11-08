@@ -43,15 +43,6 @@ final class DepartmentViewController: UIViewController, UITableViewDataSource, U
     return departmentTableView
   }()
   
-  lazy var scrollView: UIScrollView = {
-    let scrollView = UIScrollView()
-    scrollView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-    scrollView.contentSize = CGSize(width: view.bounds.width,
-                                    height: 800)
-    scrollView.backgroundColor = .black
-    return scrollView
-  }()
-  
   private let titleLabel: UILabel = {
     let titleLabel = UILabel()
     titleLabel.text = "회원가입"
@@ -121,12 +112,6 @@ final class DepartmentViewController: UIViewController, UITableViewDataSource, U
   // MARK: - setUpLayout
   func setUpLayout(){
     [
-      scrollView
-    ].forEach {
-      view.addSubview($0)
-    }
-    
-    [
       titleLabel,
       progressLabel,
       departmentPromptLabel,
@@ -136,8 +121,9 @@ final class DepartmentViewController: UIViewController, UITableViewDataSource, U
       departmentTextFielddividerLine,
       nextButton
     ].forEach {
-      scrollView.addSubview($0)
+      view.addSubview($0)
     }
+    
   }
   
   // MARK: - makeUI
