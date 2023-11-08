@@ -26,7 +26,9 @@ final class SearchResultCell: UICollectionViewCell {
   
   private lazy var titleLabel: UILabel = {
     let label = UILabel()
-    
+    label.text = "단기 스터디원 구해요!"
+    label.textColor = .black
+    label.font = UIFont.boldSystemFont(ofSize: 16)
     return label
   }()
   
@@ -41,6 +43,7 @@ final class SearchResultCell: UICollectionViewCell {
     let label = UILabel()
     label.text = "1자리 남았어요"
     label.textColor = .o50
+    label.font = UIFont.boldSystemFont(ofSize: 14)
     return label
   }()
   
@@ -60,7 +63,7 @@ final class SearchResultCell: UICollectionViewCell {
   private lazy var memberStackView: UIStackView = {
     let stackView = UIStackView()
     stackView.axis = .vertical
-    stackView.spacing = 10
+    stackView.spacing = 5
     return stackView
   }()
   
@@ -79,7 +82,7 @@ final class SearchResultCell: UICollectionViewCell {
   private lazy var fineStackView: UIStackView = {
     let stackView = UIStackView()
     stackView.axis = .vertical
-    stackView.spacing = 10
+    stackView.spacing = 5
     return stackView
   }()
   
@@ -98,7 +101,7 @@ final class SearchResultCell: UICollectionViewCell {
   private lazy var genderStackView: UIStackView = {
     let stackView = UIStackView()
     stackView.axis = .vertical
-    stackView.spacing = 10
+    stackView.spacing = 5
     return stackView
   }()
   
@@ -114,19 +117,22 @@ final class SearchResultCell: UICollectionViewCell {
     imageView.layer.cornerRadius = 15
     imageView.image = UIImage(named: "ProfileAvatar")
     imageView.contentMode = .left
-    imageView.frame = CGRect(x: 0, y: 0, width: 10, height: 10)
     return imageView
   }()
   
   private lazy var nickNameLabel: UILabel = {
     let label = UILabel()
     label.text = "학생"
+    label.textColor = .bg90
+    label.font = UIFont.systemFont(ofSize: 14)
     return label
   }()
   
   private lazy var postedDate: UILabel = {
     let label = UILabel()
     label.text = "2023.9.1"
+    label.textColor = .bg70
+    label.font = UIFont.systemFont(ofSize: 14)
     return label
   }()
   
@@ -134,10 +140,10 @@ final class SearchResultCell: UICollectionViewCell {
     let label = UILabel()
     label.textColor = .bg90
     label.text = "0/14"
+    label.changeColor(label: label, wantToChange: "0")
     return label
   }()
-
-
+  
   override init(frame: CGRect) {
     super.init(frame: frame)
     
@@ -153,20 +159,36 @@ final class SearchResultCell: UICollectionViewCell {
   }
   
   private func addSubviews() {
+    memberStackView.alignment = .center
+    memberStackView.layoutMargins = UIEdgeInsets(top: 10, left: 0, bottom: 10, right: 0)
+    memberStackView.isLayoutMarginsRelativeArrangement = true
+    
     let memeberData = [memberCountImage, countMemeberLabel]
     for data in memeberData {
       memberStackView.addArrangedSubview(data)
     }
+    
+    fineStackView.alignment = .center
+    fineStackView.layoutMargins = UIEdgeInsets(top: 10, left: 0, bottom: 10, right: 0)
+    fineStackView.isLayoutMarginsRelativeArrangement = true
     
     let fineData = [fineImage, fineLabel]
     for data in fineData {
       fineStackView.addArrangedSubview(data)
     }
     
+    genderStackView.alignment = .center
+    genderStackView.layoutMargins = UIEdgeInsets(top: 10, left: 0, bottom: 10, right: 0)
+    genderStackView.isLayoutMarginsRelativeArrangement = true
+    
     let genderData = [genderImage, genderLabel]
     for data in genderData {
       genderStackView.addArrangedSubview(data)
     }
+    
+    infoStackView.backgroundColor = .bg20
+    infoStackView.distribution = .fillEqually
+    infoStackView.layer.cornerRadius = 10
     
     let infoData = [memberStackView, fineStackView, genderStackView]
     for data in infoData {
@@ -190,7 +212,7 @@ final class SearchResultCell: UICollectionViewCell {
   
   private func configure() {
     majorLabel.snp.makeConstraints { make in
-      make.leading.equalToSuperview().offset(10)
+      make.leading.equalToSuperview().offset(20)
       make.top.equalToSuperview().offset(10)
     }
     
@@ -205,18 +227,19 @@ final class SearchResultCell: UICollectionViewCell {
     }
     
     periodLabel.snp.makeConstraints { make in
-      make.top.equalTo(titleLabel.snp.bottom)
+      make.top.equalTo(titleLabel.snp.bottom).offset(10)
       make.leading.equalTo(majorLabel)
     }
     
     remainLabel.snp.makeConstraints { make in
       make.top.equalTo(periodLabel)
-      make.trailing.equalToSuperview().offset(-10)
+      make.trailing.equalToSuperview().offset(-20)
     }
     
     infoStackView.snp.makeConstraints { make in
       make.top.equalTo(periodLabel.snp.bottom).offset(10)
-      make.leading.equalToSuperview().offset(10)
+      make.leading.equalToSuperview().offset(20)
+      make.trailing.equalToSuperview().offset(-20)
     }
     
     profileImageView.snp.makeConstraints { make in
@@ -226,12 +249,12 @@ final class SearchResultCell: UICollectionViewCell {
     
     nickNameLabel.snp.makeConstraints { make in
       make.leading.equalTo(profileImageView.snp.trailing).offset(10)
-      make.top.equalTo(profileImageView)
+      make.top.equalTo(profileImageView.snp.top).offset(10)
     }
     
     postedDate.snp.makeConstraints { make in
-      make.leading.equalTo(profileImageView.snp.trailing)
-      make.top.equalTo(nickNameLabel.snp.bottom)
+      make.leading.equalTo(profileImageView.snp.trailing).offset(10)
+      make.top.equalTo(profileImageView.snp.bottom).offset(-25)
     }
     
     backgroundColor = .white
@@ -240,7 +263,6 @@ final class SearchResultCell: UICollectionViewCell {
     self.layer.borderColor = UIColor.cellShadow.cgColor
     self.layer.cornerRadius = 10
     
-  
   }
   
   private func bind() {

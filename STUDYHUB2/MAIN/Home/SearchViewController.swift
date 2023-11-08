@@ -23,14 +23,22 @@ final class SearchViewController: NaviHelper {
   private lazy var recentButton: UIButton = {
     let button = UIButton()
     button.setTitle("최신순", for: .normal)
-    button.tintColor = .black
+    button.setTitleColor(.black, for: .normal)
+    button.titleLabel?.font = .systemFont(ofSize: 16)
+    button.frame = CGRect(x: 0, y: 0, width: 57, height: 30)
+    button.addTarget(self, action: #selector(recentButtonTapped), for: .touchUpInside)
+    
     return button
   }()
   
   private lazy var popularButton: UIButton = {
     let button = UIButton()
     button.setTitle("인기순", for: .normal)
-    button.tintColor = .black
+    button.setTitleColor(.bg70, for: .normal)
+    button.titleLabel?.font = .systemFont(ofSize: 16)
+    button.frame = CGRect(x: 0, y: 0, width: 57, height: 30)
+    button.addTarget(self, action: #selector(popularButtonTapped), for: .touchUpInside)
+    
     return button
   }()
   
@@ -41,13 +49,15 @@ final class SearchViewController: NaviHelper {
   private lazy var resultCollectionView: UICollectionView = {
     let flowLayout = UICollectionViewFlowLayout()
     flowLayout.scrollDirection = .vertical
-    flowLayout.minimumLineSpacing = 10// cell사이의 간격 설정
+    flowLayout.minimumLineSpacing = 10
     let view = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
     view.backgroundColor = .white
     view.clipsToBounds = false
-
+    
     return view
   }()
+  
+  private lazy var divideLine = createDividerLine(height: 1)
   
   private let scrollView: UIScrollView = {
     let scrollView = UIScrollView()
@@ -76,8 +86,11 @@ final class SearchViewController: NaviHelper {
     resultTableView.delegate = self
     resultTableView.dataSource = self
     
+    resultCollectionView.delegate = self
+    resultCollectionView.dataSource = self
+    
     resultCollectionView.register(SearchResultCell.self,
-                                    forCellWithReuseIdentifier: SearchResultCell.id)
+                                  forCellWithReuseIdentifier: SearchResultCell.id)
     
     searchBar.snp.makeConstraints { make in
       make.top.equalToSuperview().offset(10)
@@ -119,12 +132,25 @@ final class SearchViewController: NaviHelper {
     
     navigationItem.rightBarButtonItems = [alertBell, bookMark]
   }
-
+  
   @objc func bookmarkpageButtonTapped() {
     let bookmarkViewController = BookmarkViewController()
     let navigationController = UINavigationController(rootViewController: bookmarkViewController)
     navigationController.modalPresentationStyle = .fullScreen
     present(navigationController, animated: true, completion: nil)
+  }
+  
+  @objc func recentButtonTapped(){
+    print("1")
+    recentButton.setTitleColor(.black, for: .normal)
+    popularButton.setTitleColor(.bg70, for: .normal)
+    
+  }
+  
+  @objc func popularButtonTapped(){
+    print("2")
+    recentButton.setTitleColor(.bg70, for: .normal)
+    popularButton.setTitleColor(.black, for: .normal)
   }
 }
 
@@ -138,7 +164,6 @@ extension SearchViewController: UISearchBarDelegate {
   }
   
   func searchTapped(keyword: String){
-    
     view.setNeedsLayout()
     view.layoutIfNeeded()
     
@@ -172,9 +197,7 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
       make.centerY.equalTo(cell.contentView)
     }
     
-  
     cell.backgroundColor = .white
-    
     
     return cell
   }
@@ -183,32 +206,51 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     resultTableView.isHidden = true
     
+    navigationItem.rightBarButtonItems = .none
+    
     navigationController?.navigationBar.topItem?.title = "검색결과"
     navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
     
     view.addSubview(recentButton)
     view.addSubview(popularButton)
     view.addSubview(countLabel)
-    view.addSubview(resultCollectionView)
+    view.addSubview(divideLine)
+    view.addSubview(scrollView)
+    
+    scrollView.addSubview(resultCollectionView)
     
     recentButton.snp.makeConstraints { make in
-      make.top.equalTo(searchBar.snp.bottom).offset(10)
-      make.leading.equalToSuperview().offset(10)
+      make.top.equalTo(searchBar.snp.bottom)
+      make.leading.equalTo(searchBar.snp.leading).offset(10)
     }
     
     popularButton.snp.makeConstraints { make in
       make.top.equalTo(recentButton)
-      make.leading.equalTo(recentButton.snp.trailing)
+      make.leading.equalTo(recentButton.snp.trailing).offset(20)
     }
     
     countLabel.snp.makeConstraints { make in
-      make.top.equalTo(recentButton)
+      make.centerY.equalTo(recentButton)
       make.trailing.equalToSuperview().offset(-10)
     }
     
-    resultCollectionView.snp.makeConstraints { make in
-      make.height.equalTo(500)
+    divideLine.backgroundColor = .bg30
+    divideLine.snp.makeConstraints { make in
+      make.top.equalTo(recentButton.snp.bottom).offset(10)
+      make.leading.trailing.equalTo(searchBar)
     }
+    
+    resultCollectionView.snp.makeConstraints { make in
+      make.width.equalToSuperview()
+      make.height.equalTo(scrollView.snp.height)
+    }
+    
+    scrollView.snp.makeConstraints { make in
+      make.top.equalTo(divideLine.snp.bottom).offset(10)
+      make.leading.trailing.bottom.equalTo(view)
+      
+    }
+    
   }
   
   func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -229,6 +271,7 @@ extension SearchViewController: UICollectionViewDelegate, UICollectionViewDataSo
   }
   func collectionView(_ collectionView: UICollectionView,
                       didSelectItemAt indexPath: IndexPath) {
+    
     let postedVC = PostedStudyViewController()
     let postedVCwithNavi = UINavigationController(rootViewController: postedVC)
     present(postedVCwithNavi, animated: true, completion: nil)
@@ -248,9 +291,9 @@ extension SearchViewController: UICollectionViewDelegateFlowLayout {
   func collectionView(_ collectionView: UICollectionView,
                       layout collectionViewLayout: UICollectionViewLayout,
                       sizeForItemAt indexPath: IndexPath) -> CGSize {
- 
-      return CGSize(width: 335, height: collectionView.frame.height)
-
+    
+    return CGSize(width: 350, height: 247)
+    
   }
 }
 
