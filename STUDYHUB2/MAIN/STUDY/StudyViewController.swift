@@ -107,15 +107,16 @@ final class StudyViewController: NaviHelper {
     }
     
     describeLabel.numberOfLines = 3
-    describeLabel.changeColor(label: describeLabel, wantToChange: "지금 스터디를 만들어\n  팀원을 구해보세요!")
+    describeLabel.changeColor(label: describeLabel, wantToChange: "지금 스터디를 만들어\n  팀원을 구해보세요!", color: .changeInfo)
     describeLabel.snp.makeConstraints { make in
       make.top.equalTo(emptyImageView.snp.bottom).offset(10)
       make.centerX.equalTo(emptyImageView)
     }
     
     addButton.snp.makeConstraints { make in
-      make.trailing.equalToSuperview().offset(-10)
-      make.bottom.equalToSuperview().offset(-30)
+      make.width.height.equalTo(60) // Increase width and height as needed
+      make.bottom.equalTo(view.safeAreaLayoutGuide).offset(-30)
+      make.trailing.equalTo(view).offset(-16)
     }
   }
   
@@ -131,7 +132,7 @@ final class StudyViewController: NaviHelper {
       image: bookMarkImg,
       style: .plain,
       target: self,
-      action: #selector(bookmarkpageButtonTapped))
+      action: #selector(searchButtonTapped))
     bookMark.imageInsets = UIEdgeInsets(top: 0, left: 30, bottom: 0, right: 0)
     
     let alertBellImg = UIImage(named: "BellImgWithWhite")?.withRenderingMode(.alwaysOriginal)
@@ -146,15 +147,8 @@ final class StudyViewController: NaviHelper {
     navigationItem.rightBarButtonItems = [alertBell, bookMark]
   }
   
-  @objc func searchButtonTapped(){
-    
-  }
-  
-  @objc func bookmarkpageButtonTapped() {
-    let bookmarkViewController = BookmarkViewController()
-    let navigationController = UINavigationController(rootViewController: bookmarkViewController)
-    navigationController.modalPresentationStyle = .fullScreen
-    present(navigationController, animated: true, completion: nil)
+  @objc func searchButtonTapped() {
+    print("아직")
   }
   
   @objc func addButtonTapped() {

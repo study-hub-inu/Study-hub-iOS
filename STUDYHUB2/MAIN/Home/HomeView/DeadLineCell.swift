@@ -36,7 +36,7 @@ final class DeadLineCell: UICollectionViewCell {
     let label = UILabel()
     label.text = "29/39명"
     label.textColor = .bg90
-    label.changeColor(label: label, wantToChange: "29")
+    label.changeColor(label: label, wantToChange: "29", color: .changeInfo)
     return label
   }()
   

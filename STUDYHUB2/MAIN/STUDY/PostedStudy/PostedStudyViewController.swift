@@ -447,8 +447,8 @@ final class PostedStudyViewController: NaviHelper, SendPostData {
       make.edges.equalTo(view)
     }
     
-    memeberNumberCountLabel.changeColor(label: memeberNumberCountLabel, wantToChange: "1")
-    fineCountLabel.changeColor(label: fineCountLabel, wantToChange: "1000")
+    memeberNumberCountLabel.changeColor(label: memeberNumberCountLabel, wantToChange: "1", color: .changeInfo)
+    fineCountLabel.changeColor(label: fineCountLabel, wantToChange: "1000", color: .changeInfo)
   }
   
   private func setupDataSource() {

@@ -4,8 +4,6 @@ import SnapKit
 
 // 캘린더 커스텀하기, 캘린더 선택 버튼 수정
 final class CreateStudyViewController: UIViewController, ChangeDateProtocol {
-
-  
   let tokenManager = TokenManager.shared
   var genderType: String?
   var contactMethod: String?

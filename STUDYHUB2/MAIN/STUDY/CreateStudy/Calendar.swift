@@ -174,9 +174,8 @@ class CalendarViewController: UIViewController {
     self.dismiss(animated: true, completion: nil)
     
   }
-  
-  
 }
+
 extension Date {
   static func today() -> Date {
     return Date()

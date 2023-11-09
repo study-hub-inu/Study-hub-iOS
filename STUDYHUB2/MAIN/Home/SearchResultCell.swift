@@ -52,11 +52,11 @@ final class SearchResultCell: UICollectionViewCell {
     imageView.image = UIImage(named: "MemberNumberImage")
     return imageView
   }()
-  
+
   private lazy var memberCountLabel: UILabel = {
     let label = UILabel()
     label.text = "10/20명"
-    label.changeColor(label: label, wantToChange: "10")
+    label.changeColor(label: label, wantToChange: "10", color: .changeInfo)
     return label
   }()
   
@@ -140,7 +140,7 @@ final class SearchResultCell: UICollectionViewCell {
     let label = UILabel()
     label.textColor = .bg90
     label.text = "0/14"
-    label.changeColor(label: label, wantToChange: "0")
+    label.changeColor(label: label, wantToChange: "0", color: .changeInfo)
     return label
   }()
   

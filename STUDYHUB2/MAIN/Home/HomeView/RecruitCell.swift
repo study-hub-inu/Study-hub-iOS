@@ -143,8 +143,8 @@ final class RecruitPostCell: UICollectionViewCell {
     self.layer.borderColor = UIColor.cellShadow.cgColor
     self.layer.cornerRadius = 10
     
-    fineCountLabel.changeColor(label: fineCountLabel, wantToChange: "900")
-    countMemeberLabel.changeColor(label: countMemeberLabel, wantToChange: "0")
+    fineCountLabel.changeColor(label: fineCountLabel, wantToChange: "900", color: .changeInfo)
+    countMemeberLabel.changeColor(label: countMemeberLabel, wantToChange: "0", color: .changeInfo)
   }
   
   private func bind() {
