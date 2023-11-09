@@ -7,7 +7,8 @@ import SnapKit
 final class BookmarkViewController: NaviHelper {
   
   // MARK: - 화면 구성
-  private lazy var totalCountLabel = createLabel(title: "전체 0",
+  var countNumber: Int = 0
+  private lazy var totalCountLabel = createLabel(title: "전체 \(countNumber)",
                                                  textColor: .bg80,
                                                  fontSize: 16)
   
@@ -35,7 +36,7 @@ final class BookmarkViewController: NaviHelper {
   // MARK: - viewDidLoad
   override func viewDidLoad() {
     super.viewDidLoad()
-    view.backgroundColor = .white
+    view.backgroundColor = .bg30
     
     navigationItemSetting()
     redesignNavigationbar()
